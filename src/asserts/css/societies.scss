@@ -1,0 +1,28 @@
+.my-society-content {
+  margin: 20px 25% 40px;
+}
+
+.my-all-socierty-div .my-society-content img {
+  width: 143px;
+  height: 140px;
+}
+
+.ISA-society h4,
+.ISTE-society h4,
+.IEEE-society h4,
+.CSI-society h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.my-society-content .col-6 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.my-society-content .col-6:hover {
+  background: #8080801a;
+  cursor: pointer;
+}
