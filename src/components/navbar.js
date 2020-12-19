@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import '../asserts/css/navbar.scss';
 
 class Navbar extends Component {
-   
     render(){
         return(
             <div className="my-content">
@@ -33,11 +32,11 @@ class Navbar extends Component {
                             </ul>
                             <ul className="navbar-nav ml-auto">
                                 <li id="login-li" className="nav-item d-flex align-items-center">
-                                        <a className="nav-link btn btn-md btn-primary my-login-button" href="/login">Login</a>
+                                    <a className="nav-link btn btn-md btn-primary my-login-button" href="/login">
+                                            <img style={{ width : "26px", height: "26px" }} src="/images/google_icon.svg" alt="google-logo" /> Login
+                                    </a>
                                 </li>
-                                <li className="nav-item d-flex align-items-center">
-                                    <a className="nav-link btn btn-md btn-primary my-login-button" href="/signup">Sign Up</a>
-                                </li>
+        
                             </ul>
                     </div>
                 </nav>
