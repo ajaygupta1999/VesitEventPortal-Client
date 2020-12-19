@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import '../asserts/css/societies.scss';
 
-class Societies extends Component {
-    render(){
+function Societyheader(){
         return(
         <div>
             <div className="home-page-all-society d-flex justify-content-center">
@@ -47,6 +46,6 @@ class Societies extends Component {
         </div>
         )
     }
-}
 
-export default Societies;
+
+export default Societyheader;

@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import axios from 'axios';
-import Home from './home';
 import Navbar from './components/navbar';
 import Appheader from "./components/Appheader";
-import Society from "./components/society"
 import GoogleLogin from 'react-google-login';
+import Societyheader from './components/Societyheader';
 
 
-class App extends Component {
+class Home extends Component {
   
   constructor(props){
     super(props);
@@ -37,14 +36,23 @@ class App extends Component {
 
   render(){
     return (
-    <BrowserRouter>
-      <Switch>
-            <Route path="/" component={Home} exact/>
-            <Route path="/society/:name" component={Society} exact/>
-      </Switch>
-      </BrowserRouter>
+          <div>
+          <Navbar />
+          <h1>
+            Login With google
+          </h1>
+          <GoogleLogin
+            clientId="878476685235-rubcpt9de8uo2g1ing0iqnanfkmpb4h5.apps.googleusercontent.com"
+            buttonText="Login with google"
+            onSuccess={this.onSuccessLogin}
+            onFailure={this.onFailureLogin}
+            cookiePolicy={'single_host_origin'}
+          />
+          <Appheader />
+          <Societyheader/>
+      </div>
     )
   };
 }
 
-export default App;
+export default Home;
