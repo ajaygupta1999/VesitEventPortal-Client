@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Event from "./Event";
 import { fetchAllEvents } from "../stores/actions/event";
 import { connect } from "react-redux";
-import "../asserts/css/EventCards.css";
+import "../asserts/css/EventCards.scss";
 
 
 class Eventlists extends Component{
@@ -26,7 +26,19 @@ class Eventlists extends Component{
                 <div class="d-flex justify-content-center align-items-center">
                     <h4 class="my-ongoing-title-index-page">Today's Events</h4>
                 </div>
-                <div className="MY-on-going-evenets-session">
+                <div className="MY-on-going-evenets-session container">
+                    <div className="row">
+                        {
+                            allEvents.map(event => {
+                                return <Event key={event.id} {...event}/>
+                            }) 
+                        }
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <h4 class="my-upcoming-title-index-page">Upcoming's Events</h4>
+                </div>
+                <div className="MY-on-going-evenets-session container">
                     <div className="row">
                         {
                             allEvents.map(event => {

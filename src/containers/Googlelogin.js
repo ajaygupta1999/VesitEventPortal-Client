@@ -49,4 +49,4 @@ class Googlelogin extends Component{
 }
 
 
-export default withRouter( connect(null , { authUser , logout })(Googlelogin) );
+export default withRouter(connect(null , { authUser , logout })(Googlelogin) );

@@ -1,5 +1,71 @@
 #my-navbar{
-	padding: 6px 3.5%;
+	padding:10px 0px;
+	margin : 0px 6%;
+   
+	 #navbar-logo-link{
+		 padding : 10px;
+		 text-decoration: none;
+		 font-size : 0.95em;
+		 color : #313338;
+		 font-weight : 700;
+	 }
+
+	 #navbar-logo-link img{
+		margin-left : -15px;
+		width : 42px;
+		height : 42px;
+		margin-right : 0px;
+	 }
+
+	 .navbar-collapse .navlink-all-lis{
+		text-align : center;
+		padding : 7px 10px;
+	 }
+	
+
+	 .navbar-navsession-links{
+		text-decoration: none;
+		color : #313338;
+		font-weight : 600;
+	}
+
+	.navbar-navsession-links:hover{
+		color : #707070de;
+	}
+
+	.navbar-active-state{
+		color : #707070de;
+		font-weight : 600;
+	}
+	
+	.navlink-id{
+		text-decoration : none;
+		font-size : 1em;
+	}
+
+	#navbar-allsocities-dropdown{
+		margin : 0px;
+		list-style: none;
+		padding : 0px;
+	}
+
+	#navbar-allsocities-dropdown #navbarDropdown{
+		text-align : center;
+		font-weight : 600;
+		color : #313338;
+		padding: 7px 15px;
+	}
+
+	#navbar-allsocities-dropdown .dropdown-menu .dropdown-item {
+		text-align : center;
+	}
+
+	#navbar-allsocities-dropdown .dropdown-menu .dropdown-item a{
+		text-decoration: none;
+		font-weight : 600;
+		color : black;
+	}
+  
 
 	.my-login-button {
 		padding: 7px 26px !important;
@@ -12,21 +78,94 @@
 	}
 
 	#login-li{
-		margin-right : 15px;
+		padding : 5px 10px;
 	}
 
-	#VES_logo{
-		width : 36px;
+	.navbar-profile-session #navbarDropdown img{
+		width : 40px;
+		height: 40px;
+	    border-radius : 20px; 
 	}
 
-	.navbar-brand{
-		font-size: 18px;
-		font-weight: 600;
+	.navbar-profile-session #navbarDropdown p{
+		margin : 0px;
+		margin-left : 5px;
 	}
 
-	#vesit-logo{
-		margin-left : 3px;
-		font-family: 'Sriracha', cursive;
-		font-size : 20px;
+	.navbar-profile-session .dropdown-menu{
+		padding : 0px;
+	}
+
+	.navbar-profile-session .dropdown-menu .dropdown-item{
+		padding-left: 0;
+        padding-right: 0;
+	}
+
+	.navbar-profile-session .dropdown-menu hr{
+		margin : 0px;
+	}
+
+	.profile-image-dropdown-content .profile-name-and-email p{
+		margin : 0px;
+	}
+
+	.profile-image-dropdown-content .profile-name-and-email .nav-profile-user-name{
+		font-size : 15px;
+		font-weight : 600;
+	}
+
+	.profile-image-dropdown-content .profile-name-and-email .nav-profile-user-email{
+		font-size : 13px;
+		font-weight : 500;
+	} 
+
+	.profile-image-dropdown-content .profile-name-and-email img{
+		border-radius : 20px;
+		width : 40px;
+		height : 40px;
+		object-fit: cover;
+		margin-bottom : 3px;
+	}
+
+	.profile-image-dropdown-content .Navbar-notifications-session p , 
+	.profile-image-dropdown-content .Navbar-profile-dopdown-socities-session p , 
+	.profile-image-dropdown-content .Navbar-profile-dopdown-profile-session p{
+		margin : 0px;
+		font-weight : 500;
+		font-size: 14px;
+		text-align : start;
+		padding : 8px 15px;
+	}
+
+	.profile-image-dropdown-content .profile-name-and-email{
+		padding : 10px 15px;
+	}
+
+	.navbar-login-and-sign-button button div{
+		margin : 0px;
+		
+	}
+
+	.navbar-login-and-sign-button button{
+		padding: 0px !important;
+		font-weight: 600 !important;
+		font-size: 15px !important;
+		color: #1E6AD9 !important;
+		border-radius : 0px !important;
+		border-color : #1E6AD9 !important;
+	}
+
+	.navbar-login-and-sign-button button div{
+		margin-right : 0px !important;
+		padding : 8px 4px 8px 18px !important;
+	}
+
+	.navbar-login-and-sign-button button span{
+		font-weight : 600!important;
+		padding : 8px 18px 8px 4px !important;
+	}
+
+	.navbar-login-and-sign-button button div svg{
+		margin-bottom : -4px !important;
 	}
 }

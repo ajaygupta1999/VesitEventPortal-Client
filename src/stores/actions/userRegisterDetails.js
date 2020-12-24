@@ -1,7 +1,7 @@
 
-import { apiCall, apiUploadCall } from "../../../services/api";
-import { SET_USER_PERSONAL_DETAILS , SET_CLASS_AND_SCOEITY_DETAILS , ADDING_EVENT_DETAILS } from "../../actionTypes"; 
-import { addError , removeError } from "../error";
+import { apiCall, apiUploadCall } from "../../services/api";
+import { SET_USER_PERSONAL_DETAILS , SET_CLASS_AND_SCOEITY_DETAILS , ADDING_EVENT_DETAILS } from "../actionTypes"; 
+import { addError , removeError } from "./error";
 
 
 const setPersonalDetail = (user) => {

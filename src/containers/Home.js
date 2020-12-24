@@ -12,7 +12,6 @@ class Home extends Component {
         return(
             <div>
                  <Navbar />
-                 <Googlelogin />
                  <Appheader />
                  <Allsocietys />
                  <Eventlists />

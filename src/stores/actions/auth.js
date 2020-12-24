@@ -23,6 +23,7 @@ export function logout() {
 
 
 export function authUser(userData) {
+  
     return dispatch => {
       // wrap our thunk in a promise so we can wait for the API call
       return new Promise((resolve, reject) => {

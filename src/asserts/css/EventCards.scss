@@ -1,0 +1,138 @@
+.my-ongoing-title-index-page{
+	font-weight : 600;
+}
+
+.my-upcoming-title-index-page{
+	margin-top : 20px;
+	font-weight : 600;
+}
+
+.MY-on-going-evenets-session .row .col-12{
+   padding: 28px;
+}
+
+.MY-on-going-evenets-session .each-event-container{
+	border : 1px solid black;
+	border-radius : 15px;
+	padding : 0px;
+
+	.img-session img{
+		width : 100%;
+		height : 210px;
+		object-fit: cover;
+		border-top-left-radius: 15px;
+		border-top-right-radius: 15px;
+	}
+
+	.content-session {
+		
+		.upper-content{
+			padding : 10px 15px;
+
+			.main-title{
+				font-weight : 700;
+				margin-bottom : 5px;
+				color : black;
+				font-size : 18px;
+				overflow-wrap: anywhere;
+			}
+
+			.short-desc{
+				margin-bottom : 3px;
+				color : black;
+				font-size : 14px;
+				overflow-wrap: anywhere;
+			}
+
+			.guest-text{
+				font-weight : 600;
+				font-size: 14px;
+				margin-bottom : 5px;
+			}
+
+			.guest-text span{
+				font-weight : 700;
+				font-size: 14px;
+				color :blue;
+			}
+
+			.date-time-div p{
+				font-weight : 600;
+				font-size : 14px;
+				margin-top : 8px;
+				margin-bottom : 0px;
+			}
+
+			.date-time-div .date-session{
+				margin-right : 15px;
+			}
+
+			.date-time-div span{
+				margin-right : 2px;
+			}
+
+			.date-time-div i{
+				color : blue;
+				font-weight : 500;
+			}
+
+			.event-countdown-p{
+				font-weight: 600;
+				font-size: 14px;
+				margin-top: 3px;
+				margin-bottom: 5px;
+			}
+			
+		}
+
+		.lower-content{
+			margin: 10px 15px 16px 15px;
+
+			p{
+				font-weight : 600;
+				margin : 0px;
+				margin-right : 10px;
+			}
+		}
+
+		.register-button-div{
+			margin-top : 10px;
+			margin-bottom : 5px;
+
+			#each-event-register-button{ 
+				font-size: 14px;
+				width : 100px;
+				height : 34px;
+				font-weight: 700;
+				color: white !important;
+				border-radius: 33px;
+				border: none;
+				box-shadow: 0 4px 10px 8px rgba(0, 0, 0, 0.05), 0 6px 20px 2px rgba(0, 0, 0, 0.04);
+			}
+		}
+    }
+}
+
+
+@media (max-width: 992px){
+	.MY-on-going-evenets-session{
+		padding-left : 20px;
+		padding-right:  20px;
+	}
+}
+
+
+
+@media (max-width: 767.98px) { 
+
+	.MY-on-going-evenets-session .each-event-container{
+		margin :0px 15% !important;
+	}
+}
+
+@media (max-width: 400px){
+	.MY-on-going-evenets-session .each-event-container{
+		margin :0px 10% !important;
+	}
+}
+

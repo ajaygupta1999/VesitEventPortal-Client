@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 
 class Event extends Component{
     render(){
-        const {name , shortdesc , fulldesc , date , time } = this.props;
+        const {name , shortdesc , date , time } = this.props;
         const imgurl = this.props.imgurl.dataurl;
+
         return(
-                <div className="col-12 col-md-4">
+                <div className="col-12 col-md-6 col-lg-4">
                     <div className="each-event-container">
                         <div className="img-session">
                             <img src={imgurl} alt="event-image" />

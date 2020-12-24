@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import "../../asserts/css/Forms.css";
+import "../../asserts/css/Forms.scss";
 import { Link } from "react-router-dom";
-import { setGuestAndSponsorsDetails } from "../../stores/actions/userRegister/userRegisterDetails";
+import { setGuestAndSponsorsDetails } from "../../stores/actions/userRegisterDetails";
 import { connect } from 'react-redux';
 import Navbar from "../navbar";
 

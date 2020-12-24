@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from '../navbar';
-import {setClassAndSocietyDetails} from "../../stores/actions/userRegister/userRegisterDetails"
+import "../../asserts/css/Forms.scss";
+import {setClassAndSocietyDetails} from "../../stores/actions/userRegisterDetails";
 import { connect } from "react-redux"; 
 
 
