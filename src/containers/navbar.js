@@ -3,29 +3,43 @@ import { NavLink , Link } from "react-router-dom";
 import { connect } from "react-redux";
 import '../asserts/css/navbar.scss';
 import { GoogleLogin } from "react-google-login";
-import { authUser , logout } from "../stores/actions/auth";
+import { loginOrSignUp , logout } from "../stores/actions/auth";
 import { withRouter } from "react-router-dom";
 
-console.log(authUser);
-
-
 class Navbar extends Component {
-    
-    onSuccessLogin = (res) => {
-        const userdata = { 
-            tokenId : res.tokenId 
-        }
-        this.props.authUser(userdata)
-        .then((user) => {
+
+    onSuccessLogin = async (res) => {
+        try{
+            const userdata = { 
+                tokenId : res.tokenId 
+            }
+            let user = await this.props.loginOrSignUp(userdata);
             if(user.firstname && user.lastname && user.societydetails.role){
                 this.props.history.push("/");
             }else{
                 this.props.history.push(`/user/${user.id}/create/personaldetails`);
             }
-        }).catch(() => {
+        }catch(err){
             return;
-        });
-    }
+        }
+        
+        // For login 
+        // if(this.state.isLoginClicked){
+        //     this.props.lo(userdata)
+        //     .then((user) => {
+        //         if(user.firstname && user.lastname && user.societydetails.role){
+        //             this.props.history.push("/");
+        //         }else{
+        //             this.props.history.push(`/user/${user.id}/create/personaldetails`);
+        //         }
+        //     }).catch(() => {
+        //         return;
+        //     });
+        // }
+        
+        // For Sign Up 
+    }   
+    
 
     onFailureLogin = (err) => {
        console.log(err);
@@ -35,9 +49,8 @@ class Navbar extends Component {
         this.props.logout();
     }
 
-
+    
     render(){
-           console.log(this.props.authUser);
            const { currentUser } = this.props;
            const userid = this.props.currentUser.user.id;
          
@@ -69,16 +82,16 @@ class Navbar extends Component {
                                 </a>
                                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                     <div className="dropdown-item">
-                                        <Link className="navbar-each-society" to="/society/isa" > ISA </Link>
+                                        <Link className="navbar-each-society" to="/society/isa" > ISA Vesit </Link>
                                     </div>
                                     <div className="dropdown-item">
-                                        <Link className="navbar-each-society" to="/society/isa"> IEEE </Link>
+                                        <Link className="navbar-each-society" to="/society/ieee"> IEEE Vesit </Link>
                                     </div>
                                     <div className="dropdown-item">
-                                        <Link className="navbar-each-society" to="/society/isa"> ISTE </Link>
+                                        <Link className="navbar-each-society" to="/society/iste"> ISTE Vesit </Link>
                                     </div>
                                     <div className="dropdown-item">
-                                        <Link className="navbar-each-society" to="/society/isa"> CSI </Link>
+                                        <Link className="navbar-each-society" to="/society/csi"> CSI Vesit </Link>
                                     </div>
                                 </div>
                             </li>
@@ -89,7 +102,7 @@ class Navbar extends Component {
                                 <ul className="navbar-nav ml-auto">
                                      <li className="nav-item dropdown navbar-profile-session" id="navbar-allsocities-dropdown">
                                         <a className="nav-link dropdown-toggle navlink-header-text profile-session-link d-flex justify-content-center align-items-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <img src={ currentUser.user.imgurl ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="google-logo" /> 
+                                            <img src={ currentUser.user.imgurl.dataurl ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="google-logo" /> 
                                             <p>{ currentUser.user.username }</p>
                                         </a>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -134,22 +147,28 @@ class Navbar extends Component {
                              )   : (
                                 <ul className="navbar-nav ml-auto">
                                     <li class="nav-item navlink-all-lis navbar-login-and-sign-button d-flex justify-content-center align-items-center">
-                                        <GoogleLogin
-                                                clientId="878476685235-rubcpt9de8uo2g1ing0iqnanfkmpb4h5.apps.googleusercontent.com"
-                                                buttonText="Login"
-                                                onSuccess={this.onSuccessLogin}
-                                                onFailure={this.onFailureLogin}
-                                                cookiePolicy={'single_host_origin'}
-                                        />
+                                        <form onSumit={this.handleSubmit}>
+                                            <button className="btn btn-md btn-light login-and-signup-buttons">
+                                                <GoogleLogin
+                                                        clientId="878476685235-rubcpt9de8uo2g1ing0iqnanfkmpb4h5.apps.googleusercontent.com"
+                                                        buttonText="Login"
+                                                        onSuccess={this.onSuccessLogin}
+                                                        onFailure={this.onFailureLogin}
+                                                        cookiePolicy={'single_host_origin'}
+                                                />
+                                            </button>
+                                        </form>
                                     </li>
                                     <li class="nav-item navlink-all-lis navbar-login-and-sign-button d-flex justify-content-center align-items-center">
-                                        <GoogleLogin
-                                                clientId="878476685235-rubcpt9de8uo2g1ing0iqnanfkmpb4h5.apps.googleusercontent.com"
-                                                buttonText="Sign Up"
-                                                onSuccess={this.onSuccessLogin}
-                                                onFailure={this.onFailureLogin}
-                                                cookiePolicy={'single_host_origin'}
-                                        />
+                                        <button className="btn btn-md btn-light login-and-signup-buttons">
+                                            <GoogleLogin
+                                                    clientId="878476685235-rubcpt9de8uo2g1ing0iqnanfkmpb4h5.apps.googleusercontent.com"
+                                                    buttonText="Sign Up"
+                                                    onSuccess={this.onSuccessLogin}
+                                                    onFailure={this.onFailureLogin}
+                                                    cookiePolicy={'single_host_origin'}
+                                            />
+                                        </button>
                                     </li>
                                 </ul>
 
@@ -170,4 +189,4 @@ function mapStateToProps (state){
    };
 }
 
-export default withRouter(connect(mapStateToProps , {authUser , logout})(Navbar));
+export default withRouter(connect(mapStateToProps , {loginOrSignUp , logout})(Navbar));

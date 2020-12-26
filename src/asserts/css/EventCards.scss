@@ -11,10 +11,22 @@
    padding: 28px;
 }
 
+.society-page-event-lists{
+	padding : 0px 2% 4.5% 2% !important;
+}
+
+.MY-on-going-evenets-session .society-page-events-each-container{
+   min-width : 200px !important;
+   max-width: 313px !important; 
+   
+}
+
 .MY-on-going-evenets-session .each-event-container{
 	border : 1px solid black;
 	border-radius : 15px;
 	padding : 0px;
+
+
 
 	.img-session img{
 		width : 100%;
@@ -115,6 +127,11 @@
 
 
 @media (max-width: 992px){
+
+	.society-page-event-lists{
+		padding : 0px 1.5% 4.5% 1.5% !important;
+	}
+	
 	.MY-on-going-evenets-session{
 		padding-left : 20px;
 		padding-right:  20px;
@@ -126,13 +143,13 @@
 @media (max-width: 767.98px) { 
 
 	.MY-on-going-evenets-session .each-event-container{
-		margin :0px 15% !important;
+		margin :0px auto !important;
 	}
 }
 
 @media (max-width: 400px){
 	.MY-on-going-evenets-session .each-event-container{
-		margin :0px 10% !important;
+		margin :0px auto !important;
 	}
 }
 

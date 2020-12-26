@@ -1,0 +1,285 @@
+.society-header-session {
+    margin : 20px auto;
+
+    .society-page-society-icon{
+        width : 150px;
+        height : 150px;
+        object-fit: cover;
+    }
+
+    .society-page-society-name{
+        font-weight : 600;
+        font-size : 1.8em;
+        text-align: center;
+        margin-bottom : 3px;
+        margin-top : -16px;
+    }
+
+    .society-page-see-all-members-button {
+        border-radius : 0px;
+        background : #1E6AD9;
+        border : none;
+        font-weight : 600;
+        font-size : 1em;
+        color : white;
+        padding : 10px;
+
+        i{
+            margin-right : 6px;
+            font-size : 16px;
+        }
+    }
+}
+
+// for society content-session
+
+// About Society _page
+.society-page-navigation-session{
+    margin : 80px 6.5%;
+
+    #pills-tab{
+        border-bottom: 1px solid #d1d1d1ba;
+        width: fit-content;
+    }
+    
+    #pills-tab .nav-item a {
+        text-decoration : none;
+        border : none;
+        color : black;
+        background : white;
+        outline : none;
+        border-radius : 0px;
+        font-size: 15px;
+        border-bottom : 3px solid white;
+    }
+
+    #pills-tab .nav-item a.active{
+        color: black;
+        background: #f6f6f6eb;
+        font-size: 15px;
+        font-weight: 500;
+        border: 1px solid #e8e8e847;    
+        outline : none;
+        border-bottom : 3px solid blue;
+    }
+}
+
+.about-society-session{
+    margin-top : 50px; 
+
+    .society-iamges-and-description{
+        text-align : center;
+
+        img{
+            width : 50%;
+            height : 50%;
+            object-fit: cover;
+        }
+
+        #society-main-text{
+            margin-top : 8px;
+            font-style: italic;
+            font-weight : 600;
+            font-size : 1.1em;
+        }
+    }
+
+    p{
+         font-size : 1em;
+         margin : 18px auto 40px;
+    }
+
+    h2 {
+        font-weight : 500;
+        font-size : 2em;
+        text-decoration: underline;
+        font-style: italic;
+    }
+} 
+
+// All-Members session
+
+.about-members-session{
+    .our-navigation-of-members .members-navigation-buttons{
+        border : none;
+        text-align : start;
+        outline : none;
+        border-radius : 0px;
+        background : white;
+        color : black;
+        font-size : 15px;
+        position : relative;
+    }
+
+    .our-navigation-of-members .all-members-nev-buttons-div{
+        border: 1px solid #d3d3d3bf;
+        margin-bottom: 8px;
+    }
+
+    .our-navigation-of-members .members-navigation-buttons.active{
+        color: black;
+        background: #c7c7c759;
+        font-size: 15px;
+        font-weight: 500;
+        border: 1px solid #e8e8e847;
+    }
+
+    .our-navigation-of-members .members-navigation-buttons.active:before{
+        background : blue;
+        position: absolute;
+        height : 41px;
+        top: -2px;
+        bottom: 0;
+        left: -1px;
+        z-index: 1;
+        width: 4px;
+        pointer-events: none;
+        content: "";
+    }
+
+
+    .all-membes-cards{
+        
+
+        .each-member-card{
+
+            .card{
+                margin-bottom : 15px;
+            }
+
+            img{
+                width : 100%;
+                height : 180px;
+                object-fit: cover;
+                object-position: center;
+            }
+
+            .card-body{
+                padding : 14px 18px;
+            }
+
+            .card-title {
+                font-weight : 500;
+                font-size : 19px;
+            }
+
+            .card-text{
+                margin : 0px;
+                font-size : 14px;
+            }
+
+            button{
+                margin-top : 10px;
+                font-weight: 500;
+                border : none;
+                outline : none;
+                padding : 4px 15px;
+                background : #1E6AD9;
+            }
+        }
+         
+    }
+} 
+
+// Event-statistics session
+
+.event-statistics-session .row .col-12{
+    padding : 15px;
+}
+
+.event-statistics-card{
+    border : 1px solid #969696e6;
+    width : 100%;
+
+    .card-title{
+        font-weight: 550;
+        font-size: 1.3em;
+        color: #2C27C0;
+    }
+
+    .card-text{
+        font-size : 15px;
+    }
+
+    .date-and-time-session{
+        margin-bottom : 8px;
+
+        span{
+            margin-right : 10px;
+            font-weight : 600;
+            font-size : 14px;
+        }
+
+        i{
+            color: blue;
+            font-weight: 500;
+            font-size : 14px;
+        }
+    }
+
+    .all-registrations-class-wise{
+        margin-bottom : 5px;
+
+        span{
+            padding: 4px 8px;
+            width: 66px;
+            display: inline-block;
+            border-radius: 3px;
+            min-height: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            outline: none;
+            border: none;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            color: black;
+            background: #e2e6ea;
+        }
+    }
+
+    .total-registrations-text{
+        font-weight: 600;
+        font-size: 16px;
+
+        i{
+            color: blue;
+            font-weight: 600;
+            font-size : 16px;
+        }
+
+    }
+
+    .event-statistics-button-session{
+        a{
+            padding: 7px 14px;
+            display: inline-block;
+            font-weight: 600;
+            font-size: 12px;
+            background: #302ac9db;
+            color: white;
+            border-radius: 37px;
+            text-decoration: none;
+            margin-right : 5px;
+            margin-bottom : 5px;
+        }
+
+        a:hover{
+            background: blue;
+            cursor : pointer;
+        }
+
+        button {
+            padding : 7px 10px;
+            font-size : 12px;
+            font-weight : 600;
+            border-radius : 20px;
+            background : #e2e6ea;
+            margin-bottom : 5px;
+        }
+
+        button:hover{
+            background : #e0e0e0;
+        }
+    }
+
+}

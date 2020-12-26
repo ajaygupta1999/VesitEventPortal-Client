@@ -2,43 +2,46 @@ import { apiCall, setTokenHeader } from "../../services/api";
 import { SET_CURRENT_USER } from "../actionTypes";
 import { addError , removeError } from "./error";
 
-export function setCurrentUser(user) {
+export const setCurrentUser = (user) => {
     return {
       type: SET_CURRENT_USER,
       user
     };
 }
 
-export function setAuthorizationToken(token) {
+export const setAuthorizationToken = (token) => {
     setTokenHeader(token);
 }
 
-export function logout() {
-  return dispatch => {
+export const logout = () => dispatch => {
     localStorage.clear();
     setAuthorizationToken(false);
     dispatch(setCurrentUser({}));
-  };
 }
 
+// export const loginUser = (userData) => async dispatch => {
+//     try{
+//         let { token , ...user } = await apiCall("post", "/api/auth/login/google", userData);
+//         localStorage.setItem("jwtToken", token);
+//         setAuthorizationToken(token);    
+//         dispatch(setCurrentUser(user));   
+//         dispatch(removeError());          
+//         return user;
+//     }catch(err){
+//         dispatch(addError(err.message));
+//     }
+// }
 
-export function authUser(userData) {
-  
-    return dispatch => {
-      // wrap our thunk in a promise so we can wait for the API call
-      return new Promise((resolve, reject) => {
-        return apiCall("post", "/api/auth/signup/google", userData)
-          .then(({ token , ...user }) => {
-                localStorage.setItem("jwtToken", token);
-                setAuthorizationToken(token);     // To add Authrization header all axios requests 
-                dispatch(setCurrentUser(user));   // Action object for setting userData to store
-                dispatch(removeError());          // Action object for removing error
-                resolve(user); // indicate that the API call succeeded
-          })
-          .catch(err => {
-            dispatch(addError(err.message));
-            reject(); // indicate the API call failed
-          });
-      });
-    };
+
+export const loginOrSignUp = (userData) => async dispatch => {
+      try{
+          let { token , ...user } = await apiCall("post", "/api/auth/loginOrSignUp/google", userData);
+          localStorage.setItem("jwtToken", token);
+          setAuthorizationToken(token);     
+          dispatch(setCurrentUser(user));  
+          dispatch(removeError());          
+        return user; 
+      }catch(err){
+          dispatch(addError(err.message));
+      }
   }

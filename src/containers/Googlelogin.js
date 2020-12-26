@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { GoogleLogin } from "react-google-login";
-import { authUser , logout } from "../stores/actions/auth";
+import { loginOrSignUp , logout } from "../stores/actions/auth";
 import { withRouter } from "react-router-dom";
 
 class Googlelogin extends Component{
@@ -10,7 +10,7 @@ class Googlelogin extends Component{
         const userdata = { 
             tokenId : res.tokenId 
         }
-        this.props.authUser(userdata)
+        this.props.signUpUser(userdata)
         .then((user) => {
             console.log("From Googlelogin  component" , user);
             if(user.firstname && user.lastname && user.societydetails.role){
@@ -49,4 +49,4 @@ class Googlelogin extends Component{
 }
 
 
-export default withRouter(connect(null , { authUser , logout })(Googlelogin) );
+export default withRouter(connect(null , { loginOrSignUp , logout })(Googlelogin) );

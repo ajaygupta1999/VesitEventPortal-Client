@@ -141,6 +141,10 @@
 		padding : 10px 15px;
 	}
 
+	.navbar-login-and-sign-button .login-and-signup-buttons:hover{
+		background : #1E6AD9;
+	} 
+
 	.navbar-login-and-sign-button button div{
 		margin : 0px;
 		
@@ -153,6 +157,7 @@
 		color: #1E6AD9 !important;
 		border-radius : 0px !important;
 		border-color : #1E6AD9 !important;
+		border : none;
 	}
 
 	.navbar-login-and-sign-button button div{

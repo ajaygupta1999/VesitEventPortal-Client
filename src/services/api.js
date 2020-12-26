@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export function setTokenHeader(token) {
+export const setTokenHeader = (token) => {
   if (token) {
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   } else {
@@ -8,42 +8,32 @@ export function setTokenHeader(token) {
   }
 }
 
-export function apiCall(method, path, data) {
-  return new Promise((resolve, reject) => {
-    return axios[method.toLowerCase()](path, data)
-      .then(res => {
-          console.log(res);
-          // Returing data object
-          return resolve(res.data);
-      })
-      .catch(err => {
-         console.log(err);
-         // Reject with error
-         return reject(err.response.data.error);
-      });
-  });
+export const apiCall = async (method, path, data) => {
+  try {
+      let res = await axios[method.toLowerCase()](path, data);
+      return res.data;
+  }catch(err){
+      return err.response.data.error;
+  }
 }
 
 
-export function apiUploadCall(method, path, data) {
+export const apiUploadCall = async (method, path, data) => {
     let formData = new FormData();
     for (const [key, value] of Object.entries(data)) {
       formData.append( key , value);
     }
     console.log(formData);
-  
-    return new Promise((resolve, reject) => {
-      return axios.post(path , formData , {
+    try{
+        // This is for File Upload requests
+        let res = await axios.post(path , formData , {
             headers : {
-               'Content-type' : 'multipart/form-data'
+              'Content-type' : 'multipart/form-data'
             }
-            }).then(res => {
-                // Returing data object
-                return resolve(res.data);
-            }).catch(err => {
-              // Reject with error
-              return reject(err.response.data.error);
-            });
-    });
+        });
+        return res.data;
+    }catch(err){
+      return err.response.data.error;
+    }
 }
 
