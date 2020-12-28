@@ -1,87 +1,86 @@
-
 import { apiCall, apiUploadCall } from "../../services/api";
-import { SET_USER_PERSONAL_DETAILS , SET_CLASS_AND_SCOEITY_DETAILS , ADDING_EVENT_DETAILS } from "../actionTypes"; 
+import { setAuthorizationToken } from "./auth";
+
+import {
+    FETCH_USER_PERSONAL_DETAILS,
+    LOAD_USER_PERSONAL_DETAILS,
+    FETCH_USER_PERSONAL_DETAILS_ERROR,
+    FETCH_CLASS_AND_SCOEITY_DETAILS,
+    LOAD_CLASS_AND_SCOEITY_DETAILS,
+    FETCH_CLASS_AND_SCOEITY_DETAILS_ERROR,
+    FETCH_CREATED_EVENT,
+    LOAD_CREATED_EVENT,
+    FETCH_CREATED_EVENT_ERROR,
+    FETCH_GUESTANDSPONSOR_DATA,
+    LOAD_GUESTANDSPONSOR_DATA,
+    FETCH_GUESTANDSPONSOR_DATA_ERROR
+} from "../actionTypes";
+
 import { addError , removeError } from "./error";
 
 
-const setPersonalDetail = (user) => {
-    return {
-        type : SET_USER_PERSONAL_DETAILS,
-        user
-    }
+export const setPersonalDetails = (data , id) => async (dispatch) => {
+        try{
+            dispatch({ type : FETCH_USER_PERSONAL_DETAILS });
+            let { token ,  ...user } = await apiUploadCall("POST" , `/api/user/${id}/create/personaldetails` , data);
+            localStorage.setItem("jwtToken", token);
+            setAuthorizationToken(token);     
+            dispatch({ type : LOAD_USER_PERSONAL_DETAILS , user });
+            dispatch(removeError());
+            console.log("got data from personalDetails ===>" , user);
+        }catch(err){
+            console.error("got error from personal details ===> " , err.message);
+            dispatch({ type : FETCH_USER_PERSONAL_DETAILS_ERROR });
+            dispatch(addError(err.message));
+        }
 }
 
-const setAddingEventDetails = (event) => {
-    return {
-        type : ADDING_EVENT_DETAILS,
-        id : event.id
-    }
+
+
+
+export const setClassAndSocietyDetails = (data , id) => async (dispatch) => {
+        try{
+            dispatch({ type : FETCH_CLASS_AND_SCOEITY_DETAILS });
+            let { token ,  ...user } = await apiCall("post", `/api/user/${id}/create/classandsociety`, data);
+            localStorage.setItem("jwtToken", token);
+            setAuthorizationToken(token);
+            dispatch({ type : LOAD_CLASS_AND_SCOEITY_DETAILS , user });  
+            dispatch(removeError());
+            console.log("Got data from classandsocietydetails  =>>>> " , user);
+        }catch(err){
+            console.error("got error from classandsocietydetails ===> " , err.message);
+            dispatch({ type : FETCH_CLASS_AND_SCOEITY_DETAILS_ERROR  });
+            dispatch(addError(err.message));
+        }
 }
 
-const setClassAndSocietyDetail = (user) => {
-    return {
-        type : SET_CLASS_AND_SCOEITY_DETAILS,
-        user
-    }
-}
 
-export function setPersonalDetails(data , id){
-    return dispatch => {
-        return apiUploadCall("POST" , `/api/user/${id}/create/personaldetails` , data)
-        .then(data => {
-            console.error(data);
+export const setEventDetails = (data , id) => async (dispatch) => {
+      try{
+            dispatch({ type : FETCH_CREATED_EVENT  });
+            let event = await apiUploadCall("post", `/api/user/${id}/add/eventdetails`, data);
+            dispatch({ type : LOAD_CREATED_EVENT , event });
             dispatch(removeError()); 
-            dispatch(setPersonalDetail(data));
-        }).catch(err => {
+            console.log("got data of event ====> " , event );
+      }catch(err){
+            console.error("Got error while creating error ==>>>" , err);
+            dispatch({ type : FETCH_CREATED_EVENT_ERROR });
             dispatch(addError(err.message));
-        })
-    }
-}
-
-export function setClassAndSocietyDetails(data , id){
-    return dispatch => {
-    
-        return apiCall("post", `/api/user/${id}/create/classandsociety`, data)
-          .then((user) => {
-                console.log(data);
-                dispatch(removeError());
-                dispatch(setClassAndSocietyDetail(user));       
-          })
-          .catch(err => {
-              console.log(err);
-            dispatch(addError(err.message));
-          });
     }
 }
 
 
-export function setEventDetails(data , id){
-    return dispatch => {
-    
-        return apiUploadCall("post", `/api/user/${id}/add/eventdetails`, data)
-          .then((event) => {
-                dispatch(setAddingEventDetails(event));
-                dispatch(removeError());      
-          })
-          .catch(err => {
-              console.log(err);
-              dispatch(addError(err.message));
-          });
-    }
-}
+export const setGuestAndSponsorsDetails = (data , id , eventid) => async (dispatch) => {
+        try{
+            dispatch({ type : FETCH_GUESTANDSPONSOR_DATA });
+            let event = await apiUploadCall("post" , `/api/user/${id}/add/${eventid}/guestandsponsor` , data);
+            dispatch({ type : LOAD_GUESTANDSPONSOR_DATA , event });
+            dispatch(removeError());
+            console.log("got data of guest ===> " , event);
 
-
-export function setGuestAndSponsorsDetails(data , id , eventid){
-    return dispatch => {
-        
-        return apiUploadCall("post" , `/api/user/${id}/add/${eventid}/guestandsponsor` , data)
-        .then((data) => {
-            console.error(data);
-            dispatch(removeError())
-        })
-        .catch(err => {
-            console.log(err);
+        }catch(err){
+            console.error("Got error while setting up guest details ===>>" , err.message);
+            dispatch({ type : FETCH_GUESTANDSPONSOR_DATA_ERROR  });
             dispatch(addError(err.message));
-        })
-    }
+        }
 }

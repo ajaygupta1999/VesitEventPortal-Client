@@ -1,18 +1,11 @@
 import React, { Component } from 'react';
 import Event from "./Event";
-import { fetchAllEvents } from "../stores/actions/event";
+import { fetchAllEvents } from "../stores/actions/events";
 import { connect } from "react-redux";
 import "../asserts/css/EventCards.scss";
 
 
 class Eventlists extends Component{
-
-    constructor(props){
-        super(props);
-        this.state = {
-            events : [1 , 2]
-        }
-    }
 
     componentDidMount = async () => {
        this.props.fetchAllEvents();
@@ -52,9 +45,11 @@ class Eventlists extends Component{
     }
 }
 
+
+
 function mapStateToProps (state) {
     return {
-        allEvents : state.allEvents
+        allEvents : state.allEvents.data
     }
 }
 

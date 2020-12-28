@@ -3,20 +3,11 @@ import {
    LOAD_SOCIETY_DATA,
    FETCH_SOCIETY_DATA,
    FETCH_SOCIETY_ERROR,
-   ADD_ERROR,
-   REMOVE_ERROR,
    SHOW_SEARCH_MODAL,
    HIDE_SEARCH_MODAL
 } from "../actionTypes";
 
-const addError = (error) => ({
-    type : ADD_ERROR,
-    error 
-})
-  
-const removeError = () => ({
-    type: REMOVE_ERROR
-});
+import { addError , removeError } from "../actions/error";
 
 export const showSearchModal = () => ({
     type : SHOW_SEARCH_MODAL
@@ -32,13 +23,13 @@ export const loadSocietyData = (name) => async dispatch => {
         dispatch({ type : FETCH_SOCIETY_DATA });
         let societyData = await apiCall("get" , `/api/society/${name}/allData`);
         dispatch({ type : LOAD_SOCIETY_DATA , data : societyData.society});
-
+        dispatch(removeError());
+        console.log("got data of society ===> " , societyData);
     }catch(err){
-        console.log(err);
+        console.error("gor error while fetching society details ===> " , err.message);
         dispatch({ type : FETCH_SOCIETY_ERROR  });
         dispatch(addError(err.message));
     }
-
 }
 
 

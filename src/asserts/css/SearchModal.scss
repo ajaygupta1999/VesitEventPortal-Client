@@ -131,6 +131,8 @@
 
         .searched-content .each-search-content {
             padding : 5px 0px;
+            background: #dadada57;
+            border-radius: 2px;
             
             .searched-content-img-session{
                 margin-right : 10px;
@@ -170,8 +172,9 @@
         }
 
         .searched-content .each-search-content:hover{
-            background: #8787871f;
-            border-radius : 5px;     
+            padding: 5px 0px;
+            background: #dadada57;
+            border-radius: 2px;     
         }
         
     }

@@ -78,7 +78,7 @@ class GuestAndSponsorsForm extends Component {
 
         if(this.props.currentUser.isAuthenticated){
             console.log("Last step of submission ===> ");
-            this.props.setGuestAndSponsorsDetails(dataObj , this.props.currentUser.user.id , this.props.addingEvent.id)
+            this.props.setGuestAndSponsorsDetails(dataObj , this.props.currentUser.user.id , this.props.createdEvent.data.id)
             .then(() => {
                 this.props.history.push("/");    
             }).catch(() => {
@@ -313,7 +313,7 @@ class GuestAndSponsorsForm extends Component {
 function mapStateToProps(state){
     return {
         currentUser : state.currentUser,
-        addingEvent : state.addingEvent
+        createdEvent : state.createdEvent
     }
 } 
 

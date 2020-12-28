@@ -5,10 +5,10 @@ import { ADD_ERROR , REMOVE_ERROR } from "../actionTypes";
 const errorHandler = ( state = {message : null} , action ) => {
     switch(action.type){
         case ADD_ERROR:
-            return {...state , messgae : action.error}
+            return { messgae : action.error}
         
         case REMOVE_ERROR:
-            return { ...state , messgae : null }
+            return { messgae : null }
 
         default :
              return state; 

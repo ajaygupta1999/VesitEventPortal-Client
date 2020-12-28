@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { getSocietyMembers } from "../../functions";
 import { Link , withRouter } from "react-router-dom";
 import { parse } from "query-string";
 import { connect } from "react-redux";

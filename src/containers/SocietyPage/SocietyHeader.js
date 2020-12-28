@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from "redux";
 import { showSearchModal } from "../../stores/actions/society";
 import { connect } from "react-redux";
-
+import { Link } from "react-router-dom";
 
 class SocietyHeader extends Component{
    
@@ -44,16 +44,57 @@ class SocietyHeader extends Component{
         }
 
         return(
-            <div className="container society-header-session d-flex justify-content-center">
+            <div className="society-header-session d-flex justify-content-center">
                 <div className="d-flex flex-column">
+                    <img className="cover-img-of-society" src="/images/cover_image.jpg" alt="coverimage" />
                     <div className="d-flex justify-content-center">
                        <img className="society-page-society-icon" src={ `/images/${imgurl}` } alt="society-image" />
                     </div>
-                    <p class="society-page-society-name"> { Object.keys(this.props.data).length > 0 ? this.props.data.name.toUpperCase() : null } VESIT</p>
-                    <button className="btn btn-lg society-page-see-all-members-button" onClick={this.handleClick}>
-                        <i class="fas fa-users"></i>
-                        <span>{ totalMembers } Members (See All)</span>
-                    </button>
+                    <div className="society-contents-div">
+                        <p className="society-page-society-name"> { Object.keys(this.props.data).length > 0 ? this.props.data.name.toUpperCase() : null } VESIT</p>
+                        <p className="society-description">Student chapter of Indian Society for Technical Education,
+                            ISTE aims at developing not only technical temperament of budding engineers but also overall personality, reasoning and presentation skills.</p>
+                        <div className="faculty-and-society-incharge-session d-flex justify-content-center align-items-center">
+                            <div className="d-flex flex-column">
+                                <Link to="/user/profile/:id">
+                                    <div className="d-flex flex-row">
+                                        <div>
+                                            <img src="/images/user-img1.jpg" alt="user-profile-img"/>
+                                        </div>
+                                        <div className="d-flex flex-column">
+                                            <p className="incharge-name">Ajay Gupta</p>
+                                            <p className="role-of-person">Faculty Incharge</p>
+                                        </div>
+                                    </div> 
+                                </Link>
+                                <div className="total-members-and-total-events-session d-flex justify-content-end">
+                                    <button className="btn btn-lg society-page-see-all-members-button" onClick={this.handleClick}>
+                                        <i className="fas fa-users"></i>
+                                        <span>{ totalMembers } Members (See All)</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div className="d-flex flex-column">
+                                <Link to="/user/profile/:id">
+                                    <div className="d-flex flex-row">
+                                        <div>
+                                            <img src="/images/user-img1.jpg" alt="user-profile-img"/>
+                                        </div>
+                                        <div className="d-flex flex-column">
+                                            <p className="incharge-name">Hritwik Ekade</p>
+                                            <p className="role-of-person">Society Chairperson</p>
+                                        </div>
+                                    </div> 
+                                </Link>
+                                <div className="total-members-and-total-events-session d-flex justify-content-start">
+                                    <button className="btn btn-lg society-page-see-all-members-button" onClick={this.handleClick}>
+                                        <i class="far fa-calendar-check"></i>
+                                        <span>{ Object.keys(this.props.data).length > 0 ? this.props.data.events.length : 0 } Events</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>  
         )

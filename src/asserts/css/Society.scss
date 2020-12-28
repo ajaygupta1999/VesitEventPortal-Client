@@ -1,33 +1,112 @@
 .society-header-session {
-    margin : 20px auto;
+    margin : 20px 6.5%;
+    position: relative;
+    text-align: center;
+
+    .cover-img-of-society{
+        width: 100%;
+        height: 300px;
+        border-radius: 12px;
+        object-fit: cover;
+        object-position: center;
+    }
 
     .society-page-society-icon{
-        width : 150px;
-        height : 150px;
+        position: absolute;
+        top: 249px;
+        width: 100px;
+        height: 100px;
+        border-radius: 50px;
         object-fit: cover;
     }
 
-    .society-page-society-name{
-        font-weight : 600;
-        font-size : 1.8em;
-        text-align: center;
-        margin-bottom : 3px;
-        margin-top : -16px;
-    }
+    .society-contents-div{
+        margin-top : 60px;
+        margin-bottom : 10px;
 
-    .society-page-see-all-members-button {
-        border-radius : 0px;
-        background : #1E6AD9;
-        border : none;
-        font-weight : 600;
-        font-size : 1em;
-        color : white;
-        padding : 10px;
+        .society-description{
+            margin: 0 18%;
+            text-align: center;
+            font-size: 0.95em;
+            margin-bottom: 10px;
 
-        i{
-            margin-right : 6px;
-            font-size : 16px;
+            i{
+                font-weight: 500;
+                color: #ff2b2b;
+                margin-right: 8px;
+                position: relative;
+                top: 2px;
+            }
         }
+        
+        .society-page-society-name{
+            font-weight : 600;
+            font-size : 2em;
+            text-align: center;
+            margin-bottom : 3px;
+        }
+
+    
+        .faculty-and-society-incharge-session a{
+            margin: 0px 10px 12px;
+            padding: 8px 18px;
+            background: #dededeeb;
+            border-radius: 8px;
+            text-decoration: none;
+            color: black;
+            font-size: 12px;
+
+            img{
+                width : 40px;
+                height : 40px;
+                border-radius : 20px;
+                object-fit: cover;
+                object-position: start;
+            }
+
+            p{
+                margin-bottom : 0px;
+                margin-left : 10px; 
+            }
+
+            .incharge-name{
+                font-size : 13px;
+                font-weight : 600;
+                text-align: left;
+            }
+        }
+
+        .faculty-and-society-incharge-session .profile-to-society-link{
+            margin-bottom : 0px;
+            padding: 8px 18px;
+            background: #dededeeb;
+            border-radius: 0px;
+            text-decoration: none;
+            color: black;
+            font-size: 14px;
+        }
+
+        .total-members-and-total-events-session{
+            
+
+            .society-page-see-all-members-button {
+                border-radius : 0px;
+                background : #1E6AD9;
+                border : none;
+                font-weight : 600;
+                font-size : 0.9em;
+                color : white;
+                padding : 10px;
+                margin : 0px 10px;
+    
+                i{
+                    margin-right : 6px;
+                    font-size : 14px;
+                }
+            }
+        }
+
+        
     }
 }
 
@@ -35,7 +114,7 @@
 
 // About Society _page
 .society-page-navigation-session{
-    margin : 80px 6.5%;
+    margin : 0px 6.5%;
 
     #pills-tab{
         border-bottom: 1px solid #d1d1d1ba;

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Googlelogin from "./Googlelogin";
 import Appheader from "../components/Appheader";
 import Allsocietys from "../components/Allsocietys";
 import Eventlists from "./Eventlists";

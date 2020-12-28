@@ -10,7 +10,7 @@ class EventDetailsForm extends Component {
      constructor(props){
          super(props);
          this.state = {
-             e : "",
+             eventname : "",
              shortdesc : "",
              fulldesc : "",
              category : "technical",
@@ -20,7 +20,7 @@ class EventDetailsForm extends Component {
          }
      }
      
-     componentWillMount(){
+     componentDidMount(){
          let date = new Date();
          let todaysdate =  date.getFullYear() + "-" + ( date.getMonth() + 1 < 10 ? ("0" + (date.getMonth() + 1 )): (date.getMonth() + 1) ) + "-" +  ( date.getDate() < 10 ? ("0" + date.getDate()) : date.getDate());
          var time = (date.getHours() < 10 ? ("0" + date.getHours()) : date.getHours()) + ":" + (date.getMinutes() < 10 ? ("0" + date.getMinutes()) : date.getMinutes());
@@ -49,7 +49,7 @@ class EventDetailsForm extends Component {
         if(this.props.currentUser.isAuthenticated){
             this.props.setEventDetails(this.state , this.props.currentUser.user.id)
             .then(() => {
-                this.props.history.push(`/user/${this.props.currentUser.user.id}/add/${this.props.addingEvent.id}/guestandsponsor`);    
+                this.props.history.push(`/user/${this.props.currentUser.user.id}/add/${this.props.createdEvent.data.id}/guestandsponsor`);    
             }).catch(() => {
                 return;
             });
@@ -122,7 +122,7 @@ class EventDetailsForm extends Component {
 function mapStateToProps(state){
     return {
         currentUser : state.currentUser,
-        addingEvent : state.addingEvent
+        createdEvent : state.createdEvent
     }
 } 
 

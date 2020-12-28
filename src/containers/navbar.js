@@ -15,7 +15,7 @@ class Navbar extends Component {
             }
             let user = await this.props.loginOrSignUp(userdata);
             if(user.firstname && user.lastname && user.societydetails.role){
-                this.props.history.push("/");
+                console.log("Logged in");
             }else{
                 this.props.history.push(`/user/${user.id}/create/personaldetails`);
             }
@@ -23,21 +23,6 @@ class Navbar extends Component {
             return;
         }
         
-        // For login 
-        // if(this.state.isLoginClicked){
-        //     this.props.lo(userdata)
-        //     .then((user) => {
-        //         if(user.firstname && user.lastname && user.societydetails.role){
-        //             this.props.history.push("/");
-        //         }else{
-        //             this.props.history.push(`/user/${user.id}/create/personaldetails`);
-        //         }
-        //     }).catch(() => {
-        //         return;
-        //     });
-        // }
-        
-        // For Sign Up 
     }   
     
 
@@ -52,7 +37,6 @@ class Navbar extends Component {
     
     render(){
            const { currentUser } = this.props;
-           const userid = this.props.currentUser.user.id;
          
         return(
             <div className="my-content">
@@ -76,6 +60,16 @@ class Navbar extends Component {
                                     All Events
                                 </NavLink>
                             </li>
+                            {
+                                this.props.currentUser.isAuthenticated ? (
+                                    <li class="nav-item navlink-all-lis d-flex justify-content-center align-items-center">
+                                        <NavLink to={ `/user/${ this.props.currentUser.user.id }/add/eventdetails` } className="navbar-navsession-links" activeClassName="navbar-active-state">
+                                            Add Event
+                                        </NavLink>
+                                    </li>
+                                ) : null
+                            }
+                           
                             <li className="nav-item dropdown" id="navbar-allsocities-dropdown">
                                 <a className="nav-link dropdown-toggle navlink-header-text" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     All Societies
@@ -102,7 +96,7 @@ class Navbar extends Component {
                                 <ul className="navbar-nav ml-auto">
                                      <li className="nav-item dropdown navbar-profile-session" id="navbar-allsocities-dropdown">
                                         <a className="nav-link dropdown-toggle navlink-header-text profile-session-link d-flex justify-content-center align-items-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <img src={ currentUser.user.imgurl.dataurl ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="google-logo" /> 
+                                            <img src={ Object.keys(currentUser.user.imgurl).length > 0 ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="google-logo" /> 
                                             <p>{ currentUser.user.username }</p>
                                         </a>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -110,7 +104,7 @@ class Navbar extends Component {
                                                 <div className="dropdown-item">
                                                     <Link to="/notification">
                                                         <div className="profile-name-and-email">
-                                                            <img src={ currentUser.user.imgurl ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="profile-image" />
+                                                            <img src={ Object.keys(currentUser.user.imgurl).length > 0 ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="profile-image" />
                                                             <p className="nav-profile-user-name">{ currentUser.user.username }</p>
                                                             <p className="nav-profile-user-email">{ currentUser.user.email }</p>
                                                         </div>
@@ -123,18 +117,32 @@ class Navbar extends Component {
                                                     </div>
                                                 </div>
                                                 <hr />
-                                                <div className="dropdown-item">
-                                                    <div className="Navbar-profile-dopdown-socities-session">
-                                                        <p>Socity</p>
-                                                    </div>
-                                                </div>
-                                                <hr />
-                                                <div className="dropdown-item">
-                                                    <div className="Navbar-profile-dopdown-profile-session">
-                                                        <p>Go to Profile</p>
-                                                    </div>
-                                                </div>
-                                                <hr />
+                                                {
+                                                    this.props.currentUser.user.societydetails && (
+                                                        <div>
+                                                            <div className="dropdown-item">
+                                                                <Link to={ `/society/${ this.props.currentUser.user.societydetails.name}` } className="Navbar-profile-dopdown-socities-session">
+                                                                    <p>{ this.props.currentUser.user.societydetails.name.toUpperCase() } VESIT</p>
+                                                                </Link>
+                                                            </div>
+                                                            <hr />
+                                                        </div>
+                                                    )
+                                                }
+                                                {
+                                                    (this.props.currentUser.isAuthenticated && this.props.currentUser.user) && (
+                                                        <div>
+                                                            <div className="dropdown-item">
+                                                                <Link to={ `/user/${this.props.currentUser.user.id}/profile` } className="Navbar-profile-dopdown-profile-session">
+                                                                    <p>Go to Profile</p>
+                                                                </Link>
+                                                            </div>
+                                                            <hr />
+                                                        </div>
+                                                    )
+
+                                                }
+                                                
                                                 <div className="dropdown-item">
                                                     <div className="Navbar-profile-dopdown-profile-session">
                                                         <p onClick={this.handleLogout}>Logout</p>
@@ -189,4 +197,4 @@ function mapStateToProps (state){
    };
 }
 
-export default withRouter(connect(mapStateToProps , {loginOrSignUp , logout})(Navbar));
+export default withRouter(connect(mapStateToProps , {loginOrSignUp , logout })(Navbar));

@@ -1,36 +1,63 @@
-import { SET_CLASS_AND_SCOEITY_DETAILS, SET_CURRENT_USER , SET_USER_PERSONAL_DETAILS } from "../actionTypes";
+import { 
+   FETCH_CURRENT_USER,
+   LOAD_CURRENT_USER,
+   FETCH_CURRENT_USER_ERROR,
+   FETCH_USER_PERSONAL_DETAILS,
+   LOAD_USER_PERSONAL_DETAILS,
+   FETCH_USER_PERSONAL_DETAILS_ERROR,
+   FETCH_CLASS_AND_SCOEITY_DETAILS,
+   LOAD_CLASS_AND_SCOEITY_DETAILS,
+   FETCH_CLASS_AND_SCOEITY_DETAILS_ERROR 
+} from "../actionTypes";
 
 
 const DEFAULT_STATE = {
-    isAuthenticated : false,  // Is Authenticated 
-    user : {} // User details when logged in
+    isAuthenticated : false, 
+    user : {},
+    isFetching : false,
+    error : false
 }
 
 // Set user reducer
 const currentUser = (state = DEFAULT_STATE , action) => {
     switch(action.type){
-        case SET_CURRENT_USER:
+
+        case FETCH_CURRENT_USER:
+            return { ...state , isFetching : true , error : false }
+
+        case LOAD_CURRENT_USER:
             return {
                 isAuthenticated : Object.keys(action.user).length > 0,
-                user : action.user
+                user : action.user,
+                isFetching :false,
+                error : false
             }
         
-        case SET_USER_PERSONAL_DETAILS:
-           console.log("Set user is called");
-           return {
-               ...state,
-               user : action.user
-           }
+        case FETCH_CURRENT_USER_ERROR:
+            return { ...state , isFetching : false , error : true }
+
+        case FETCH_USER_PERSONAL_DETAILS:
+            return { ...state , isFetching : true , error : false }
+
+        case LOAD_USER_PERSONAL_DETAILS:
+           return { ...state , user : action.user , isFetching : false , error : false}
         
-        case SET_CLASS_AND_SCOEITY_DETAILS:
-            console.log("Setting class and Socirty Details of user. ....");
-            return {
+        case FETCH_USER_PERSONAL_DETAILS_ERROR:
+            return { ...state , isFetching : false , error : true }
+        
+        case FETCH_CLASS_AND_SCOEITY_DETAILS:
+            return { ...state , isFetching : true , error : false }
+   
+        case LOAD_CLASS_AND_SCOEITY_DETAILS:
+            return { 
                 ...state,
-                user : {
-                    ...action.user,
-                    ...state.user
-                }
+                user : action.user,
+                isFetching : false,
+                error : false
             }
+        
+        case FETCH_CLASS_AND_SCOEITY_DETAILS_ERROR:
+            return { ...state, isFetching : false, error : true }
         
         default:
             return state;

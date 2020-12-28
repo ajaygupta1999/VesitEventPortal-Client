@@ -5,7 +5,6 @@ import {
     FETCH_SOCIETY_RETRY,
     SHOW_SEARCH_MODAL,
     HIDE_SEARCH_MODAL
-
 } from "../actionTypes";
 
 
