@@ -102,7 +102,7 @@ class Navbar extends Component {
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <div className="profile-image-dropdown-content">
                                                 <div className="dropdown-item">
-                                                    <Link to="/notification">
+                                                    <Link to={ `/user/${currentUser.user.id}/profile` }>
                                                         <div className="profile-name-and-email">
                                                             <img src={ Object.keys(currentUser.user.imgurl).length > 0 ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="profile-image" />
                                                             <p className="nav-profile-user-name">{ currentUser.user.username }</p>

@@ -169,7 +169,7 @@ class SearchModal extends Component{
                                                     </div>
                                                     <div className="view-profile-button col-12 col-md-4 d-flex justify-content-center align-items-center">
                                                         <button className="btn btn-md btn-primary">    
-                                                            <Link to="/user/:id">
+                                                            <Link to={ `/user/${member._id}/profile` }>
                                                                 View Profile
                                                             </Link>
                                                         </button>

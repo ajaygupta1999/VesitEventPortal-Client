@@ -56,16 +56,3 @@ export const loginOrSignUp = (userData) => async dispatch => {
       }
   }
 
-
-//   export const refreshSignIn = () => async (dispatch) => {
-//       try{
-//             dispatch({ type : FETCH_CURRENT_USER });
-//             let user = await apiCall("post", "/api/auth/refreshSignIn");
-//             dispatch(setCurrentUser(user));  
-//             dispatch(removeError()); 
-//       }catch(err){
-//             console.log("Error while login ==>>> " , err.message);
-//             dispatch({ type : FETCH_CURRENT_USER_ERROR });
-//             dispatch(addError(err.message));
-//       }
-//   }

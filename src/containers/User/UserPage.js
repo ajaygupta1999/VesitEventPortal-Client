@@ -8,12 +8,14 @@ import "../../asserts/css/Society.scss";
 
 class UserPage extends Component{
 
-
+    
     render(){
+        let totalReg = this.props.registeredEvents.length;
+
         return(
             <div>
                 <Navbar />
-                <UserPageHeader data={ this.props.user }/>
+                <UserPageHeader data={ this.props.user } totalreg={totalReg}/>
                 <UserPageContent />
             </div>
         )
@@ -22,7 +24,8 @@ class UserPage extends Component{
 
 
 const mapStateToProps = (state) => ({
-    user : state.currentUser
+    user : state.currentUser,
+    registeredEvents : state.registeredEvents.data
 });
 
 export default connect(mapStateToProps , null)(UserPage);

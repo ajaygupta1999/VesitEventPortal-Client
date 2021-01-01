@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from "react-router-dom";
+import "../../asserts/css/UserProfile.scss";
+
 
 class UserpageHeader extends Component{
 
@@ -58,7 +60,7 @@ class UserpageHeader extends Component{
                         <div className="society-contents-div">
                             <p className="society-page-society-name"> { username } </p>
                             <p className="society-description"><i class="far fa-envelope"></i>
-                                { email } , { branch + ", " + year + " " + classname + "-" + rollno }
+                               <span id="email-of-user"> { email } </span> , { branch + ", " + year + " " + classname + "-" + rollno }
                             </p>
                             <div className="faculty-and-society-incharge-session d-flex justify-content-center align-items-center">
                                 <div className="d-flex flex-row">
@@ -67,14 +69,17 @@ class UserpageHeader extends Component{
                                             <div>
                                                 <img src={ `/images/${societyimg}` } alt="user-profile-img"/>
                                             </div>
-                                            <p className="incharge-name"> { societyname.toUpperCase() + ", " +  societyrole.toUpperCase()  } </p>
+                                            <div className="d-flex flex-column">
+                                                <p className="profile-incharge-name"> { societyname.toUpperCase() + " VESIT" } </p>
+                                                <p className="profile-role-of-person"> { societyrole.toUpperCase() } </p>
+                                            </div>
                                         </div>
                                     </Link>
 
                                     <div className="total-members-and-total-events-session d-flex align-items-center">
                                         <button className="btn btn-lg society-page-see-all-members-button">
                                             <i class="far fa-calendar-check"></i>
-                                            <span>{ 5 } registrations </span>
+                                            <span>{ this.props.totalreg } registrations </span>
                                         </button>
                                     </div>
                                 </div>

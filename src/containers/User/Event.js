@@ -1,34 +1,25 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
-import { registerEvent , unregisterEvent } from "../stores/actions/events";
+import { registerEvent , unregisterEvent } from "../../stores/actions/events";
 
 
 
 class Event extends Component{
 
-    handleRegister = () => {
-        if(this.props.userdata.isAuthenticated){
-            console.log("user is Authenticated");
-            this.props.registerEvent( this.props.userdata.user.id , this.props.id);
-        }
-    }
-
     handleUnregister = () => {
         if(this.props.userdata.isAuthenticated){
             console.log("user is Authenticated");
-            this.props.unregisterEvent( this.props.userdata.user.id , this.props.id);
+            this.props.unregisterEvent( this.props.userdata.user.id , this.props._id);
         }
     }
 
     render(){
-        const {name , shortdesc , date , time , isRegistered } = this.props;
+        const {name , shortdesc , date , time } = this.props;
         const imgurl = this.props.imgurl.dataurl;
-        const registedEventStyle = {
-            backgroundColor : "blue !important"
-        }
+
 
         return(
-                <div className="col-12 col-md-6 col-lg-4">
+                <div className="col-12 col-md-6 col-lg-3">
                     <div className="each-event-container">
                         <div className="img-session">
                             <img src={imgurl} alt="event-image" />
@@ -42,17 +33,11 @@ class Event extends Component{
                                     <p className="date-session"><span><i className="far fa-calendar-alt"></i></span>{ date }</p>
                                     <p><span><i className="far fa-clock"></i></span> { time } </p>
                                 </div>
-                                {
-                                    isRegistered ? (
-                                        <div className="register-button-div">
-                                            <button style={registedEventStyle} id="each-event-unregister-button" className="btn btn-md btn-success" onClick={this.handleUnregister}>Un-Register</button>        
-                                        </div> 
-                                    ) : (
-                                        <div className="register-button-div">
-                                            <button id="each-event-register-button" className="btn btn-md btn-primary" onClick={this.handleRegister}>Register</button>        
-                                        </div>
-                                    )
-                                }
+                                <div className="register-button-div">
+                                    <button id="each-event-unregister-button" className="btn btn-md btn-success" onClick={this.handleUnregister}>Un-Register</button>        
+                                </div> 
+                                    
+                                
                             </div>
                         </div>
                     </div>

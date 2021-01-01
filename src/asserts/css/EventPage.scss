@@ -1,0 +1,190 @@
+.each-event-main-div{
+    margin: 20px 9%;
+
+    .each-event-main-div-session{
+        padding: 2.5%;
+        border: 1px solid #bdbdbd;
+        border-radius: 6px;
+
+        .each-event-content{
+
+            .event-name{
+                font-size: 34px;
+                font-weight: 500;
+                color: #245bd8;
+            }
+
+            .event-guest{
+                margin-bottom: 8px;
+
+                span{
+                    font-weight: 600;
+                    color: blue;
+                    margin-right: 5px;
+                    margin-bottom: 0px;
+                }
+            }
+
+            .event-date-time span{
+                margin-right: 25px;
+                font-weight: 500;
+
+                i{
+                    color: blue;
+                    margin: 3px;
+                }
+
+            }
+      
+            .profile-to-society-link{
+                margin: 0px 0px 12px;
+                padding: 5px 13px;
+                background: #dedede80;
+                border-radius: 8px;
+                color: black;
+                font-size: 12px;
+                max-width: 146px;
+
+                .society-collections {
+                    img{
+                        width: 30px;
+                        height: 30px;
+                        border-radius: 20px;
+                        object-fit: cover;
+                    }
+
+                    .profile-incharge-name{
+                        font-weight: 600;
+                        margin: 0;
+                        margin-left: 7px !important;
+                        font-size: 14px;
+
+                    }
+                }
+            }
+            
+            .register-button-div .register-button-div{
+                font-size: 14px;
+                padding : 6px 18px;
+                margin-right : 12px;
+                font-weight: 600;
+                color: white !important;
+                border-radius: 33px;
+                border: none;
+                box-shadow: 0 4px 10px 8px rgba(0, 0, 0, 0.05), 0 6px 20px 2px rgba(0, 0, 0, 0.04);
+            }
+
+            .register-button-div .set-remainder-button{
+                background: #0010ffd6;
+            }
+
+            .all-registrations-class-wise{
+                margin-bottom:  5px;
+
+                span{
+                    padding: 7px 9px;
+                    width: 72px;
+                    display: inline-block;
+                    border-radius: 3px;
+                    min-height: 20px;
+                    font-size: 13px;
+                    font-weight: 600;
+                    outline: none;
+                    border: none;
+                    margin-right: 5px;
+                    margin-bottom: 5px;
+                    color: black;
+                    background: #e2e6ead4;
+                }
+            } 
+
+            .call-starts-in-time {
+                margin-top : 15px;
+                margin-bottom  : 10px;
+
+                p{
+                    margin: 0px;
+                    font-weight:  600;
+                    font-size : 1em;
+                }
+
+                span{
+                    font-weight : 500;
+                }
+            }
+        }
+
+        .event-page-main-image-session div{
+            width : 100%;
+            text-align: center;
+
+            img { 
+                width : 80% !important;
+                height : 60% !important;
+                object-fit: cover !important;
+                object-position: start !important;  
+            }
+        }
+    }
+
+    
+    .main-title-full-detail{
+        font-weight: 600;
+        margin-top : 50px;
+        margin-bottom : 20px;
+    }
+    
+    .full-detail-session{
+
+        .full-detail-img-session{
+            width : 100%;
+
+            img {
+                width : 100%;
+            }
+        }
+    }
+
+
+
+
+}
+
+
+.main-title-event-guest{
+    font-weight: 600;
+    margin-top : 50px;
+    margin-bottom : 0px;
+}
+
+.guest-session .guest-card{
+    margin: 20px 26px;
+    border: 1px solid black;
+} 
+
+.guest-session .guest-card .guest-img img{
+    width : 255px;
+    height : 255px;
+    object-fit: cover;
+}
+
+.guest-session .guest-card .guest-detail{
+    padding : 10px;
+}
+
+.guest-session .guest-card .guest-detail .guest-name{
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.guest-session .guest-card .guest-detail .guest-division-seesion{
+    font-weight : 500;
+    font-size : 16px;
+    margin-bottom : 3px;
+}
+
+#github-img{
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+}

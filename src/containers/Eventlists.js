@@ -1,19 +1,39 @@
 import React, { Component } from 'react';
 import Event from "./Event";
-import { fetchAllEvents } from "../stores/actions/events";
+import { fetchAllEvents , fetchregisteredEvents } from "../stores/actions/events";
 import { connect } from "react-redux";
 import "../asserts/css/EventCards.scss";
-
+import moment from "moment";
 
 class Eventlists extends Component{
 
     componentDidMount = async () => {
        this.props.fetchAllEvents();
+       if(this.props.currentUser.isAuthenticated){
+           this.props.fetchregisteredEvents(this.props.currentUser.user.id);
+       }
     }
 
-    render(){
-        const { allEvents } = this.props;
+    getUpcomingEvents = (events) => {
+        let todaysDate = new Date();
+        let wrapper = moment(todaysDate).format("YYYY-MM-DD");
+        let upcomingevents = events.filter(event => moment(wrapper).isBefore(event.date)); 
+        return upcomingevents;
+    }
 
+    getTodaysEvents = (events) => {
+        let todaysDate = new Date();
+        let wrapper = moment(todaysDate).format("YYYY-MM-DD");  
+        let todaysevents = events.filter(event => event.date === wrapper);
+        return todaysevents;
+    } 
+
+
+    render(){
+        const { allEvents , registerdEvents } = this.props;
+        let todaysevents = this.getTodaysEvents(allEvents);
+        let upcomingevents = this.getUpcomingEvents(allEvents);
+ 
         return(
             <div>
                 <div class="d-flex justify-content-center align-items-center">
@@ -22,8 +42,13 @@ class Eventlists extends Component{
                 <div className="MY-on-going-evenets-session container">
                     <div className="row">
                         {
-                            allEvents.map(event => {
-                                return <Event key={event.id} {...event}/>
+                            todaysevents.map(event => {
+                                let data = this.props.registerdEvents.data.filter(registered => registered._id.toString() === event.id.toString());
+                                if(data.length > 0){
+                                     return <Event key={event.id} {...event} userdata={this.props.currentUser} isRegistered={true}/>
+                                }else{
+                                    return <Event key={event.id} {...event} userdata={this.props.currentUser} isRegistered={false}/>
+                                }
                             }) 
                         }
                     </div>
@@ -33,9 +58,15 @@ class Eventlists extends Component{
                 </div>
                 <div className="MY-on-going-evenets-session container">
                     <div className="row">
-                        {
-                            allEvents.map(event => {
-                                return <Event key={event.id} {...event}/>
+                       {
+                            upcomingevents.map(event => {
+                                let data = this.props.registerdEvents.data.filter(registered => registered._id.toString() === event.id.toString());
+                            
+                                if(data.length > 0){
+                                     return <Event key={event.id} {...event} userdata={this.props.currentUser} isRegistered={true}/>
+                                }else{
+                                    return <Event key={event.id} {...event} userdata={this.props.currentUser} isRegistered={false}/>
+                                }
                             }) 
                         }
                     </div>
@@ -47,11 +78,10 @@ class Eventlists extends Component{
 
 
 
-function mapStateToProps (state) {
-    return {
-        allEvents : state.allEvents.data
-    }
-}
-
-
-export default connect( mapStateToProps , { fetchAllEvents } )(Eventlists);
+const mapStateToProps = (state) => ({
+    currentUser : state.currentUser,
+    allEvents : state.allEvents.data,
+    registerdEvents : state.registeredEvents
+});
+    
+export default connect( mapStateToProps , { fetchAllEvents , fetchregisteredEvents } )(Eventlists);

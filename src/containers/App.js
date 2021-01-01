@@ -8,7 +8,7 @@ import EventDetailsForm from './Event/EventDetailsForm';
 import GuestAndSponsorsForm from "./Event/GuestAndSponsorsForm";
 import SocietyPage from "./SocietyPage/SocietyPage";
 import UserPage from './User/UserPage';
-
+import EventPage from "./EventPage/Eventpage";
 
 class App extends Component {
      render(){
@@ -22,6 +22,7 @@ class App extends Component {
              <Route exact path="/user/:id/add/:eventid/guestandsponsor" component={GuestAndSponsorsForm} />
              <Route exact path="/society/:name" component={SocietyPage} />
              <Route exact path="/user/:id/profile" component={UserPage} />
+             <Route exact path="/event/:id" component={EventPage} />
           </Switch>
        );
      }
