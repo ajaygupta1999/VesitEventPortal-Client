@@ -20,10 +20,11 @@ export const apiCall = async (method, path, data) => {
 
 export const apiUploadCall = async (method, path, data) => {
     let formData = new FormData();
+    console.log("Api Upload call is called => " , data);
     for (const [key, value] of Object.entries(data)) {
       formData.append( key , value);
     }
-    console.log(formData);
+  
     try{
         // This is for File Upload requests
         let res = await axios.post(path , formData , {
@@ -37,3 +38,16 @@ export const apiUploadCall = async (method, path, data) => {
     }
 }
 
+
+export const apiComplexCall = async (method , path , data) => {
+   try{
+      let res = await axios.post(path , data , {
+          headers : {
+            'Content-type' : 'multipart/form-data'
+          }
+      });
+      console.log(res);
+   }catch(err){
+       return err.response.data.error;
+   }
+}

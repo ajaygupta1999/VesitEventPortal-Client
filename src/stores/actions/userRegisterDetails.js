@@ -1,4 +1,4 @@
-import { apiCall, apiUploadCall } from "../../services/api";
+import { apiCall, apiUploadCall , apiComplexCall } from "../../services/api";
 import { setAuthorizationToken } from "./auth";
 
 import {
@@ -13,7 +13,8 @@ import {
     FETCH_CREATED_EVENT_ERROR,
     FETCH_GUESTANDSPONSOR_DATA,
     LOAD_GUESTANDSPONSOR_DATA,
-    FETCH_GUESTANDSPONSOR_DATA_ERROR
+    FETCH_GUESTANDSPONSOR_DATA_ERROR,
+    FETCH_ALLUSERS_ERROR
 } from "../actionTypes";
 
 import { addError , removeError } from "./error";
@@ -70,17 +71,45 @@ export const setEventDetails = (data , id) => async (dispatch) => {
 }
 
 
-export const setGuestAndSponsorsDetails = (data , id , eventid) => async (dispatch) => {
-        try{
-            dispatch({ type : FETCH_GUESTANDSPONSOR_DATA });
-            let event = await apiUploadCall("post" , `/api/user/${id}/add/${eventid}/guestandsponsor` , data);
-            dispatch({ type : LOAD_GUESTANDSPONSOR_DATA , event });
-            dispatch(removeError());
-            console.log("got data of guest ===> " , event);
+// export const setGuestAndSponsorsDetails = (data , id , eventid) => async (dispatch) => {
+//         try{
+//             dispatch({ type : FETCH_GUESTANDSPONSOR_DATA });
+//             let event = await apiUploadCall("post" , `/api/user/${id}/add/${eventid}/guestandsponsor` , data);
+//             dispatch({ type : LOAD_GUESTANDSPONSOR_DATA , event });
+//             dispatch(removeError());
+//             console.log("got data of guest ===> " , event);
 
-        }catch(err){
-            console.error("Got error while setting up guest details ===>>" , err.message);
-            dispatch({ type : FETCH_GUESTANDSPONSOR_DATA_ERROR  });
-            dispatch(addError(err.message));
-        }
+//         }catch(err){
+//             console.error("Got error while setting up guest details ===>>" , err.message);
+//             dispatch({ type : FETCH_GUESTANDSPONSOR_DATA_ERROR  });
+//             dispatch(addError(err.message));
+//         }
+// }
+
+export const setGuestAndSponsorsDetails = (data , id , eventid) => async (dispatch) => {
+    try{
+        dispatch({ type : FETCH_GUESTANDSPONSOR_DATA });
+        let event = await apiComplexCall("post" , `/api/user/${id}/addevent/${eventid}/guestandsponsor` , data);
+        dispatch({ type : LOAD_GUESTANDSPONSOR_DATA , event });
+        dispatch(removeError());
+        console.log("got data of guest ===> " , event);
+
+    }catch(err){
+        console.error("Got error while setting up guest details ===>>" , err.message);
+        dispatch({ type : FETCH_GUESTANDSPONSOR_DATA_ERROR  });
+        dispatch(addError(err.message));
+    }
+}
+
+
+export const fetchAllUsers = (id) => async (dispatch) => {
+    try{
+        let allUsers = await apiCall("get" , `/api/user/${id}/getallusers`);
+        console.log("got all users ==>> " , allUsers);
+        return allUsers;  
+    }catch(err){
+        console.error("Got error while fetching all users ===>>" , err.message);
+        dispatch({ type : FETCH_ALLUSERS_ERROR  });
+        dispatch(addError(err.message));
+    }
 }

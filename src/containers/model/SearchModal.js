@@ -112,7 +112,7 @@ class SearchModal extends Component{
 
         return(
             
-            <Modal className="book-a-call-modal" hideSearchModal={this.handleSearchModalClose}>
+            <Modal className="book-a-call-modal" hideModal={this.handleSearchModalClose}>
                 <h5 className="text-center search-modal-heading">Search Members</h5>
                 <div className="row">
                     <div className="col-12">

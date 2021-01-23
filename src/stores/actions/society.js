@@ -4,7 +4,7 @@ import {
    FETCH_SOCIETY_DATA,
    FETCH_SOCIETY_ERROR,
    SHOW_SEARCH_MODAL,
-   HIDE_SEARCH_MODAL
+   HIDE_MODAL
 } from "../actionTypes";
 
 import { addError , removeError } from "../actions/error";
@@ -14,7 +14,7 @@ export const showSearchModal = () => ({
 });
 
 export const hideSearchModal = () => ({
-    type : HIDE_SEARCH_MODAL
+    type : HIDE_MODAL
 });
 
 

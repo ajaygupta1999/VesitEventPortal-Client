@@ -5,7 +5,7 @@ class Modal extends React.Component {
     
   
     handleClose = () => {
-        this.props.hideSearchModal();
+        this.props.hideModal();
     }
 
     render() {

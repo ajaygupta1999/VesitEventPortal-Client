@@ -4,7 +4,7 @@ import {
     FETCH_SOCIETY_ERROR,
     FETCH_SOCIETY_RETRY,
     SHOW_SEARCH_MODAL,
-    HIDE_SEARCH_MODAL
+    HIDE_MODAL
 } from "../actionTypes";
 
 
@@ -35,7 +35,7 @@ const society = (state = INITIAL_STATE , action) => {
         case SHOW_SEARCH_MODAL:
             return { ...state , isSearchModelVisible : true }
         
-        case HIDE_SEARCH_MODAL:
+        case HIDE_MODAL:
             return { ...state , isSearchModelVisible : false }
         
         default:
