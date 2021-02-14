@@ -1,0 +1,112 @@
+
+// Profile page edit =====>
+.Edit-profile-page-div{
+    margin : 20px 15% 50px;
+
+    .update-profile-left-session{
+        h3{
+            font-weight : 500;
+            font-size : 24px;
+        }
+
+        p{
+            font-size : 15px;
+        }
+    }
+
+    .update-profile-heading{
+        margin: 20px 0px 40px;
+        text-align: center;
+        font-weight: 500;
+        color: blue;
+        font-size: 33px;
+    }
+}
+
+
+// Society page Edit/Settings
+.Society-page-settings{
+    margin : 20px 15% 50px;
+    
+    .society-page-settings-left-session{
+        h3{
+            font-weight : 500;
+            font-size : 24px;
+        }
+
+        p{
+            font-size : 15px;
+        }
+    }
+
+    .update-profile-heading{
+        margin: 20px 0px 40px;
+        text-align: center;
+        font-weight: 500;
+        color: blue;
+        font-size: 33px;
+    }
+
+    .all-filterd-faculty-or-chairperson{
+        background: #ffffff;
+        border-top: none;
+        position: absolute;
+        z-index: 1200;
+        width: 94%;
+    }
+
+    .each-div-of-each-guest{
+        margin-left : 15px;
+
+        .guest-img-session{
+            img {
+                width : 30px;
+                border-radius : 15px; 
+            }
+        }
+    }
+
+    
+
+    .each-search-content-of-society-settings{
+        padding: 7px 5px;
+        margin: 0px;
+        background: #e2e2e24a;
+
+        .searched-content-img-session {
+            margin-right : 5px;
+
+            img {
+                width : 50px;
+                border-radius : 25px;
+            }
+        }
+        .Searched-content-username{
+            font-weight : 500;
+            font-size : 14px;
+            margin : 0;
+        }
+
+        .each-content-class-details{
+            font-size : 12px;
+            margin : 0;
+        }
+    } 
+}
+
+.add-button-normal-chairperson-or-faculty{
+    font-weight: 600;
+    font-size: 12px;
+    padding: 4px 14px;
+    
+}
+
+.add-buttons-for-chairperson-or-faculty{
+    position: absolute;
+    font-weight: 600;
+    font-size: 12px;
+    padding: 4px 14px;
+    top: 3px;
+    z-index: 0;
+    right: 20px;
+}

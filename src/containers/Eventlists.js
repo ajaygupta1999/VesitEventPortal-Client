@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Event from "./Event";
-import { fetchAllEvents , fetchregisteredEvents } from "../stores/actions/events";
+import { fetchAllEvents  } from "../stores/actions/events";
 import { connect } from "react-redux";
 import "../asserts/css/EventCards.scss";
 import moment from "moment";
@@ -8,10 +8,7 @@ import moment from "moment";
 class Eventlists extends Component{
 
     componentDidMount = async () => {
-       this.props.fetchAllEvents();
-       if(this.props.currentUser.isAuthenticated){
-           this.props.fetchregisteredEvents(this.props.currentUser.user.id);
-       }
+       await this.props.fetchAllEvents();
     }
 
     getUpcomingEvents = (events) => {
@@ -30,7 +27,7 @@ class Eventlists extends Component{
 
 
     render(){
-        const { allEvents , registerdEvents } = this.props;
+        const { allEvents } = this.props;
         let todaysevents = this.getTodaysEvents(allEvents);
         let upcomingevents = this.getUpcomingEvents(allEvents);
  
@@ -43,12 +40,15 @@ class Eventlists extends Component{
                     <div className="row">
                         {
                             todaysevents.map(event => {
-                                let data = this.props.registerdEvents.data.filter(registered => registered._id.toString() === event.id.toString());
-                                if(data.length > 0){
-                                     return <Event key={event.id} {...event} userdata={this.props.currentUser} isRegistered={true}/>
-                                }else{
-                                    return <Event key={event.id} {...event} userdata={this.props.currentUser} isRegistered={false}/>
+                                if(this.props.currentUser.isAuthenticated){
+                                    let data = this.props.currentUser.user.registered_events.filter(registered => registered.toString() === event._id.toString());
+                                    if(data.length > 0){
+                                        return <Event key={event._id} {...event} userdata={this.props.currentUser} isRegistered={true}/>
+                                    }else{
+                                        return <Event key={event._id} {...event} userdata={this.props.currentUser} isRegistered={false}/>
+                                    }
                                 }
+                                return <Event key={event._id} {...event} userdata={this.props.currentUser} isRegistered={false}/>
                             }) 
                         }
                     </div>
@@ -60,13 +60,17 @@ class Eventlists extends Component{
                     <div className="row">
                        {
                             upcomingevents.map(event => {
-                                let data = this.props.registerdEvents.data.filter(registered => registered._id.toString() === event.id.toString());
+                                if(this.props.currentUser.isAuthenticated){
+                                    let data = this.props.currentUser.user.registered_events.filter(registered => registered._id.toString() === event._id.toString());
                             
-                                if(data.length > 0){
-                                     return <Event key={event.id} {...event} userdata={this.props.currentUser} isRegistered={true}/>
-                                }else{
-                                    return <Event key={event.id} {...event} userdata={this.props.currentUser} isRegistered={false}/>
+                                    if(data.length > 0){
+                                        return <Event key={event._id} {...event} userdata={this.props.currentUser} isRegistered={true}/>
+                                    }else{
+                                        return <Event key={event._id} {...event} userdata={this.props.currentUser} isRegistered={false}/>
+                                    }
                                 }
+                                return <Event key={event._id} {...event} userdata={this.props.currentUser} isRegistered={false}/>
+                                
                             }) 
                         }
                     </div>
@@ -81,7 +85,6 @@ class Eventlists extends Component{
 const mapStateToProps = (state) => ({
     currentUser : state.currentUser,
     allEvents : state.allEvents.data,
-    registerdEvents : state.registeredEvents
 });
     
-export default connect( mapStateToProps , { fetchAllEvents , fetchregisteredEvents } )(Eventlists);
+export default connect( mapStateToProps , { fetchAllEvents } )(Eventlists);

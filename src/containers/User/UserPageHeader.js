@@ -1,36 +1,54 @@
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+import { Link ,withRouter } from "react-router-dom";
 import "../../asserts/css/UserProfile.scss";
-
-
+ 
 class UserpageHeader extends Component{
 
+    componentDidMount = () => {
+
+    }
 
     render(){
-        let username , img , societyname , societyimg , societyrole , classname , rollno , branch, email ,year , registeredevents;
-        if(this.props.data.isAuthenticated && Object.keys(this.props.data.user).length > 0){
-            let  { user } = this.props.data;
+        let username = "";
+        let img = "";
+        let societyname = "";
+        let societyimg = "";
+        let societyrole ="";
+        let specificrole = "";
+        let classname= "";
+        let rollno = 0;
+        let branch = "";
+        let email = "";
+        let year = 0;
+        if(Object.keys(this.props.user).length > 0){
+            let user = this.props.user;
             username = user.username;
-            img = user.imgurl.dataurl;
-            email = user.email
-            branch = user.classdetails.department.toUpperCase();
-            classname = user.classdetails.class.toUpperCase();
-            rollno = user.classdetails.rollno;
-            if(user.classdetails.currentyearofstudy === 1){
-                year = "F.E.";
-            }else if(user.classdetails.currentyearofstudy === 2){
-                year = "S.E.";
-            }else if(user.classdetails.currentyearofstudy === 3){
-                year = "T.E.";
+            if(user.imgurl){
+                img = user.imgurl.dataurl;
             }else{
-                year = "B.E.";
+                img = "/images/profile_image.png";
             }
+            
+            email = user.email;
+            branch = user.classdetails ? user.classdetails.department.toUpperCase() : "";
+            classname = user.classdetails ? user.classdetails.class.toUpperCase() : "";
+            rollno = user.classdetails ? user.classdetails.rollno : 0;
+            if(user.classdetails){
+                if(user.classdetails.currentyearofstudy === 1){
+                    year = "F.E.";
+                }else if(user.classdetails.currentyearofstudy === 2){
+                    year = "S.E.";
+                }else if(user.classdetails.currentyearofstudy === 3){
+                    year = "T.E.";
+                }else{
+                    year = "B.E.";
+                }
+            }
+            
             if(Object.keys(user.societydetails).length > 0){
                 societyname = user.societydetails.name;
                 societyrole = user.societydetails.role;
-            }
-
-            if(Object.keys(user.societydetails).length > 0){
+                specificrole = user.societydetails ? ( user.societydetails.specificrole ? user.societydetails.specificrole : ""  ) : "";
                 if(user.societydetails.name === "ieee"){
                     societyimg = "ieee_logo.jpg";
                 }
@@ -44,10 +62,7 @@ class UserpageHeader extends Component{
                     societyimg = "csi_logo.jpg";
                 }
             }
-
-            // registeredevents = user.registeredevents.length;
         }
-
        
 
         return(
@@ -62,26 +77,30 @@ class UserpageHeader extends Component{
                             <p className="society-description"><i class="far fa-envelope"></i>
                                <span id="email-of-user"> { email } </span> , { branch + ", " + year + " " + classname + "-" + rollno }
                             </p>
-                            <div className="faculty-and-society-incharge-session d-flex justify-content-center align-items-center">
-                                <div className="d-flex flex-row">
-                                    <Link className="profile-to-society-link" to={ `/society/${societyname}` }>
-                                        <div className="total-members-and-total-events-session d-flex align-items-center">
-                                            <div>
-                                                <img src={ `/images/${societyimg}` } alt="user-profile-img"/>
-                                            </div>
-                                            <div className="d-flex flex-column">
-                                                <p className="profile-incharge-name"> { societyname.toUpperCase() + " VESIT" } </p>
-                                                <p className="profile-role-of-person"> { societyrole.toUpperCase() } </p>
-                                            </div>
+                            {
+                               ( Object.keys(this.props.user).length > 0 && Object.keys(this.props.currentUser.user).length > 0 ) &&
+                                    ( this.props.user._id.toString() === this.props.currentUser.user._id.toString() ) &&
+                                        <div className="setting-button-div">
+                                            <Link to={ `/user/${this.props.currentUser.user._id}/edit/profile` } className="btn btn-md btn-primary settings-button">
+                                                <i class="fas fa-cog"></i>
+                                                <span>Settings</span>
+                                            </Link>
                                         </div>
-                                    </Link>
-
-                                    <div className="total-members-and-total-events-session d-flex align-items-center">
-                                        <button className="btn btn-lg society-page-see-all-members-button">
-                                            <i class="far fa-calendar-check"></i>
-                                            <span>{ this.props.totalreg } registrations </span>
-                                        </button>
-                                    </div>
+                            }
+                            <div className="faculty-and-society-incharge-session members-and-event-session d-flex justify-content-center align-items-center">
+                                <div className="all-members-div current-position-in-society">
+                                    <a className="btn btn-lg society-page-see-all-members-button" onClick={this.handleClick}>
+                                        <img className="event-and-members-images" src={ `/images/${societyimg}` } alt="user-profile-img"/>
+                                        <p className="members-and-event-number">{ societyname.toUpperCase() + " VESIT" }</p>
+                                        <p className="property-of-above"> { societyrole.toUpperCase() } </p>
+                                    </a>
+                                </div>
+                                <div className="all-events-div">
+                                    <a className="btn btn-lg society-page-see-all-members-button">
+                                        <img className="event-and-members-images" src="/images/smalleventicon.png"  alt="members-icon" />
+                                        <p className="members-and-event-number">{ this.props.totalreg }</p>
+                                        <p className="property-of-above">  Registrations </p>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -92,4 +111,4 @@ class UserpageHeader extends Component{
 }
 
 
-export default UserpageHeader;
+export default withRouter(UserpageHeader);

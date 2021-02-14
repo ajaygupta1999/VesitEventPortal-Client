@@ -1,0 +1,98 @@
+.form-genetaor-page{
+    
+    .form-genrator-background {
+        width: 100%;
+        height: 100%;
+        padding: 50px 12.5%; 
+        background : #f6f6f6; 
+
+        .form-session-of-form-generator{
+            border: 1px solid black;
+            padding: 2rem 4.5rem;
+            border-top: 7px solid blue;
+            border-radius: 6px;
+            background : white;
+
+            .form-generator-text{
+                text-align: center;
+                font-size: 38px;
+                font-weight: 500;
+                margin-bottom : 40px;
+            }
+            .form-title{
+                padding: 22px;
+                border: 1px solid #666666;
+                border-left: 5px solid blue;
+                border-radius: 6px;
+                position: relative;
+
+                .edit-button-of-form-title{
+                    text-align: end;
+                    position: absolute;
+                    right: 8px;
+                    top: 8px;
+                }
+
+                .input-form-title-div{
+                    text-align : center;
+                    position  : relative;
+
+                    .input-form-title{
+                        font-size: 32px;
+                        color: black;
+                        font-weight : 500;
+                        outline: none;
+                        border : none;
+                        border-bottom : 2px solid blue;
+                    }   
+                   
+                }
+            }
+
+            .main-form-content{
+ 
+
+                .main-form-content-div{
+
+                    .description-about-form{
+                        .alert-font-awesome-div{
+                            border-right : 1px solid #00000069;
+
+                            i{
+                                font-size : 24px;
+                            }
+                        }
+
+                        .rules-div{
+                            p { 
+                                 margin-bottom : 0px;
+                                 font-size : 15px;
+                                 font-weight : 500;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+    }
+    
+}
+
+.add-feild-button{
+    padding: 10px 30px;
+    border-radius: 50px;
+
+    i{
+        font-size: 20px;
+        position : relative;
+        top :2px;
+        margin-right : 4px;
+    }
+
+    span{
+        font-weight: 600;
+        font-size: 16px;
+    }
+}

@@ -32,10 +32,10 @@
 
             i{
                 font-weight: 500;
-                color: #ff2b2b;
-                margin-right: 8px;
+                color: blue;
+                margin-right: 0px;
                 position: relative;
-                top: 2px;
+                top: 1px;
             }
         }
         
@@ -50,13 +50,13 @@
         .faculty-and-society-incharge-session a{
             margin: 0px 10px 12px;
             padding: 8px 18px;
-            background: #dededeeb;
+            background: #dcdcdc78;
             border-radius: 8px;
             text-decoration: none;
             color: black;
             font-size: 12px;
 
-            img{
+            .society-incharge-and-chairperson-image{
                 width : 40px;
                 height : 40px;
                 border-radius : 20px;
@@ -64,7 +64,7 @@
                 object-position: start;
             }
 
-            p{
+            .incharge-name , .role-of-person{
                 margin-bottom : 0px;
                 margin-left : 10px; 
             }
@@ -73,6 +73,31 @@
                 font-size : 13px;
                 font-weight : 600;
                 text-align: left;
+            }
+
+            .event-and-members-images{
+                width : 40px;
+                height : 40px;
+                border-radius : 8px;
+                object-fit: cover;
+                object-position: start;
+            }
+        }
+
+        .members-and-event-session{
+            margin : 45px 0px 0px;
+
+            .members-and-event-number{
+                font-weight : 600;
+                font-size : 14px;
+                margin : 0px;
+                margin-top : 4px;
+            }
+
+            .property-of-above{
+                font-size : 12px;
+                font-weight : 500;
+                margin : 0px;
             }
         }
 
@@ -107,6 +132,27 @@
         }
 
         
+    }
+}
+
+.setting-button-div{
+    margin : 10px 0px;
+
+    .settings-button { 
+        padding: 8px 26px;
+        background: #0000ffab;
+        border: none;
+        font-weight: 500;
+        font-size: 16px;
+        border-radius: 25px;
+
+        i{
+            color: white;
+            font-size: 18px;
+            position: relative;
+            top: 1px;
+            margin-right: 5px;
+        }
     }
 }
 

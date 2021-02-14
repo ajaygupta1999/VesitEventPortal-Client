@@ -4,18 +4,37 @@ import UserPageContent from "./UserPageContent";
 import UserPageHeader from "./UserPageHeader";
 import { connect } from "react-redux";
 import "../../asserts/css/Society.scss";
+import {  withRouter } from "react-router-dom";
+import  { fetchSpecificUser } from "../../stores/actions/userRegisterDetails";
 
 
 class UserPage extends Component{
 
-    
-    render(){
-        let totalReg = this.props.registeredEvents.length;
+    componentWillMount = async () => {
+        let { userid } = this.props.match.params;
+        await this.props.fetchSpecificUser(userid);
+    }
 
+    componentDidUpdate = async (prevProps , prevState) => {
+        let prevuserid = prevProps.match.params.userid;
+        let newuserid = this.props.match.params.userid;
+        if(prevuserid.toString() !==  newuserid.toString()){
+            await this.props.fetchSpecificUser(newuserid);
+        }
+    }
+
+
+    render(){
+
+        let totalReg = 0;
+        if(Object.keys(this.props.specificUser.user).length > 0){
+            totalReg = this.props.specificUser.user.registered_events.length;
+        }
+        
         return(
             <div>
                 <Navbar />
-                <UserPageHeader data={ this.props.user } totalreg={totalReg}/>
+                <UserPageHeader user={ this.props.specificUser.user } currentUser={this.props.currentUser} totalreg={totalReg}/>
                 <UserPageContent />
             </div>
         )
@@ -24,8 +43,8 @@ class UserPage extends Component{
 
 
 const mapStateToProps = (state) => ({
-    user : state.currentUser,
-    registeredEvents : state.registeredEvents.data
+    currentUser : state.currentUser,
+    specificUser : state.specificUser
 });
 
-export default connect(mapStateToProps , null)(UserPage);
+export default withRouter(connect(mapStateToProps , { fetchSpecificUser })(UserPage));

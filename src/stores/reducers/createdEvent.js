@@ -15,6 +15,9 @@ import {
     LOAD_ADDED_GUESTS,
     LOAD_ADDED_EVENTTAKERS,
     LOAD_ADDED_SPONSORS,
+    SHOW_EVENT_CREATED_SUCCESSFUL_MODAL,
+    HIDE_EVENT_CREATED_SUCCESSFUL_MODAL,
+    LOAD_EVENT_DETAILS
 } from "../actionTypes";
 
 
@@ -24,6 +27,7 @@ const DEFAULT_STATE = {
     error : false,
     addGuestModalVisible : false,
     addEventtakerModalVisible : false,
+    showeventcreatedmodal : false,
     selectedguests : [],
     selectedeventtakers : [],
     addedguests : [],
@@ -81,10 +85,18 @@ const createdEvent = ( state = DEFAULT_STATE , action ) => {
         
         case LOAD_ADDED_SPONSORS:
             return { ...state , addedsponsors : action.data }
-        
-        
+         
         case FETCH_ALLUSERS_ERROR:
             return { ...state , error : true }
+        
+        case SHOW_EVENT_CREATED_SUCCESSFUL_MODAL:
+            return { ...state , showeventcreatedmodal : true }
+
+        case HIDE_EVENT_CREATED_SUCCESSFUL_MODAL:
+            return { ...state , showeventcreatedmodal : false }
+
+        case LOAD_EVENT_DETAILS:
+            return { ...state , data : action.data }
 
         default:
             return state;

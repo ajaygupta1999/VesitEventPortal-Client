@@ -16,6 +16,8 @@ import {
   HIDE_ADDEVENTTAKERMODAL
  } from "../actionTypes";
 
+
+import { setAuthorizationToken , setCurrentUser } from "./auth";
 import { addError, removeError } from "./error";
 
 
@@ -39,13 +41,11 @@ export const hideAddEventtakerModal = () => ({
 
 
 export const fetchAllEvents = () => async (dispatch) => {
-      
      try{
         dispatch({ type : FETCH_ALL_EVENTS }); 
         let allEvents = await apiCall("get" , "/api/event/allevents");
         dispatch({ type : LOAD_ALL_EVENTS  , events : allEvents});
         dispatch(removeError());
-        console.log("got all events data ==> ", allEvents);
 
      }catch(err){
        console.log("got error while loading all events ===> " , err.message);
@@ -64,7 +64,7 @@ export const registerEvent = (userid , eventid) => async (dispatch) => {
     let { events } = await apiCall("get" , `/api/event/user/${userid}/registeredevents`);
     dispatch({ type : LOAD_REGISTERED_EVENTS , events });
     dispatch(removeError());
-    console.log("got the registering event data and all events ===> " , event , events);
+   
   }catch(err){
       console.log("Got error while registering event ====>" , err.message);
       dispatch({ type : FETCH_REGISTER_EVENT_ERROR });
@@ -80,7 +80,6 @@ export const unregisterEvent = (userid , eventid) => async (dispatch) => {
     let { events } = await apiCall("get" , `/api/event/user/${userid}/registeredevents`);
     dispatch({ type : LOAD_REGISTERED_EVENTS , events });
     dispatch(removeError());
-    console.log("got the unregistering event data and all events ===> " , event , events);
   }catch(err){
       console.log("Got error while unregistering event ====>" , err.message);
       dispatch({ type : FETCH_REGISTERED_EVENTS_ERROR });
@@ -88,6 +87,66 @@ export const unregisterEvent = (userid , eventid) => async (dispatch) => {
   }
 }
 
+export const unregisterEventFromProfile = (userid , eventid) => async (dispatch) => {
+  try{
+   
+      let { event } = await apiCall("post" , `/api/event/${eventid}/unregister/user/${userid}`);
+      let userdetailsdata = await apiCall("get" , `/api/user/${userid}/getspecificuser`);
+      dispatch({
+          type : "LOAD_SPECIFIC_USER_DATA",
+          user : userdetailsdata.userdata,
+          registeredevents : userdetailsdata.registeredevents
+      });
+      let { token , userdetails , registeredevents } = await apiCall("get" , `/api/user/${userid}/get/updateddataandtoken`);
+      console.log("Updating root data , " ,token , userdetails);
+      localStorage.setItem("jwtToken", token);
+      setAuthorizationToken(token);     
+      dispatch(setCurrentUser(userdetails , registeredevents));  
+      dispatch(removeError());          
+      return userdetails; 
+
+  }catch(err){
+      console.log("Got error while unregistering event ====>" , err.message);
+      dispatch({ type : FETCH_REGISTERED_EVENTS_ERROR });
+      dispatch(addError(err.message));
+  }
+}
+
+export const registerSpecificEvent = (userid , eventid) => async (dispatch) => {
+   try{
+      let { event } = await apiCall("post" , `/api/event/${eventid}/register/user/${userid}` );
+      console.log("got event data from server ==> " , event);
+      dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA" , event});
+      let { token , userdetails , registeredevents } = await apiCall("get" , `/api/user/${userid}/get/updateddataandtoken`);
+      console.log("Updating root data , " ,token , userdetails);
+      localStorage.setItem("jwtToken", token);
+      setAuthorizationToken(token);     
+      dispatch(setCurrentUser(userdetails , registeredevents));  
+      dispatch(removeError());          
+      return userdetails; 
+
+   }catch(err){
+       console.log("Error while registering specific event , " , err);
+   }
+}
+
+
+export const unregisterSpecificEvent = (userid , eventid) => async (dispatch) => {
+  try{
+     let { event } = await apiCall("post" , `/api/event/${eventid}/unregister/user/${userid}` );
+     console.log("got event data from server ==> " , event);
+     dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA" , event});
+     let { token , userdetails , registeredevents } = await apiCall("get" , `/api/user/${userid}/get/updateddataandtoken`);
+      console.log("Updating root data , " ,token , userdetails);
+      localStorage.setItem("jwtToken", token);
+      setAuthorizationToken(token);     
+      dispatch(setCurrentUser(userdetails , registeredevents));  
+      dispatch(removeError());          
+      return userdetails; 
+  }catch(err){
+      console.log("Error while registering specific event , " , err);
+  }
+}
 
 
 export const fetchregisteredEvents = (userid) => async (dispatch) => {
@@ -96,15 +155,95 @@ export const fetchregisteredEvents = (userid) => async (dispatch) => {
        let { events } = await apiCall("get" , `/api/event/user/${userid}/registeredevents`);
        dispatch({ type : LOAD_REGISTERED_EVENTS , events });
        dispatch(removeError());
-       console.log("Got data of registered events ===> " , events);
 
     }catch(err){
         console.log("Got error while registering event ====>" , err.message);
         dispatch({ type : FETCH_REGISTERED_EVENTS_ERROR });
         dispatch(addError(err.message));
     }
-  }
+}
 
+
+export const fetchCreatedEvent = (userid , eventid ) => async (dispatch) => {
+    try{
+        let { event } = await apiCall("get" , `/api/user/${userid}/event/${eventid}/createdeventsdetails`);
+        dispatch({ type : "LOAD_CREATED_EVENT" , event : event });
+    }catch(err){
+       console.log(err);
+    }
+} 
+
+
+export const fetchguestandsponsorspagedata = (userid , eventid) => async (dispatch) => {
+    try{
+       let { selectedguests , selectedeventtakers , addedguests , addedeventtakers  , addedsponsors } = await apiCall("get" , `/api/user/${userid}/addevent/${eventid}/getallguestsandsponsorsandeventtakers`);
+       let selectedguestsarr = selectedguests.map(eachperson => {
+          if(eachperson.roletype === "user"){
+              return eachperson.data;
+          }
+          let newobj = eachperson.data; 
+          newobj.roletype = eachperson.roletype;
+          return newobj;
+       });
+ 
+       let selectedeventtakersarr = selectedeventtakers.map(eachperson => {
+            if(eachperson.roletype === "user"){
+              return eachperson.data;
+            }
+            let newobj = eachperson.data;
+            newobj.roletype = eachperson.roletype;
+            return newobj;
+      });
+
+      let addedguestsarr = addedguests.map(eachperson => {
+          let newobj = eachperson.data;
+          newobj.roletype = eachperson.roletype;
+          return newobj;
+      });
+
+      let addedeventtakersarr = addedeventtakers.map(eachperson => {
+          let newobj = eachperson.data;
+          newobj.roletype = eachperson.roletype;
+          return newobj;
+      });
+    
+      let addedsponsorsarr = addedsponsors.map(sponsor => {
+            let newobj = sponsor;
+            newobj.roletype = "sponsor";
+            newobj.role = "sponsor"; 
+            return newobj;
+      });
+
+      dispatch({
+          type : "LOAD_SELECTED_GUESTS",
+          data : selectedguestsarr
+      });
+
+      dispatch({
+        type : "LOAD_SELECTED_EVENTTAKERS",
+        data : selectedeventtakersarr
+      });
+
+      dispatch({
+        type : "LOAD_ADDED_GUESTS",
+        data : addedguestsarr
+      });
+
+      dispatch({
+        type : "LOAD_ADDED_EVENTTAKERS",
+        data : addedeventtakersarr
+      });
+
+      dispatch({
+        type : "LOAD_ADDED_SPONSORS",
+        data : addedsponsorsarr
+      });
+
+    }catch(err){
+       console.log("Got error while getting all data ==> " , err);
+
+    }
+}
 
   // Guest and Sponsors and Eventakers details add 
  export const handleAddSelectedPerson = (data , userid , eventid) => async (dispatch) => {
@@ -115,7 +254,7 @@ export const fetchregisteredEvents = (userid) => async (dispatch) => {
                    if(eachperson.roletype === "user"){
                         return eachperson.data;
                    }
-                   let newobj = eachperson.data;
+                   let newobj = eachperson.data; 
                    newobj.roletype = eachperson.roletype;
                    return newobj;
               });
@@ -193,7 +332,6 @@ export const fetchregisteredEvents = (userid) => async (dispatch) => {
                 newobj.roletype = eachperson.roletype;
                 return newobj;
             });
-            console.log("modified data ," , newdata );
             dispatch({
               type : "LOAD_ADDED_GUESTS",
               data : newdata
@@ -284,4 +422,72 @@ export const handleRemoveSponsor = (data , userid , eventid) => async (dispatch)
        console.log(err.message);
 
     }
+}
+
+
+export const addFormLink = (data , userid , eventid) => async (dispatch) => {
+    try{
+        let { eventdetails }  = await apiCall("post" , `/api/user/${userid}/addevent/${eventid}/add/registrationlink` , data);
+        console.log("Got Form data from server =>>> " , eventdetails);        
+        dispatch({
+            type : "LOAD_CREATED_EVENT",
+            event : eventdetails
+        });
+        return eventdetails;
+    }catch(err){
+        console.log(err);
+    }
+}
+
+export const showeventcreatedmodal = () =>  async (dispatch) => {
+    try{
+       dispatch({
+          type : "SHOW_EVENT_CREATED_SUCCESSFUL_MODAL"
+       });
+    }catch(err){
+        console.log("Got error while ");
+    }
+}
+
+export const hideeventcreatedmodal = () =>  async (dispatch) => {
+  try{
+     dispatch({
+        type : "HIDE_EVENT_CREATED_SUCCESSFUL_MODAL"
+     });
+  }catch(err){
+      console.log("Got error while ");
+  }
+}
+
+export const fetchEventDetails = (userid , eventid) => async (dispatch) => {
+  try{
+      let { eventdetails } = await apiCall("get" , `/geteventdetails/user/${userid}/event/${eventid}`);
+      dispatch({
+          type : "LOAD_EVENT_DETAILS",
+          data : eventdetails
+      });
+
+  }catch(err){
+      console.log(err);
+  }
+}
+
+
+export const getspecificevent = (eventid) => async (dispatch) => {
+     try { 
+         let { event } = await apiCall("get" , `/api/event/${eventid}/getspecificevent`);
+         dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA", event });
+     }catch(err){
+         console.log(err);
+     }
+} 
+
+export const getFileData = (dataobj ) => async (dispatch) => {
+     try{
+       setAuthorizationToken(dataobj.token);
+       let data = await apiCall("get" , `https://www.googleapis.com/drive/v2/files/${dataobj.data.id}?alt=media`);
+       console.log(data);
+     }catch(err){
+       console.log(err);
+     }
 }

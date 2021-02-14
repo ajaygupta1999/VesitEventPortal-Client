@@ -4,6 +4,8 @@ import Allsocietys from "../components/Allsocietys";
 import Eventlists from "./Eventlists";
 import '../App.css';
 import Navbar from './navbar';
+import EventCreatedModal from './model/EventCreatedModal';
+import { connect } from "react-redux";
 
 
 class Home extends Component {
@@ -11,6 +13,10 @@ class Home extends Component {
         return(
             <div>
                  <Navbar />
+                 {
+                     this.props.createdEvent.showeventcreatedmodal &&
+                     <EventCreatedModal />
+                 }
                  <Appheader />
                  <Allsocietys />
                  <Eventlists />
@@ -18,6 +24,13 @@ class Home extends Component {
         )
     }
 }
-  
 
-export default Home;
+
+function mapStateToProps(state){
+    return {
+       createdEvent : state.createdEvent
+    }
+}
+
+
+export default connect(mapStateToProps , {})(Home);

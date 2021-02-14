@@ -150,6 +150,33 @@
 
 }
 
+.total-registrations-on-specific-event{
+    margin : 0px;
+    
+    i{
+        font-size : 16px;
+        color : blue;
+    }
+
+    span{
+        font-weight: 500;
+        font-size :15px;
+    }
+}
+
+
+.each-guest-profile-link-div {
+   margin-top : 15px;
+
+   .navigation-link-to-profile{
+        font-size: 14px;
+        font-weight: 600;
+        color: white !important;
+        border-radius: 50px;
+        border: none;
+        padding: 6px 22px;
+   }
+}
 
 .main-title-event-guest{
     font-weight: 600;

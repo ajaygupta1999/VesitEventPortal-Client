@@ -23,8 +23,6 @@ class UserpageContent extends Component{
                 {
                    ( queryObj.show === "registered-events" || Object.keys(queryObj).length === 0 ) && 
                     <RegisteredEvents />
-                
-
                 }
             </div>
             

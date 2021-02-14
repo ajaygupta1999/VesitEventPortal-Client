@@ -33,8 +33,7 @@ class AddGuestModal extends Component{
         if(JSON.stringify(prevProps.selectedguests) !== JSON.stringify(this.props.selectedguests)){
             this.setState({
                ...this.state,
-               selectedguests : this.props.selectedguests
-               
+               selectedguests : this.props.selectedguests  
            });
         }
     }
@@ -230,7 +229,7 @@ class AddGuestModal extends Component{
                                     <div className="each-div-of-each-guest">
                                         <div className="each-guest d-flex justify-content-start align-items-center">
                                             <div className="guest-img-session">
-                                                <img src={ member.imgurl.dataurl ? member.imgurl.dataurl : "/images/profile_image.png" } />
+                                                <img src={ member.imgurl ? member.imgurl.dataurl : "/images/profile_image.png" } />
                                             </div>
                                             <div className="guest-details d-flex flex-column">
                                                 <h5>{ member.username }</h5>
@@ -292,16 +291,27 @@ class AddGuestModal extends Component{
                                     filtereData.map(member => (
                                             <div className="col-12">
                                                 {
-                                                     member.email && 
+                                                    member.email  && 
                                                      <div className="each-search-content row">
                                                         <div className="serached-profile-content col-12 col-md-8 d-flex justify-content-center justify-content-md-start  align-items-center">
                                                             <div className="searched-content-img-session">
-                                                                <img src={ member.imgurl.dataurl ? member.imgurl.dataurl : "/images/profile_image.png" } alt="user-image" />
+                                                                <img src={ member.imgurl ? member.imgurl.dataurl : "/images/profile_image.png" } alt="user-image" />
                                                             </div>
                                                             <div className="searched-content-user-details">
-                                                                <p className="Searched-content-username">{ member.username }</p>
-                                                                <p> { member.societydetails.name.toUpperCase() }, { member.societydetails.role }</p>
-                                                                <p><span>{ member.classdetails.department.toUpperCase() }</span> - <span>{member.classdetails.class.toUpperCase()},</span> { member.classdetails.rollno } <span>21</span></p>
+                                                                 <p className="Searched-content-username">{ member.username }</p>
+                                                                 { 
+                                                                   member.societydetails ?  <p> { member.societydetails.name.toUpperCase() }, { member.societydetails.role.toUpperCase() } </p> : null 
+                                                                 }
+                                                                 {
+                                                                     member.classdetails ? 
+                                                                     <p>
+                                                                        <span>{ member.classdetails.department.toUpperCase()  }</span> - 
+                                                                        <span>{ member.classdetails.class.toUpperCase() },</span>
+                                                                        <span>{ member.classdetails.rollno  }</span>
+                                                                     </p> : null
+                                                                 }
+                                                                   
+                                                                
                                                             </div>
                                                         </div>
                                                         <div className="view-profile-button col-12 col-md-4 d-flex justify-content-center align-items-center">

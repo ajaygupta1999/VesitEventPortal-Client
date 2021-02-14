@@ -10,7 +10,7 @@ import jwtDecode from "jwt-decode";
 import { setAuthorizationToken, setCurrentUser } from "./stores/actions/auth";
 
 
-// Central Store =============
+// Central Store ============
 const store = configureStore();
 
 // For setting up jwt-token header and 

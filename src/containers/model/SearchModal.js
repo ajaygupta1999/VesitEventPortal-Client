@@ -11,44 +11,47 @@ class SearchModal extends Component{
 
     constructor(props){
         super(props);
-        console.log("I am from Construtor");
         this.state = {
             searchtext : "",
             filters : [],
-            data : []
+            council_heads : [],
+            council_members : [],
+            normal_members : [],
+            faculty : []
         }
     }
-    
-    componentDidMount = () => {
-        let allMembers = this.getAllMembers();
-        this.setState({
-            ...this.state,
-            data : allMembers
-        });
-    }
 
-
-    getAllMembers = () => {
-        let members_data = [];
-        
+    componentDidMount = async () => {
         if(Object.keys(this.props.society.data).length > 0){
-            const { normal_member , council_members , council_head  } = this.props.society.data;
-            members_data = members_data.concat(normal_member);
-            members_data = members_data.concat(council_head);
-            members_data = members_data.concat(council_members);
-            if(this.props.society.data.faculty){
-                members_data.push(this.props.society.data.faculty);
-            }
-        }
+            const normal_members = this.props.society.normal_members.map(member => {
+                return { societyrole : "normal-member" , ...member }
+            });
+            
+            const council_members = this.props.society.council_members.map(member => {
+                return {  societyrole : "council-member" , ...member }
+            });
 
-        return members_data;
+            const council_heads = this.props.society.council_heads.map(member => {
+                return { societyrole : "council-head" , ...member }
+            });
+
+            const faculty = {
+                societyrole : "faculty",
+                ...this.props.society.faculty
+            }
+
+            this.setState({
+                ...this.state,
+                normal_members,
+                council_heads,
+                council_members,
+                faculty
+            });
+        }
     }
 
    
-
-
     handleInputClick = (e) => {
-        console.log(e.target.value);
         let inData = false;
         for(let i = 0 ; i < this.state.filters.length ; i++){
             if(e.target.value === this.state.filters[i]){
@@ -79,36 +82,55 @@ class SearchModal extends Component{
         });
     }
 
-
     handleSearchModalClose = () => {
         this.props.hideSearchModal();
     }
-   
 
     render(){
-         let rowdata = this.state.data;
-         let filtereData = [];
-         if(this.state.filters.length > 0){
-             this.state.filters.map(filter => (
-                 this.state.data.map(data => {
-                     if(data.societydetails.role === filter){
-                         filtereData.push(data);
-                     }
-                 })
-             ));
-         }else{
-             filtereData = rowdata;
-         }
+    
+        let filtereData = [];
+        if(this.state.filters.length > 0){
+            for(let p = 0 ; p < this.state.filters.length ; p++){
+                if(this.state.filters[p] === "council-head"){
+                    for(let t = 0 ; t < this.state.council_heads.length ; t++){
+                        filtereData.push(this.state.council_heads[t]);
+                    }
+                }
+                if(this.state.filters[p] === "normal-member"){
+                    for(let q = 0 ; q < this.state.normal_members.length ; q++){
+                        filtereData.push(this.state.normal_members[q]);
+                    }
+                }
+                if(this.state.filters[p] === "council-member"){
+                    for(let r = 0 ; r < this.state.council_members.length ; r++){
+                        filtereData.push(this.state.council_members[r]);
+                    }
+                }
+                if(this.state.filters[p] === "faculty"){
+                     filtereData.push(this.state.faculty);
+                }
+            }
+        }else{
+            for(let t = 0 ; t < this.state.council_heads.length ; t++){
+                filtereData.push(this.state.council_heads[t]);
+            }
+            for(let q = 0 ; q < this.state.normal_members.length ; q++){
+                filtereData.push(this.state.normal_members[q]);
+            }
+            for(let r = 0 ; r < this.state.council_members.length ; r++){
+                filtereData.push(this.state.council_members[r]);
+            }
+            filtereData.push(this.state.faculty);
+            
+        }
 
          if(this.state.searchtext !== ""){
             let matches = filtereData.filter(state => {
                 const regex = new RegExp(this.state.searchtext.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), 'gi');
-                console.log(regex);
-                return state.username.match(regex) || state.email.match(regex);
+                return state.email.match(regex);
             });
             filtereData = matches;
          }
-
 
         return(
             
@@ -120,7 +142,7 @@ class SearchModal extends Component{
                             <div className="form-group">
                             <i className="fas fa-search"></i>
                                 <input type="email" onChange={this.handleChange}  
-                                   className="form-control" value={this.state.searchtext} id="exampleFormControlInput1" placeholder="Search members by username or email." />
+                                   className="form-control" value={this.state.searchtext} id="exampleFormControlInput1" placeholder="Search members by email address." />
                             </div>
                         </form>
                     </div>
@@ -132,7 +154,7 @@ class SearchModal extends Component{
                             <button className="btn btn-md btn-primary" value="faculty" onClick={this.handleInputClick}>
                                faculty      
                             </button>
-                            <button className="btn btn-md btn-primary" value="coucil-member" onClick={this.handleInputClick}>
+                            <button className="btn btn-md btn-primary" value="council-member" onClick={this.handleInputClick}>
                                 Council Members
                             </button>
                             <button className="btn btn-md btn-primary" value="council-head" onClick={this.handleInputClick}>
@@ -154,17 +176,25 @@ class SearchModal extends Component{
                         <div className="searched-content">
                             <div className="row">
                                 {
-                                    filtereData.map(member => (
-                                            <div className="col-12">
+                                filtereData.map(member => (
+                                    member.username ? (
+                                           <div className="col-12">
                                                 <div className="each-search-content row">
                                                     <div className="serached-profile-content col-12 col-md-8 d-flex justify-content-center justify-content-md-start  align-items-center">
                                                         <div className="searched-content-img-session">
-                                                            <img src={ member.imgurl.dataurl ? member.imgurl.dataurl : "/images/profile_image.png" } alt="user-image" />
+                                                            <img src={ member.imgurl ? member.imgurl.dataurl : "/images/profile_image.png" } alt="user-image" />
                                                         </div>
                                                         <div className="searched-content-user-details">
                                                             <p className="Searched-content-username">{ member.username }</p>
-                                                            <p> { member.societydetails.name.toUpperCase() }, { member.societydetails.role }</p>
-                                                            <p><span>{ member.classdetails.department.toUpperCase() }</span> - <span>{member.classdetails.class.toUpperCase()},</span> { member.classdetails.rollno } <span>21</span></p>
+                                                            {
+                                                                member.societydetails && 
+                                                                  <p> { member.societydetails.name.toUpperCase() }, { member.societydetails.role }</p>
+                                                            }
+                                                            {
+                                                                member.classdetails && 
+                                                                 <p><span>{ member.classdetails.department.toUpperCase() }</span> - <span>{member.classdetails.class.toUpperCase()},</span> { member.classdetails.rollno }</p>
+                                                            }
+                                                            
                                                         </div>
                                                     </div>
                                                     <div className="view-profile-button col-12 col-md-4 d-flex justify-content-center align-items-center">
@@ -176,8 +206,25 @@ class SearchModal extends Component{
                                                     </div>
                                                 </div>
                                             </div>
-                                         ))
-                                }
+                                    ) : (
+                                           <div className="col-12">
+                                                <div className="each-search-content row">
+                                                    <div className="serached-profile-content col-12 col-md-8 d-flex justify-content-center justify-content-md-start  align-items-center">
+                                                        <div className="searched-content-img-session">
+                                                            <img src="/images/profile_image.png" alt="user-image" />
+                                                        </div>
+                                                        <div className="searched-content-user-details">
+                                                            <p className="Searched-content-username">{ member.email }</p>
+                                                            {
+                                                                <p> { member.societyrole }</p>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                    ) 
+                                ))
+                            }
                             </div>
                         </div>
                     </div>

@@ -7,12 +7,15 @@ import society  from "./society";
 import registerEvent from "./registerEvent";
 import registeredEvents from "./registeredEvents";
 import createdEvent from "./createdEvent";
+import specificEvent from "./specificEvent";
+import specificUser from "./specificUser";
 
 const rootReducer = combineReducers({
     currentUser,
     registerEvent,
-    registeredEvents,
     error,
+    specificUser,
+    specificEvent,
     createdEvent,
     allEvents,
     society

@@ -13,7 +13,7 @@ class SocietyHeader extends Component{
     getMembersLength = (data) => {
         let totalLength = 0;
         if(Object.keys(data).length > 0){
-            totalLength = data.normal_member.length + data.council_members.length + data.council_head.length;
+            totalLength = data.normal_members.length + data.council_members.length + data.council_heads.length;
             if(data.faculty){
                 if(Object.keys(data.faculty) > 0){
                     totalLength++;
@@ -22,7 +22,6 @@ class SocietyHeader extends Component{
         }
         
         return totalLength;
-
     }
 
     render(){
@@ -59,7 +58,7 @@ class SocietyHeader extends Component{
                                 <Link to="/user/profile/:id">
                                     <div className="d-flex flex-row">
                                         <div>
-                                            <img src="/images/user-img1.jpg" alt="user-profile-img"/>
+                                            <img className="society-incharge-and-chairperson-image" src="/images/user-img1.jpg" alt="user-profile-img"/>
                                         </div>
                                         <div className="d-flex flex-column">
                                             <p className="incharge-name">Ajay Gupta</p>
@@ -67,18 +66,12 @@ class SocietyHeader extends Component{
                                         </div>
                                     </div> 
                                 </Link>
-                                <div className="total-members-and-total-events-session d-flex justify-content-end">
-                                    <button className="btn btn-lg society-page-see-all-members-button" onClick={this.handleClick}>
-                                        <i className="fas fa-users"></i>
-                                        <span>{ totalMembers } Members (See All)</span>
-                                    </button>
-                                </div>
                             </div>
                             <div className="d-flex flex-column">
                                 <Link to="/user/profile/:id">
                                     <div className="d-flex flex-row">
                                         <div>
-                                            <img src="/images/user-img1.jpg" alt="user-profile-img"/>
+                                            <img className="society-incharge-and-chairperson-image" src="/images/user-img1.jpg" alt="user-profile-img"/>
                                         </div>
                                         <div className="d-flex flex-column">
                                             <p className="incharge-name">Hritwik Ekade</p>
@@ -86,12 +79,28 @@ class SocietyHeader extends Component{
                                         </div>
                                     </div> 
                                 </Link>
-                                <div className="total-members-and-total-events-session d-flex justify-content-start">
-                                    <button className="btn btn-lg society-page-see-all-members-button" onClick={this.handleClick}>
-                                        <i class="far fa-calendar-check"></i>
-                                        <span>{ Object.keys(this.props.data).length > 0 ? this.props.data.events.length : 0 } Events</span>
-                                    </button>
-                                </div>
+                            </div>
+                        </div>
+                        <div className="setting-button-div">
+                            <Link to={ `/society/${this.props.data.name}/edit/society/${this.props.data._id}` } className="btn btn-md btn-primary settings-button">
+                                <i class="fas fa-cog"></i>
+                                <span>Settings</span>
+                            </Link>
+                        </div>
+                        <div className="faculty-and-society-incharge-session members-and-event-session d-flex justify-content-center align-items-center">
+                            <div className="all-members-div">
+                                <a className="btn btn-lg society-page-see-all-members-button" onClick={this.handleClick}>
+                                    <img className="event-and-members-images" src="/images/membersicon.png"  alt="members-icon" />
+                                    <p className="members-and-event-number">{ totalMembers }</p>
+                                    <p className="property-of-above"> Members</p>
+                                </a>
+                            </div>
+                            <div className="all-events-div">
+                                <a className="btn btn-lg society-page-see-all-members-button">
+                                    <img className="event-and-members-images" src="/images/smalleventicon.png"  alt="members-icon" />
+                                    <p className="members-and-event-number">{ Object.keys(this.props.data).length > 0 ? this.props.data.events.length : 0 }</p>
+                                    <p className="property-of-above"> Events </p>
+                                </a>
                             </div>
                         </div>
                     </div>

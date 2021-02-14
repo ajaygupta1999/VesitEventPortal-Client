@@ -1,5 +1,5 @@
 #login-container {
-    width: 60%;
+    width: 65%;
     padding: 0px;
     position: relative;
     margin-left: auto;
@@ -73,6 +73,51 @@
     box-shadow: 0 4px 10px 8px rgba(0, 0, 0, 0.05), 0 6px 20px 2px rgba(0, 0, 0, 0.04);
 }
 
+.create-new-form-text{
+    color : #6734FF;
+    font-size : 34px;
+    padding : 0px 20px;
+}
+
+.send-email-button{
+    background: #6734ff;
+    font-size: 15px;
+    padding: 8px 30px;
+    width: fit-content;
+    font-weight: 600;
+    color: white !important;
+    border-radius: 77px;
+    border: none;
+    box-shadow: 0 4px 10px 8px rgba(0, 0, 0, 0.05), 0 6px 20px 2px rgba(0, 0, 0, 0.04);
+}
+
+.send-email-button:hover{
+    background: #6734ff !important;
+    box-shadow: 0 4px 10px 8px rgba(0, 0, 0, 0.05), 0 6px 20px 2px rgba(0, 0, 0, 0.04);
+}
+
+.alert-about-form-registration {
+    .alert-icon {
+        margin : 0px;
+        margin-top : 5px;
+        position  : relative;
+        top : 5px;
+
+        i { 
+            color : blue;
+            font-size : 20px;
+            margin-right : 5px;
+        }
+    }
+
+    .alert-text{
+        font-weight : 500;
+        color : blue;
+        font-size : 15px;
+    }
+
+}
+
 
 .event-page-navigation {
    margin-bottom : 20px;
@@ -130,7 +175,7 @@
                 box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
                 cursor : pointer;
             }
-   } 
+      } 
     }
 
     .about-sponsers-message{
@@ -168,7 +213,7 @@
     .guest-details-session , .event-takers-details-session , .sponsors-details-session{
         margin-top : 15px;
 
-        .col-md-5 {
+        .description-about-each-form {
             h5 {
                 font-weight : 500;
                 font-size : 22px;
@@ -181,11 +226,30 @@
                 margin : 0px;
             }
         }
-       
     }
 
 }
 
+
+.login-legend{
+    margin: 0px 11px;
+    width: 190px;
+    font-size: 17px;
+    font-weight: 500;
+    color: blue;
+    padding: 4px 10px 4px 10px;
+}
+  
+.my-fieldset{
+    border: 2px solid #d1d1d1c4;
+    border-radius: 3px;
+    padding: 10px 6px;
+    margin-bottom : 15px;
+}
+
+.faculty-fieldset{
+    width : 151px;
+}
 
 .added-guest-details {
 

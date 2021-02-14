@@ -1,0 +1,51 @@
+
+.event-created-successful-modal{
+    padding : 20px 0px;
+
+    h1{
+        text-align: center;
+        font-weight : 500;
+        font-size : 46px;
+        color : #0900ffc9;
+    }
+
+    .correct-sign-div-session {
+        text-align : center;
+        margin : 20px 0px;
+
+        i {
+            font-size : 66px;
+            color : #24d324d1;
+        }
+    }
+
+    h5{
+        text-align : center;
+        font-weight : 500;
+        font-size : 22px;
+
+        span{
+            font-weight : 600;
+        }
+    }
+
+    p{
+        font-weight : 400;
+        text-align : center;
+        font-size : 16px;
+    }
+
+    .send-email-button-div{
+        text-align : center;
+        margin-top : 20px;
+
+        img{
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            position: relative;
+            top: -1px;
+        }
+    }
+}
+  

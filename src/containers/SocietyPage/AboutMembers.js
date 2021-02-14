@@ -6,46 +6,39 @@ import { connect } from "react-redux";
 
 class AboutMembers extends Component {
     
-
     render() {
             const { location : { search } } = this.props;
-            const { normal_member , council_members , council_head  } = this.props.society.data;
+            const normal_members = this.props.society.normal_members;
+            const council_members = this.props.society.council_members;
+            const council_heads = this.props.society.council_heads;
+            const faculty =  this.props.society.faculty;
             let queryObj = parse(search);  
 
-           let filtereData = [];
-           console.log(filtereData);
-           console.log("All Props at intial state ===> " , this.props.society);
-
-           if(Object.keys(this.props.society.data).length > 0){
-                if(Object.keys(queryObj).length === 1){
-                    // Default council head
-                    console.log("Default");
-                    filtereData = council_head;
-                }else{
-                    if(queryObj.memberType === "council-heads"){
-                        console.log("council-heads");
-                        filtereData = council_head;
-                    }
-                    if(queryObj.memberType === "council-members"){
-                        console.log("council-members");
-
-                        filtereData = council_members;
-                    }
-                    if(queryObj.memberType === "normal-members"){
-                        console.log("normal-members");
-
-                        filtereData =  normal_member;
-                    }
-                    if(queryObj.memberType === "faculty"){
-                        console.log("faculty exists");
-                        if(this.props.society.faculty){
-                            filtereData.push(this.props.society.faculty); 
+            let filtereData = [];
+            if(Object.keys(this.props.society.data).length > 0){
+                    if(Object.keys(queryObj).length === 1){
+                        // Default council head
+                        console.log("Default");
+                        filtereData = council_heads;
+                    }else{
+                        if(queryObj.memberType === "council-heads"){
+                            filtereData = council_heads;
+                        }
+                        if(queryObj.memberType === "council-members"){
+                            filtereData = council_members;
+                        }
+                        if(queryObj.memberType === "normal-members"){
+                            filtereData =  normal_members;
+                        }
+                        if(queryObj.memberType === "faculty"){
+                            if(this.props.society.faculty){
+                                filtereData.push(faculty); 
+                            }
                         }
                     }
-                }
-           }
+            }
 
-           console.log("Error ==> " , filtereData);
+            console.log("Filtered data , " , filtereData);
            
                 
         return(
@@ -70,19 +63,37 @@ class AboutMembers extends Component {
                     <div className="all-membes-cards col-12 col-md-9 col-lg-10">
                         <div className="row">
                             {
-                                filtereData.length > 0 &&
                                 filtereData.map(member => (
-                                    <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
-                                        <div className="card">
-                                            <img className="card-img-top" src={ member.imgurl.dataurl ? member.imgurl.dataurl : "/images/profile_image.png" } alt="Card image cap" />
-                                            <div className="card-body">
-                                                <h5 className="card-title">{ member.username }</h5>
-                                                <p className="card-text">{ member.societydetails.role.toUpperCase() }, Techical team.</p>
-                                                <p className="card-text">{ member.classdetails.department.toUpperCase() }, {member.classdetails.class.toUpperCase()}-{ member.classdetails.rollno } </p>
-                                                <button className="btn btn-sm btn-primary"> Profile </button>
+                                    member.username ? (
+                                        <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                            <div className="card">
+                                                <img className="card-img-top" src={ member.imgurl ? member.imgurl.dataurl : "/images/profile_image.png" } alt="Card image cap" />
+                                                <div className="card-body">
+                                                    <h5 className="card-title">{ member.username }</h5>
+                                                    {
+                                                        member.societydetails && 
+                                                         <p className="card-text">{ member.societydetails.role.toUpperCase() }, { member.societydetails.specificrole ? member.societydetails.specificrole : null }</p>
+                                                    }
+                                                    {
+                                                        member.classdetails && 
+                                                         <p className="card-text">{ member.classdetails.department.toUpperCase() }, {member.classdetails.class.toUpperCase()}-{ member.classdetails.rollno } </p>
+
+                                                    }
+                                                    <button className="btn btn-sm btn-primary"> Profile </button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    ) : (
+                                        <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                            <div className="card">
+                                                <img className="card-img-top" src={ member.imgurl ? member.imgurl.dataurl : "/images/profile_image.png" } alt="Card image cap" />
+                                                <div className="card-body">
+                                                    <h5 className="card-title">{ member.email }</h5>
+                                                    <p className="card-text">{ queryObj.memberType  }</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) 
                                 ))
                             }
                         </div>
@@ -95,10 +106,8 @@ class AboutMembers extends Component {
 }
 
 
-const mapStateToProps = (state) => {
-    return {
-        society : state.society
-    }
-} 
+const mapStateToProps = (state) => ({
+    society : state.society,
+}) 
 
 export default withRouter(connect(mapStateToProps , null)(AboutMembers));

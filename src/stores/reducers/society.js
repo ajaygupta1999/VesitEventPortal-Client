@@ -4,7 +4,8 @@ import {
     FETCH_SOCIETY_ERROR,
     FETCH_SOCIETY_RETRY,
     SHOW_SEARCH_MODAL,
-    HIDE_MODAL
+    HIDE_MODAL,
+    LOAD_MEMBERS_DATA
 } from "../actionTypes";
 
 
@@ -13,6 +14,11 @@ const INITIAL_STATE = {
     error : false,
     retry : false,
     data : {},
+    council_heads : [],
+    council_members: [],
+    normal_members : [],
+    faculty : {},
+    chairperson : {},
     isSearchModelVisible : false
 }
 
@@ -31,6 +37,15 @@ const society = (state = INITIAL_STATE , action) => {
         
         case LOAD_SOCIETY_DATA:
             return { ...state , data : action.data , isFetching : false }
+0
+        case LOAD_MEMBERS_DATA:
+            return { ...state , 
+                council_members : action.council_members , 
+                council_heads : action.council_heads , 
+                normal_members : action.normal_members , 
+                faculty : action.faculty,
+                chairperson : action.chairperson
+             }
 
         case SHOW_SEARCH_MODAL:
             return { ...state , isSearchModelVisible : true }

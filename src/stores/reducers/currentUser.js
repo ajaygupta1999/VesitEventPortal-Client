@@ -14,6 +14,7 @@ import {
 const DEFAULT_STATE = {
     isAuthenticated : false, 
     user : {},
+    registeredevents : [],
     isFetching : false,
     error : false
 }
@@ -29,6 +30,7 @@ const currentUser = (state = DEFAULT_STATE , action) => {
             return {
                 isAuthenticated : Object.keys(action.user).length > 0,
                 user : action.user,
+                registeredevents : action.registeredevents,
                 isFetching :false,
                 error : false
             }

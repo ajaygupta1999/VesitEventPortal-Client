@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import "../../asserts/css/Forms.scss";
-import { setGuestAndSponsorsDetails } from "../../stores/actions/userRegisterDetails";
 import { connect } from 'react-redux';
 import Navbar from "../navbar";
 import AddGuestModal from "../model/AddGuestModal";
+import { Link , withRouter } from "react-router-dom";
 import AddEventTakerModal from "../model/AddEventTakerModal";
 import { showAddGuestModal , 
     showAddEventtakerModal , 
@@ -12,10 +12,13 @@ import { showAddGuestModal ,
     handleAddPerson ,
     handleRemovePerson,
     handleAddSponsor,
-    handleRemoveSponsor } from "../../stores/actions/events";
+    handleRemoveSponsor,
+    fetchguestandsponsorspagedata,
+    fetchCreatedEvent } from "../../stores/actions/events";
 import { fetchAllUsers } from "../../stores/actions/userRegisterDetails";
 
    
+
 class GuestAndSponsorsForm extends Component {
      constructor(props){
          super(props);
@@ -79,9 +82,7 @@ class GuestAndSponsorsForm extends Component {
      
   
      componentDidMount = async () => {
-        
         let  { guests , eventtakers , users } = await this.getAllUsers();
-
         eventtakers.forEach(eventtaker => {
             eventtaker.roletype = "eventtaker";
         });
@@ -89,6 +90,15 @@ class GuestAndSponsorsForm extends Component {
         guests.forEach(guest => {
             guest.roletype = "guest";
         });
+        
+        // From params find event 
+        let { userid , eventid } = this.props.match.params;
+        await this.props.fetchCreatedEvent(userid , eventid);
+        await this.props.fetchguestandsponsorspagedata(userid , eventid);
+        // await this.props.fetchEventDetails(userid , eventid);
+        // Then load all the guests and eventakers and sponsors
+        // Then set the data into store after manupilation. 
+
 
         this.setState({
             ...this.state,
@@ -145,12 +155,11 @@ class GuestAndSponsorsForm extends Component {
                     addedsponsors : this.props.createdEvent.addedsponsors
                 }
             });
-          }
-            
+          }  
      }
 
      getAllUsers = async () => {
-        let { allusers }  = await this.props.fetchAllUsers(this.props.currentUser.user.id);
+        let { allusers }  = await this.props.fetchAllUsers(this.props.currentUser.user._id);
         return allusers;
      }
 
@@ -179,8 +188,7 @@ class GuestAndSponsorsForm extends Component {
         if(!isPersonAlreadyPresent){
             dataArr.forEach(async (member) => {
                 if(member._id.toString() === obj.key.toString()){
-                    console.log("from function Guest selected clicked ===> " , obj);
-                    await this.props.handleAddSelectedPerson(obj , this.props.currentUser.user.id , this.props.createdEvent.data.id);
+                    await this.props.handleAddSelectedPerson(obj , this.props.currentUser.user._id , this.props.createdEvent.data._id);
                 }
             });
         }
@@ -189,7 +197,7 @@ class GuestAndSponsorsForm extends Component {
      
      handleRemoveSelectedPerson = async (obj) => {
          console.log(obj);
-         await this.props.handleRemoveSelectedPerson(obj , this.props.currentUser.user.id , this.props.createdEvent.data.id ); 
+         await this.props.handleRemoveSelectedPerson(obj , this.props.currentUser.user._id , this.props.createdEvent.data._id ); 
      }
      
    
@@ -228,12 +236,11 @@ class GuestAndSponsorsForm extends Component {
             resetobj.currentyear = ""; 
          }
          
-         await this.props.handleAddPerson(dataobj , this.props.currentUser.user.id , this.props.createdEvent.data.id);
-         
+         await this.props.handleAddPerson(dataobj , this.props.currentUser.user._id , this.props.createdEvent.data._id);  
      }
 
      handleRemoveAddedGuests = async (obj) => {
-        await this.props.handleRemovePerson(obj , this.props.currentUser.user.id , this.props.createdEvent.data.id );
+        await this.props.handleRemovePerson(obj , this.props.currentUser.user._id , this.props.createdEvent.data._id );
         
      }
 
@@ -273,13 +280,13 @@ class GuestAndSponsorsForm extends Component {
            resetobj.currentyear = ""; 
         }
 
-        await this.props.handleAddPerson(dataobj , this.props.currentUser.user.id , this.props.createdEvent.data.id);
+        await this.props.handleAddPerson(dataobj , this.props.currentUser.user._id , this.props.createdEvent.data._id);
         
     }
 
     handleRemoveAddedEventtakers = async (obj) => {
         console.log(obj);
-        await this.props.handleRemovePerson(obj , this.props.currentUser.user.id , this.props.createdEvent.data.id );
+        await this.props.handleRemovePerson(obj , this.props.currentUser.user._id , this.props.createdEvent.data._id );
     }
     // ===========================================
 
@@ -295,12 +302,12 @@ class GuestAndSponsorsForm extends Component {
             details : this.state.sponsorsdetails.details.details
         };
         console.log("sponsor form =>> " , dataobj);
-        await this.props.handleAddSponsor(dataobj , this.props.currentUser.user.id , this.props.createdEvent.data.id);
+        await this.props.handleAddSponsor(dataobj , this.props.currentUser.user._id , this.props.createdEvent.data._id);
     }
 
     handleRemoveSponsor = async (obj) => {
         console.log("Remove from component => ", obj);
-        await this.props.handleRemoveSponsor(obj , this.props.currentUser.user.id , this.props.createdEvent.data.id );
+        await this.props.handleRemoveSponsor(obj , this.props.currentUser.user._id , this.props.createdEvent.data._id );
     }
     // =======================================
 
@@ -336,8 +343,7 @@ class GuestAndSponsorsForm extends Component {
                 ...this.state,
                 guestdetails :  {
                     ...this.state.guestdetails,
-                    isguest : e.target.value,
-                    addedguests : e.target.value === "false" ? [] : [...this.state.guestdetails.addedguests]
+                    isguest : e.target.value
                 }
             })
             return;
@@ -348,8 +354,7 @@ class GuestAndSponsorsForm extends Component {
                 ...this.state,
                 eventtakerdetails :  {
                     ...this.state.eventtakerdetails,
-                    iseventtaker : e.target.value,
-                    addedeventtakers : e.target.value === "false" ? [] : [...this.state.eventtakerdetails.addedeventtakers]
+                    iseventtaker : e.target.value
                 }
             })
             return;
@@ -360,8 +365,7 @@ class GuestAndSponsorsForm extends Component {
                 ...this.state,
                 sponsorsdetails :  {
                     ...this.state.sponsorsdetails,
-                    issponsored : e.target.value,
-                    addedsponsors : e.target.value === "false" ? [] : [...this.state.sponsorsdetails.addedsponsors]
+                    issponsored : e.target.value
                 }
             })
             return;
@@ -517,7 +521,7 @@ class GuestAndSponsorsForm extends Component {
                 <Navbar />
                 {
                      this.props.createdEvent.addGuestModalVisible && 
-                     <AddGuestModal userid={this.props.currentUser.user.id} 
+                     <AddGuestModal userid={this.props.currentUser.user._id} 
                         handleSelectedPerson={this.handleSelectedPerson} 
                         handleRemoveSelectedPerson = {this.handleRemoveSelectedPerson} 
                         guests={this.state.usersdata.guests} 
@@ -528,7 +532,7 @@ class GuestAndSponsorsForm extends Component {
                 }
                 {
                      this.props.createdEvent.addEventtakerModalVisible && 
-                     <AddEventTakerModal userid={this.props.currentUser.user.id} 
+                     <AddEventTakerModal userid={this.props.currentUser.user._id} 
                         handleSelectedPerson={this.handleSelectedPerson} 
                         handleRemoveSelectedPerson = {this.handleRemoveSelectedPerson} 
                         guests={this.state.usersdata.guests} 
@@ -573,7 +577,7 @@ class GuestAndSponsorsForm extends Component {
                                                     <div className="each-div-of-each-guest">
                                                         <div className="each-guest d-flex justify-content-start align-items-center">
                                                             <div className="guest-img-session">
-                                                                <img src={ member.imgurl.dataurl ? member.imgurl.dataurl : "/images/profile_image.png" } />
+                                                                <img src={ member.imgurl ? member.imgurl.dataurl : "/images/profile_image.png" } />
                                                             </div>
                                                             <div className="guest-details d-flex flex-column">
                                                                 <h5>{ member.username }</h5>
@@ -632,22 +636,7 @@ class GuestAndSponsorsForm extends Component {
                                     <p className="alert-icon"><i className="fas fa-exclamation-circle"></i></p>
                                     <p className="alert-text">If the guest is not their on this portal then you can add their Details below.</p>
                                 </div>
-
-                                <p className="not-registered-guest-session">Guest that does not present on our portal?</p>
-                                <div className="doeshavesponsor d-flex justify-content-start">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="guest_isguest" id="exampleRadios1" value="true" onChange={this.handleChange} checked={this.state.guestdetails.isguest === "true"} />
-                                        <label className="form-check-label" htmlFor="exampleRadios1">
-                                            Yes
-                                        </label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="guest_isguest" id="exampleRadios2" value="false" onChange={this.handleChange} checked={this.state.guestdetails.isguest === "false"} />
-                                        <label className="form-check-label" htmlFor="exampleRadios2">
-                                           No
-                                        </label>
-                                    </div>
-                                </div>
+                                
                                 {
                                     this.state.guestdetails.addedguests.length > 0 && 
                                     <div className="added-guest-details my-3"> 
@@ -689,11 +678,26 @@ class GuestAndSponsorsForm extends Component {
                                     }
                                 </div>
                                 }
+                                <p className="not-registered-guest-session">Guest that does not present on our portal?</p>
+                                <div className="doeshavesponsor d-flex justify-content-start">
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="guest_isguest" id="exampleRadios1" value="true" onChange={this.handleChange} checked={this.state.guestdetails.isguest === "true"} />
+                                        <label className="form-check-label" htmlFor="exampleRadios1">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="guest_isguest" id="exampleRadios2" value="false" onChange={this.handleChange} checked={this.state.guestdetails.isguest === "false"} />
+                                        <label className="form-check-label" htmlFor="exampleRadios2">
+                                           No
+                                        </label>
+                                    </div>
+                                </div>
                                 {
                                     this.state.guestdetails.isguest === "true" && (
                                         <form onSubmit={this.handleSubmitAddGuest}>
                                             <div class="guest-details-session row">
-                                                <div className="col-md-5">
+                                                <div className="description-about-each-form col-md-5">
                                                     <h5>Guest Details</h5>
                                                     <p>Provide guest details here who does not exist on our portal.
                                                         also if you have multiple guests then add one by one.
@@ -805,7 +809,7 @@ class GuestAndSponsorsForm extends Component {
                                                     <div className="each-div-of-each-guest">
                                                         <div className="each-guest d-flex justify-content-start align-items-center">
                                                             <div className="guest-img-session">
-                                                                <img src={ member.imgurl.dataurl ? member.imgurl.dataurl : "/images/profile_image.png" } />
+                                                                <img src={ member.imgurl ? member.imgurl.dataurl : "/images/profile_image.png" } />
                                                             </div>
                                                             <div className="guest-details d-flex flex-column">
                                                                 <h5>{ member.username }</h5>
@@ -864,21 +868,6 @@ class GuestAndSponsorsForm extends Component {
                                     <p className="alert-text">If the Event-taker is not their on this portal then you can add their Details below.
                                     </p>
                                 </div>
-                                <p className="not-registered-guest-session">Event-taker is not their on our portal?</p>
-                                <div className="doeshavesponsor d-flex justify-content-start">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="eventtaker_iseventtaker" id="exampleRadios1" value="true" onChange={this.handleChange} checked={this.state.eventtakerdetails.iseventtaker === "true"} />
-                                        <label className="form-check-label" htmlFor="exampleRadios1">
-                                            Yes
-                                        </label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="eventtaker_iseventtaker" id="exampleRadios2" value="false" onChange={this.handleChange} checked={this.state.eventtakerdetails.iseventtaker === "false"}/>
-                                        <label className="form-check-label" htmlFor="exampleRadios2">
-                                           No
-                                        </label>
-                                    </div>
-                                </div>
                                 {
                                     this.state.eventtakerdetails.addedeventtakers.length > 0 && 
                                     <div className="added-guest-details my-3"> 
@@ -918,11 +907,26 @@ class GuestAndSponsorsForm extends Component {
                                     }
                                 </div>
                                 }
+                                <p className="not-registered-guest-session">Event-taker is not their on our portal?</p>
+                                <div className="doeshavesponsor d-flex justify-content-start">
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="eventtaker_iseventtaker" id="exampleRadios1" value="true" onChange={this.handleChange} checked={this.state.eventtakerdetails.iseventtaker === "true"} />
+                                        <label className="form-check-label" htmlFor="exampleRadios1">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="eventtaker_iseventtaker" id="exampleRadios2" value="false" onChange={this.handleChange} checked={this.state.eventtakerdetails.iseventtaker === "false"}/>
+                                        <label className="form-check-label" htmlFor="exampleRadios2">
+                                           No
+                                        </label>
+                                    </div>
+                                </div>
                                 {
                                     this.state.eventtakerdetails.iseventtaker === "true" && 
                                     <form onSubmit={this.handleSubmitAddEventtaker}>
                                         <div className="event-takers-details-session row">
-                                            <div className="col-md-5">
+                                            <div className="description-about-each-form col-md-5">
                                                 <h5>Add Event-taker</h5>
                                                 <p>Provide Event-takers details. Here choose appropiate option eg: outside person , College faculty , College student. </p>
                                             </div>
@@ -1015,21 +1019,6 @@ class GuestAndSponsorsForm extends Component {
                                 <div className="Add-guest-session">
                                     <p>Add Sponsor</p>
                                 </div>
-                                <p className="not-registered-guest-session">Is this event is sponsored?</p>
-                                <div className="doeshavesponsor d-flex justify-content-start">
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="sponsor_issponsored" id="exampleRadios1" value="true" onChange={this.handleChange} checked={this.state.sponsorsdetails.issponsored === "true"} />
-                                        <label className="form-check-label" htmlFor="exampleRadios1">
-                                            Yes
-                                        </label>
-                                    </div>
-                                    <div className="form-check">
-                                        <input className="form-check-input" type="radio" name="sponsor_issponsored" id="exampleRadios2" value="false" onChange={this.handleChange} checked={this.state.sponsorsdetails.issponsored === "false"}/>
-                                        <label className="form-check-label" htmlFor="exampleRadios2">
-                                           No
-                                        </label>
-                                    </div>
-                                </div>
                                 {
                                     this.state.sponsorsdetails.addedsponsors.length > 0 && 
                                     <div className="added-guest-details my-3"> 
@@ -1061,12 +1050,26 @@ class GuestAndSponsorsForm extends Component {
                                     }
                                 </div>
                                 }
-
+                                <p className="not-registered-guest-session">Is this event is sponsored?</p>
+                                <div className="doeshavesponsor d-flex justify-content-start">
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="sponsor_issponsored" id="exampleRadios1" value="true" onChange={this.handleChange} checked={this.state.sponsorsdetails.issponsored === "true"} />
+                                        <label className="form-check-label" htmlFor="exampleRadios1">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div className="form-check">
+                                        <input className="form-check-input" type="radio" name="sponsor_issponsored" id="exampleRadios2" value="false" onChange={this.handleChange} checked={this.state.sponsorsdetails.issponsored === "false"}/>
+                                        <label className="form-check-label" htmlFor="exampleRadios2">
+                                           No
+                                        </label>
+                                    </div>
+                                </div>
                                 {
                                     this.state.sponsorsdetails.issponsored === "true" && (
                                         <form onSubmit={this.handleSubmitAddSponsor}>
                                             <div className="sponsors-details-session row">
-                                                <div className="col-md-5">
+                                                <div className="description-about-each-form col-md-5">
                                                     <h5>Add Sponsors Details</h5>
                                                     <p>Provide sponsors details if any. like github sponsored.</p>
                                                 </div>
@@ -1096,7 +1099,7 @@ class GuestAndSponsorsForm extends Component {
                                         <a id="our-back-button" className="btn btn-md btn-light back-buttons" href="addevent/aboutevent">Back</a>
                                     </div>
                                     <div>
-                                        <a type="button" className="btn btn-primary btn-md btn-block next-buttons">Next</a>
+                                        <Link to={ `/user/${this.props.currentUser.user._id}/add/${this.props.createdEvent.data._id}/formdetails` } type="button" className="btn btn-primary btn-md btn-block next-buttons">Next</Link>
                                     </div>
                                 </div>
                             </div>
@@ -1115,8 +1118,7 @@ function mapStateToProps(state){
     }
 } 
 
-export default connect(mapStateToProps , {  
-    setGuestAndSponsorsDetails , 
+export default withRouter(connect(mapStateToProps , {  
     showAddGuestModal , 
     fetchAllUsers , 
     showAddEventtakerModal,
@@ -1125,5 +1127,7 @@ export default connect(mapStateToProps , {
     handleAddPerson , 
     handleRemovePerson,
     handleAddSponsor,
-    handleRemoveSponsor
- })(GuestAndSponsorsForm);
+    handleRemoveSponsor,
+    fetchguestandsponsorspagedata,
+    fetchCreatedEvent
+ })(GuestAndSponsorsForm));

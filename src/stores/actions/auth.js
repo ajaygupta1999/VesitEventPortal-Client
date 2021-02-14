@@ -8,10 +8,11 @@ import {
 import { addError , removeError } from "./error";
 import { apiCall, setTokenHeader } from "../../services/api";
 
-export const setCurrentUser = (user) => {
+export const setCurrentUser = (user , registeredevents) => {
     return {
       type: LOAD_CURRENT_USER,
-      user
+      user,
+      registeredevents
     };
 }
 
@@ -43,12 +44,12 @@ export const logout = () => dispatch => {
 export const loginOrSignUp = (userData) => async dispatch => {
       try{
           dispatch({ type : FETCH_CURRENT_USER });
-          let { token , ...user } = await apiCall("post", "/api/auth/loginOrSignUp/google", userData);
+          let { token , userdetails , registeredevents } = await apiCall("post", "/api/auth/loginOrSignUp/google", userData);
           localStorage.setItem("jwtToken", token);
           setAuthorizationToken(token);     
-          dispatch(setCurrentUser(user));  
+          dispatch(setCurrentUser(userdetails , registeredevents));  
           dispatch(removeError());          
-          return user; 
+          return userdetails; 
       }catch(err){
           console.log("Error while login ==>>> " , err.message);
           dispatch({ type : FETCH_CURRENT_USER_ERROR });
