@@ -21,7 +21,7 @@ export const hideSearchModal = () => ({
 export const loadSocietyData = (name) => async dispatch => {
     try{
         dispatch({ type : FETCH_SOCIETY_DATA });
-        let societyData = await apiCall("get" , `/api/society/${name}/allData`);
+        let societyData = await apiCall("get" , `https://vesit-events-portal.herokuapp.com/api/society/${name}/allData`);
         dispatch({ type : LOAD_SOCIETY_DATA , data : societyData.society});
         dispatch(removeError());
         return societyData;
@@ -34,7 +34,7 @@ export const loadSocietyData = (name) => async dispatch => {
 
 export const fetchSocietyMembersFullDetails = (societyid) => async ( dispatch ) => {
     try{
-        let { normal_members , council_members , council_heads , faculty , chairperson } = await apiCall("get" , `/api/society/${societyid}/get/membersfulldetails`);
+        let { normal_members , council_members , council_heads , faculty , chairperson } = await apiCall("get" , `https://vesit-events-portal.herokuapp.com/api/society/${societyid}/get/membersfulldetails`);
         dispatch({
             type : "LOAD_MEMBERS_DATA",
             normal_members,
@@ -51,7 +51,7 @@ export const fetchSocietyMembersFullDetails = (societyid) => async ( dispatch ) 
 
 export const updateSocietyDetails = (societyname , userid ,  data) => async (dispatch) => {
     try{
-        let { society } = await apiUploadCall("post" , `/api/society/${societyname}/edit/societydetails/editor/${userid}` , data);
+        let { society } = await apiUploadCall("post" , `https://vesit-events-portal.herokuapp.com/api/society/${societyname}/edit/societydetails/editor/${userid}` , data);
         dispatch({
             type : "LOAD_SOCIETY_DATA",
             data : society
@@ -64,7 +64,7 @@ export const updateSocietyDetails = (societyname , userid ,  data) => async (dis
 
 export const updateAboutSocietyDetails = (societyname , userid ,  data) => async (dispatch) => {
     try{
-        let { society } = await apiCall("post" , `/api/society/${societyname}/edit/aboutsociety/editor/${userid}` , data);
+        let { society } = await apiCall("post" , `https://vesit-events-portal.herokuapp.com/api/society/${societyname}/edit/aboutsociety/editor/${userid}` , data);
         dispatch({
             type : "LOAD_SOCIETY_DATA",
             data : society
@@ -78,8 +78,8 @@ export const updateAboutSocietyDetails = (societyname , userid ,  data) => async
 
 export const updateSocietyAddChairpersonOrFaculty = (societyname , userid ,  data) => async (dispatch) => {
      try{
-        let { society } = await apiCall("post" , `/api/society/${societyname}/edit/facultyorchairperson/editor/${userid}` , data);
-        let { normal_members , council_members , council_heads , faculty , chairperson } = await apiCall("get" , `/api/society/${society._id}/get/membersfulldetails`);
+        let { society } = await apiCall("post" , `https://vesit-events-portal.herokuapp.com/api/society/${societyname}/edit/facultyorchairperson/editor/${userid}` , data);
+        let { normal_members , council_members , council_heads , faculty , chairperson } = await apiCall("get" , `https://vesit-events-portal.herokuapp.com/api/society/${society._id}/get/membersfulldetails`);
         dispatch({
             type : "LOAD_SOCIETY_DATA",
             data : society
