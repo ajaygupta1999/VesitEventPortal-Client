@@ -469,7 +469,7 @@ class SocietySettings extends Component {
                             <div className="form-group">
                                <label htmlFor="exampleFormControlTextarea2" className="label">About Sociey</label>
                                 <Editor
-                                   apiKey='pxg7pzt47h19vlvcja130m3fawin2cvj7o5bu8sjnlkw83kx'
+                                   apiKey={ process.env.REACT_APP_EDITOR_API_KEY }
                                    initialValue={ this.state.aboutsociety }
                                    init={{
                                        /* replace textarea having class .tinymce with tinymce editor */

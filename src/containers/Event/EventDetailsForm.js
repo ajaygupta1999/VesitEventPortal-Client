@@ -119,7 +119,7 @@ class EventDetailsForm extends Component {
                                 <div className="form-group">
                                     <label htmlFor="exampleFormControlTextarea2" className="label">Event-Full Description</label>
                                     <Editor
-                                        apiKey='pxg7pzt47h19vlvcja130m3fawin2cvj7o5bu8sjnlkw83kx'
+                                        apiKey={ process.env.REACT_APP_EDITOR_API_KEY }
                                         initialValue="<p>Write Full details of the event here.</p>"
                                         init={{
                                             /* replace textarea having class .tinymce with tinymce editor */

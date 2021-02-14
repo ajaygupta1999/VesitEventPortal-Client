@@ -36,7 +36,7 @@ class Googlelogin extends Component{
            <div>
                <h5>Login With Google</h5>
                <GoogleLogin
-                    clientId="878476685235-rubcpt9de8uo2g1ing0iqnanfkmpb4h5.apps.googleusercontent.com"
+                    clientId={ process.env.REACT_APP_GOOGLE_LOGIN_CLIENT_ID }
                     buttonText="Login with google"
                     onSuccess={this.onSuccessLogin}
                     onFailure={this.onFailureLogin}

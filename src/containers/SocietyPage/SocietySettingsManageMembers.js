@@ -5,12 +5,6 @@ import GooglePicker from "react-google-picker";
 import { getFileData } from "../../stores/actions/events";
 
 
-
-let clientId = "743137032433-4909gafua9h602m8h1m4d0c2egs87u7f.apps.googleusercontent.com";
-let ApiKey = "AIzaSyAOIV7lhyjmFbgPmqZsaH83XLXdWldsChQ";
-let projectId = "instant-gecko-300513";
-let projectNumber = "743137032433";
-
 class SimpleButton extends Component {
     render(){
         return(
@@ -18,12 +12,6 @@ class SimpleButton extends Component {
         )
     }
 }
-
-
-
-
-
-
 
 class SocietySettingsManageMembers extends Component {
    
@@ -53,8 +41,8 @@ class SocietySettingsManageMembers extends Component {
             <div>
                 <Navbar />
                 <center><h1>Manage Members of <strong>ISTE VESIT</strong></h1></center>
-                <GooglePicker clientId={ clientId }
-                    developerKey={ ApiKey }
+                <GooglePicker clientId={ process.env.REACT_APP_GOOGLE_CLIENT_ID }
+                    developerKey={ process.env.REACT_APP_GOOGLE_API_KEY }
                     scope={['https://www.googleapis.com/auth/drive']}
                     onChange={data => {
                         this.handleFileSelect(data);
