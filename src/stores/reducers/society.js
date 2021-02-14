@@ -37,7 +37,7 @@ const society = (state = INITIAL_STATE , action) => {
         
         case LOAD_SOCIETY_DATA:
             return { ...state , data : action.data , isFetching : false }
-0
+
         case LOAD_MEMBERS_DATA:
             return { ...state , 
                 council_members : action.council_members , 
