@@ -4,8 +4,8 @@
         "/**" : "index.html"
     },
     "proxies" : {
-        "/api/" : {
-            "origin" : "https://vesit-events-portal.herokuapp.com"
+        "/api" : {
+            "origin" : "https://vesit-events-portal.herokuapp.com/api"
         }
     }
 }
