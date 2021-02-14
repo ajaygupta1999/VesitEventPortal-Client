@@ -43,7 +43,7 @@ export const hideAddEventtakerModal = () => ({
 export const fetchAllEvents = () => async (dispatch) => {
      try{
         dispatch({ type : FETCH_ALL_EVENTS }); 
-        let allEvents = await apiCall("get" , "/api/event/allevents");
+        let allEvents = await apiCall("get" , "https://vesit-events-portal.herokuapp.com/api/event/allevents");
         dispatch({ type : LOAD_ALL_EVENTS  , events : allEvents});
         dispatch(removeError());
 
