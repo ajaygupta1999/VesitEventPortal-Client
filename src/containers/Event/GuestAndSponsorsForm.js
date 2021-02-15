@@ -17,7 +17,6 @@ import { showAddGuestModal ,
     fetchCreatedEvent } from "../../stores/actions/events";
 import { fetchAllUsers } from "../../stores/actions/userRegisterDetails";
 
-   
 
 class GuestAndSponsorsForm extends Component {
      constructor(props){

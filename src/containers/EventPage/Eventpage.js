@@ -4,7 +4,7 @@ import "../../asserts/css/EventPage.scss";
 import { Link } from "react-router-dom";
 import { getspecificevent , registerSpecificEvent , unregisterSpecificEvent  } from "../../stores/actions/events";
 import { connect } from "react-redux";
- 
+
 
 class EventPage extends Component{
 

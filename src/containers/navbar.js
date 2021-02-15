@@ -6,6 +6,7 @@ import { GoogleLogin } from "react-google-login";
 import { loginOrSignUp , logout } from "../stores/actions/auth";
 import { withRouter } from "react-router-dom";
 
+
 class Navbar extends Component {
 
     onSuccessLogin = async (res) => {
@@ -185,7 +186,7 @@ class Navbar extends Component {
                                         <li className="nav-item navlink-all-lis navbar-login-and-sign-button d-flex justify-content-center align-items-center">
                                             <button className="btn btn-md btn-light login-and-signup-buttons">
                                                 <GoogleLogin
-                                                        clientId={ process.env.REACT_APP_GOOGLE_LOGIN_CLIENT_ID }
+                                                        clientId="755925335295-qmcfaigpmp9ch2hno1g5qpb3n5ifm6jh.apps.googleusercontent.com"
                                                         buttonText="Login"
                                                         onSuccess={this.onSuccessLogin}
                                                         onFailure={this.onFailureLogin}
@@ -197,7 +198,7 @@ class Navbar extends Component {
                                         <li className="nav-item navlink-all-lis navbar-login-and-sign-button d-flex justify-content-center align-items-center">
                                             <button className="btn btn-md btn-light login-and-signup-buttons">
                                                 <GoogleLogin
-                                                        clientId={ process.env.REACT_APP_GOOGLE_LOGIN_CLIENT_ID }
+                                                        clientId="755925335295-qmcfaigpmp9ch2hno1g5qpb3n5ifm6jh.apps.googleusercontent.com"
                                                         buttonText="Sign Up"
                                                         onSuccess={this.onSuccessLogin}
                                                         onFailure={this.onFailureLogin}

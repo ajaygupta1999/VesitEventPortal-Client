@@ -6,7 +6,6 @@ import { fetchAllUsers } from "../../stores/actions/userRegisterDetails";
 import { Editor } from '@tinymce/tinymce-react';
 import { Link } from "react-router-dom";
 
-
 class SocietySettings extends Component {
    
     constructor(props){
@@ -469,7 +468,7 @@ class SocietySettings extends Component {
                             <div className="form-group">
                                <label htmlFor="exampleFormControlTextarea2" className="label">About Sociey</label>
                                 <Editor
-                                   apiKey={ process.env.REACT_APP_EDITOR_API_KEY }
+                                   apiKey="pxg7pzt47h19vlvcja130m3fawin2cvj7o5bu8sjnlkw83kx"
                                    initialValue={ this.state.aboutsociety }
                                    init={{
                                        /* replace textarea having class .tinymce with tinymce editor */

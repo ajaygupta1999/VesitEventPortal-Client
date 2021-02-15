@@ -7,8 +7,6 @@ import Navbar from "../navbar";
 import { addFormLink , showeventcreatedmodal , fetchCreatedEvent } from "../../stores/actions/events";
 
 
-
-
 class RegistrationFormDetails extends Component {
      constructor(props){
          super(props);
