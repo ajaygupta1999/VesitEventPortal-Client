@@ -1,5 +1,6 @@
 import { apiCall, apiUploadCall , apiComplexCall } from "../../services/api";
 import { setAuthorizationToken } from "./auth";
+import { config } from "../../Constants";
 
 import {
     FETCH_USER_PERSONAL_DETAILS,
@@ -23,7 +24,7 @@ import { addError , removeError } from "./error";
 // export const setPersonalDetails = (data , id) => async (dispatch) => {
 //         try{
 //             dispatch({ type : FETCH_USER_PERSONAL_DETAILS });
-//             let { token ,  userdetails } = await apiUploadCall("POST" , `https://vesit-events-portal.herokuapp.com/api/user/${id}/create/personaldetails` , data);
+//             let { token ,  userdetails } = await apiUploadCall("POST" , `${config.Api.API_URL}/api/user/${id}/create/personaldetails` , data);
 //             localStorage.setItem("jwtToken", token);
 //             setAuthorizationToken(token);     
 //             dispatch({ type : LOAD_USER_PERSONAL_DETAILS , user : userdetails });
@@ -39,7 +40,7 @@ import { addError , removeError } from "./error";
 export const setClassAndSocietyDetails = (data , userid) => async (dispatch) => {
         try{
             dispatch({ type : FETCH_CLASS_AND_SCOEITY_DETAILS });
-            let { token , userdetails } = await apiCall("post", `https://vesit-events-portal.herokuapp.com/api/user/${userid}/create/classandsociety`, data);
+            let { token , userdetails } = await apiCall("post", `${config.Api.API_URL}/api/user/${userid}/create/classandsociety`, data);
             localStorage.setItem("jwtToken", token);
             setAuthorizationToken(token);
             dispatch({ type : LOAD_CLASS_AND_SCOEITY_DETAILS , user : userdetails });  
@@ -55,7 +56,7 @@ export const setClassAndSocietyDetails = (data , userid) => async (dispatch) => 
 export const setEventDetails = (data , userid) => async (dispatch) => {
       try{
             dispatch({ type : FETCH_CREATED_EVENT  });
-            let { eventdetails } = await apiUploadCall("post", `https://vesit-events-portal.herokuapp.com/api/user/${userid}/add/eventdetails`, data);
+            let { eventdetails } = await apiUploadCall("post", `${config.Api.API_URL}/api/user/${userid}/add/eventdetails`, data);
             dispatch({ type : LOAD_CREATED_EVENT , event : eventdetails });
             dispatch(removeError()); 
             
@@ -70,7 +71,7 @@ export const setEventDetails = (data , userid) => async (dispatch) => {
 // export const setGuestAndSponsorsDetails = (data , userid , eventid) => async (dispatch) => {
 //     try{
 //         dispatch({ type : FETCH_GUESTANDSPONSOR_DATA });
-//         let event = await apiComplexCall("post" , `https://vesit-events-portal.herokuapp.com/api/user/${userid}/addevent/${eventid}/guestandsponsor` , data);
+//         let event = await apiComplexCall("post" , `${config.Api.API_URL}/api/user/${userid}/addevent/${eventid}/guestandsponsor` , data);
 //         dispatch({ type : LOAD_GUESTANDSPONSOR_DATA , event });
 //         dispatch(removeError());
 
@@ -84,7 +85,7 @@ export const setEventDetails = (data , userid) => async (dispatch) => {
 export const updateUserProfileData = (userid , data) => async (dispatch) => {
     try{
         dispatch({ type : FETCH_CLASS_AND_SCOEITY_DETAILS });
-        let { token , userdetails } = await apiUploadCall("post", `https://vesit-events-portal.herokuapp.com/api/user/${userid}/edit/profile/personaldetails`, data);
+        let { token , userdetails } = await apiUploadCall("post", `${config.Api.API_URL}/api/user/${userid}/edit/profile/personaldetails`, data);
         localStorage.setItem("jwtToken", token);
         setAuthorizationToken(token);
         dispatch({ type : LOAD_CLASS_AND_SCOEITY_DETAILS , user : userdetails });  
@@ -99,7 +100,7 @@ export const updateUserProfileData = (userid , data) => async (dispatch) => {
 export const updateUserSocietyDetails = (userid , data) => async (dispatch) => {
     try{
         dispatch({ type : FETCH_CLASS_AND_SCOEITY_DETAILS });
-        let { token , userdetails } = await apiCall("post", `https://vesit-events-portal.herokuapp.com/api/user/${userid}/edit/profile/societydetails`, data);
+        let { token , userdetails } = await apiCall("post", `${config.Api.API_URL}/api/user/${userid}/edit/profile/societydetails`, data);
         console.log("Got data edited data from server, " , token , userdetails);
         localStorage.setItem("jwtToken", token);
         setAuthorizationToken(token);
@@ -116,7 +117,7 @@ export const updateUserSocietyDetails = (userid , data) => async (dispatch) => {
 export const updateUserClassDetails = (userid , data) => async (dispatch) => {
     try{
         dispatch({ type : FETCH_CLASS_AND_SCOEITY_DETAILS });
-        let { token , userdetails } = await apiCall("post", `https://vesit-events-portal.herokuapp.com/api/user/${userid}/edit/profile/classdetails`, data);
+        let { token , userdetails } = await apiCall("post", `${config.Api.API_URL}/api/user/${userid}/edit/profile/classdetails`, data);
         console.log("Got data edited data from server, " , token , userdetails);
         localStorage.setItem("jwtToken", token);
         setAuthorizationToken(token);
@@ -131,7 +132,7 @@ export const updateUserClassDetails = (userid , data) => async (dispatch) => {
 
 export const fetchAllUsers = (userid) => async (dispatch) => {
     try{
-        let allUsers = await apiCall("get" , `https://vesit-events-portal.herokuapp.com/api/user/${userid}/getallusers`);
+        let allUsers = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/getallusers`);
         return allUsers;  
     }catch(err){
         console.error("Got error while fetching all users ===>>" , err.message);
@@ -143,7 +144,7 @@ export const fetchAllUsers = (userid) => async (dispatch) => {
 
 export const fetchusersocietydetails = (userid) => async (dispatch) => {
     try{
-        let societydata = await apiCall("get" , `https://vesit-events-portal.herokuapp.com/api/user/${userid}/fetch/societydeails`);
+        let societydata = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/fetch/societydeails`);
         return societydata;
     }catch(err){
         console.log(err);
@@ -152,7 +153,7 @@ export const fetchusersocietydetails = (userid) => async (dispatch) => {
 
 export const fetchSpecificUser = (userid) => async (dispatch) => {
      try{
-        let { userdata , registeredevents } = await apiCall("get" , `https://vesit-events-portal.herokuapp.com/api/user/${userid}/getspecificuser`);
+        let { userdata , registeredevents } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/getspecificuser`);
         console.log("Userdata ==> " , userdata , registeredevents);
         dispatch({
             type : "LOAD_SPECIFIC_USER_DATA",

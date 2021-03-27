@@ -1,3 +1,4 @@
+import { config } from "../../Constants";
 
 import { 
     FETCH_CURRENT_USER,
@@ -44,7 +45,7 @@ export const logout = () => dispatch => {
 export const loginOrSignUp = (userData) => async dispatch => {
       try{
           dispatch({ type : FETCH_CURRENT_USER });
-          let { token , userdetails , registeredevents } = await apiCall("post", "https://vesit-events-portal.herokuapp.com/api/auth/loginOrSignUp/google", userData);
+          let { token , userdetails , registeredevents } = await apiCall("post", `${config.Api.API_URL}/api/auth/loginOrSignUp/google`, userData);
           localStorage.setItem("jwtToken", token);
           setAuthorizationToken(token);     
           dispatch(setCurrentUser(userdetails , registeredevents));  

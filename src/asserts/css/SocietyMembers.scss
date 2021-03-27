@@ -1,0 +1,190 @@
+// Society members page
+
+.blue-button , .blue-button-sm, .blue-button-sm-blue, .blue-button-sm-whites {
+    padding: 7px 15px;
+    font-weight: 500;
+    font-size: 15px;
+    background: #693fe8;
+    border: none;
+    outline: none;
+
+    i{
+        margin-right : 3px;
+    }
+}
+
+.blue-button:hover, .blue-button-sm:hover , .blue-button-sm-blue:hover, .blue-button-sm-whites:hover  {
+    background: #7345ff;
+}
+
+.blue-button-sm , .blue-button-sm-blue, .blue-button-sm-whites  {
+    font-size: 13px;
+    padding: 6px 12px;
+}
+
+.blue-button-sm-blue {
+    background :#4a4dff;
+}
+
+.blue-button-sm-whites {
+    color : white;
+    background :#4a4dff;
+}
+
+.blue-button-sm-whites:hover{
+    background :#4a4dff;
+}
+
+
+.blue-button-sm-whites a{
+    color : white;
+}
+
+.society-setting-manage-members-page {
+    .manage-members-heading{
+        text-align: center;
+        font-weight : 600;
+        font-size : 32px;
+        color : #6734FF;
+    }
+
+    .description-of-page{
+        text-align: center;
+        width : 60%;
+        margin : 10px auto;
+    }
+
+    .manage-members-nav-links{
+        margin-top : 50px;
+    }
+
+    .connect-to-spreadsheet-using-signin {
+        p {
+            margin: 0px;
+            font-size : 16px;
+            width : 48%;
+            margin-right: 20px;
+        }
+    }
+
+    .members-page-select-button {
+        select {
+            border : none;
+            border-bottom : 1px solid black;
+            border-radius : 0px;
+        }
+    }
+
+    .society-page-navigation-session{
+        .Manage-members-society-members-section {
+      
+            .members-page-intro-section {
+                .Sub-Heading{
+                    font-size : 26px;
+                    font-weight: 500;
+                }
+
+                p{
+                    font-size : 15px;   
+                }
+            }
+
+            .sheet-link-button-section {
+                margin-bottom : 15px;
+            }
+
+            .new-member-add-div {
+                margin-top : 20px;
+                    
+                .insert-member-input-feild{
+                    border : none;
+                    border-radius : 0;
+                    border-bottom: 1px solid black;
+                }
+            }
+            
+            .all-society-members{
+                .search-div{
+                    position: relative;
+                    margin-bottom: 8px;
+
+                    i{
+                        position: absolute;
+                        top: 11px;
+                        left: 15px;
+                    }
+
+                    input{
+                        padding: 9px;
+                        padding-left: 38px;
+                        background: #a2a2aa1f;
+                        border: none;
+                    }
+
+                }
+
+                .each-member-div{
+                    background: #f2f2f2ab;
+                    padding: 8px 14px;
+                    border-radius: 3px;
+
+                    .name-and-img-section{
+
+                        .user-image {
+                            margin-right : 7px;
+                        }
+
+                        img{
+                            width : 46px;
+                            height : 46px;
+                            object-fit: cover;
+                            border-radius: 23px;
+                        }
+
+                        h3 {
+                                margin: 0px;
+                                margin-bottom: 1px;
+                                font-size: 16px;
+                                font-weight: 600;
+                        }
+
+                        p{
+                            margin: 0px;
+                            font-size: 12px;
+                            font-weight: 400;
+                        }
+                    }
+
+                    .role-section{
+                        p {
+                            margin: 0px;
+                            font-size: 15px;
+                            font-weight: 500;
+                        }
+                    }
+
+                    .edit-and-delete-section{
+                        .edit-button {
+                            background : blue;
+                            border : none;
+                            margin-right : 4px;
+                            
+                            i{
+                                color : white;
+                            }
+                        }
+                    }
+                }
+
+                .each-member-div:hover {
+                    background: #e0e0e070;
+                }
+            }
+            
+        }
+    }
+
+     
+
+    
+}

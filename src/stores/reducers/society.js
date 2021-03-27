@@ -45,7 +45,7 @@ const society = (state = INITIAL_STATE , action) => {
                 normal_members : action.normal_members , 
                 faculty : action.faculty,
                 chairperson : action.chairperson
-             }
+            }
 
         case SHOW_SEARCH_MODAL:
             return { ...state , isSearchModelVisible : true }
