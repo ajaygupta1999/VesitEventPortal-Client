@@ -295,3 +295,75 @@ export const handleRemoveFacultyOrChairperson = (societyname , societyid , data)
        console.log(err);
     }
 }
+
+
+export const handleEditSocietyMemeber = (societyname , societyid , data) => async (dispatch) => {
+    try{
+        let society = await apiCall("post" , `${config.Api.API_URL}/api/society/${societyname}/${societyid}/edit/managemembers/edit/societymember` , data);
+        let { normal_members , council_members , council_heads , faculty , chairperson } = await apiCall("get" , `${config.Api.API_URL}/api/society/${societyid}/get/membersfulldetails`);
+          dispatch({
+            type : "LOAD_SOCIETY_DATA",
+            data : society
+          });
+
+        dispatch({
+            type : "LOAD_MEMBERS_DATA",
+            normal_members,
+            council_heads,
+            council_members,
+            faculty,
+            chairperson
+        });
+        
+    }catch(err){
+       console.log(err);
+    }
+}
+
+
+export const handleEditCouncilMemeber = (societyname , societyid , data) => async (dispatch) => {
+    try{
+        let society = await apiCall("post" , `${config.Api.API_URL}/api/society/${societyname}/${societyid}/edit/managemembers/edit/councilmember` , data);
+        let { normal_members , council_members , council_heads , faculty , chairperson } = await apiCall("get" , `${config.Api.API_URL}/api/society/${societyid}/get/membersfulldetails`);
+          dispatch({
+            type : "LOAD_SOCIETY_DATA",
+            data : society
+          });
+
+        dispatch({
+            type : "LOAD_MEMBERS_DATA",
+            normal_members,
+            council_heads,
+            council_members,
+            faculty,
+            chairperson
+        });
+        
+    }catch(err){
+       console.log(err);
+    }
+}
+
+
+export const handleEditFacultyAndChairperson = (societyname , societyid , data) => async (dispatch) => {
+    try{
+        let society = await apiCall("post" , `${config.Api.API_URL}/api/society/${societyname}/${societyid}/edit/managemembers/edit/facultyorchairperson` , data);
+        let { normal_members , council_members , council_heads , faculty , chairperson } = await apiCall("get" , `${config.Api.API_URL}/api/society/${societyid}/get/membersfulldetails`);
+          dispatch({
+            type : "LOAD_SOCIETY_DATA",
+            data : society
+          });
+
+        dispatch({
+            type : "LOAD_MEMBERS_DATA",
+            normal_members,
+            council_heads,
+            council_members,
+            faculty,
+            chairperson
+        });
+        
+    }catch(err){
+       console.log(err);
+    }
+}

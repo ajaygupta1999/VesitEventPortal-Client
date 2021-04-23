@@ -12,7 +12,10 @@ import {
   handleAddFacultyAndChairperson , 
   handleRemoveSocietyMember, 
   handleRemoveCouncilMember, 
-  handleRemoveFacultyOrChairperson } from "../../stores/actions/society";
+  handleRemoveFacultyOrChairperson,
+  handleEditSocietyMemeber,
+  handleEditCouncilMemeber,
+  handleEditFacultyAndChairperson } from "../../stores/actions/society";
 
 import "../../asserts/css/SocietyMembers.scss"; 
 import { Link } from 'react-router-dom';
@@ -61,28 +64,68 @@ class SocietySettingsManageMembers extends Component {
                 email: '',
                 accesstoken : "",
                 googleAuth: '',
+                imgurl : "",
                 sheeturl_of_society_members : "",
                 sheeturl_of_council_members : "",
                 sheeturl_of_faculty_and_chairperson : ""
             }
-            
         }
     }
 
 
-
     componentDidUpdate = (prevProps, prevState) => {
         if(JSON.stringify(prevProps.society.data.normal_members) !== JSON.stringify(this.props.society.data.normal_members)){
+            let societyMemberArr = this.props.society.data.normal_members.map(member => ({
+                ...member,
+                editing :{
+                   isEditing : false,
+                   name : member.name,
+                   email : member.email
+                }
+            }));
+
             this.setState({
                 ...this.state,
-                societyMembers : this.props.society.data.normal_members
+                societyMembers : societyMemberArr
             });
         }
 
         if(JSON.stringify(prevProps.society.data.council_members) !== JSON.stringify(this.props.society.data.council_members)){
+            let councilMemberArr = this.props.society.data.council_members.map(member => ({
+              ...member,
+              editing :{
+                  isEditing : false,
+                  name : member.name,
+                  email : member.email,
+                  role : "councilmember",
+                  specificrole : member.specificrole
+              }
+            }));
+
             this.setState({
                 ...this.state,
-                councilMembers : this.props.society.data.council_members
+                councilMembers : councilMemberArr
+            });
+        }
+
+        if(JSON.stringify(prevProps.society.data.spreadsheets) !== JSON.stringify(this.props.society.data.spreadsheets)){
+            let sheeturl_of_society_members = "";
+            let sheeturl_of_council_members = "";
+            let sheeturl_of_faculty_and_chairperson = "";
+            if(this.props.society.data.spreadsheets){
+                sheeturl_of_society_members = "https://docs.google.com/spreadsheets/d/" + this.props.society.data.spreadsheets.sheetid + "/edit#gid=" + this.props.society.data.spreadsheets.normal_members.sheetid;
+                sheeturl_of_council_members = "https://docs.google.com/spreadsheets/d/" + this.props.society.data.spreadsheets.sheetid + "/edit#gid=" + this.props.society.data.spreadsheets.council_member.sheetid;
+                sheeturl_of_faculty_and_chairperson = "https://docs.google.com/spreadsheets/d/" + this.props.society.data.spreadsheets.sheetid + "/edit#gid=" + this.props.society.data.spreadsheets.facultyorchairperson.sheetid;
+            }
+            console.log("Sheet url has been changed");
+            this.setState({
+              ...this.state,
+              authRelatedData : {
+                ...this.state.authRelatedData,
+                sheeturl_of_society_members,
+                sheeturl_of_council_members,
+                sheeturl_of_faculty_and_chairperson
+              }
             });
         }
         
@@ -92,12 +135,22 @@ class SocietySettingsManageMembers extends Component {
             this.setState({
               ...this.state,
               faculty :{
+                editing :{
+                    isEditing : false,
+                    name : this.props.society.data.faculty ? this.props.society.data.faculty.name : "",
+                    email : this.props.society.data.faculty ? this.props.society.data.faculty.email : ""
+                },
                 name : this.props.society.data.faculty ? this.props.society.data.faculty.name : "",
                 email : this.props.society.data.faculty ? this.props.society.data.faculty.email : ""
               },
               chairperson : {
+                 editing :{
+                    isEditing : false,
+                    name : this.props.society.data.chairperson ? this.props.society.data.chairperson.name : "",
+                    email : this.props.society.data.chairperson ? this.props.society.data.chairperson.email : ""
+                 },
                  name : this.props.society.data.chairperson ? this.props.society.data.chairperson.name : "",
-                email : this.props.society.data.chairperson ? this.props.society.data.chairperson.email : "" 
+                 email : this.props.society.data.chairperson ? this.props.society.data.chairperson.email : "" 
               }
             });
         }
@@ -115,16 +168,46 @@ class SocietySettingsManageMembers extends Component {
             sheeturl_of_council_members = "https://docs.google.com/spreadsheets/d/" + this.props.society.data.spreadsheets.sheetid + "/edit#gid=" + this.props.society.data.spreadsheets.council_member.sheetid;
             sheeturl_of_faculty_and_chairperson = "https://docs.google.com/spreadsheets/d/" + this.props.society.data.spreadsheets.sheetid + "/edit#gid=" + this.props.society.data.spreadsheets.facultyorchairperson.sheetid;
         }
-  
+
+        let societyMemberArr = this.props.society.data.normal_members.map(member => ({
+            ...member,
+            editing :{
+              isEditing : false,
+              name : member.name,
+              email : member.email
+           }
+        }));
+
+        let councilMemberArr = this.props.society.data.council_members.map(member => ({
+          ...member,
+          editing : { 
+            isEditing : false,
+            name : member.name,
+            email : member.email,
+            role : "councilmember",
+            specificrole : member.specificrole
+          }
+        }));
+
         this.setState({
           ...this.state,
-          societyMembers : this.props.society.data.normal_members,
-          councilMembers : this.props.society.data.council_members,
-          faculty :{
+          societyMembers : societyMemberArr,
+          councilMembers : councilMemberArr,
+          faculty : {
+            editing :{
+              isEditing : false,
+              name : this.props.society.data.faculty ? this.props.society.data.faculty.name : "",
+              email : this.props.society.data.faculty ? this.props.society.data.faculty.email : ""
+            },
             name : this.props.society.data.faculty ? this.props.society.data.faculty.name : "",
             email : this.props.society.data.faculty ? this.props.society.data.faculty.email : ""
           },
           chairperson : {
+            editing :{
+              isEditing : false,
+              name : this.props.society.data.chairperson ? this.props.society.data.chairperson.name : "",
+              email : this.props.society.data.chairperson ? this.props.society.data.chairperson.email : ""
+            },
              name : this.props.society.data.chairperson ? this.props.society.data.chairperson.name : "",
             email : this.props.society.data.chairperson ? this.props.society.data.chairperson.email : "" 
           },
@@ -187,8 +270,6 @@ class SocietySettingsManageMembers extends Component {
                       }
                   });
               }
-              // document.getElementById('sign').addEventListener('click', this.signInFunction);
-              // document.getElementById('signout-btn').addEventListener('click', this.signOutFunction);
           });
         }catch(e){
           console.log(e);
@@ -196,14 +277,14 @@ class SocietySettingsManageMembers extends Component {
     }
 
 
-    signInFunction = () => {
-        this.state.authRelatedData.googleAuth.signIn();
-        this.updateSigninStatus();
+    signInFunction = async () => {
+        await this.state.authRelatedData.googleAuth.signIn();
+        await this.updateSigninStatus();
     }
 
-    signOutFunction = () => {
-        this.state.authRelatedData.googleAuth.signOut();
-        this.updateSigninStatus();
+    signOutFunction = async () => {
+        await this.state.authRelatedData.googleAuth.signOut();
+        await this.updateSigninStatus();
     }
 
     updateSigninStatus = async () => {
@@ -211,47 +292,56 @@ class SocietySettingsManageMembers extends Component {
             console.log("Please login first");
             this.setState({
               ...this.state,
-              authRelatedData : {}
-            })
-            return; 
+              authRelatedData : {
+                 ...this.state.authRelatedData,
+                 name: "",
+                 email: "",
+                 accesstoken : "",
+              }
+            });
+        }else{
+          var user = this.state.authRelatedData.googleAuth.currentUser.get();
+          var accesstoken = this.state.authRelatedData.googleAuth.currentUser.get().getAuthResponse().access_token;
+          let username = user.getBasicProfile().getName();
+          let email = user.getBasicProfile().getEmail();
+          let imgurl = user.getBasicProfile().getImageUrl();
+          
+          this.setState({
+            ...this.state,
+            authRelatedData : {
+              ...this.state.authRelatedData,
+              name: username,
+              accesstoken : accesstoken,
+              email : email,
+              imgurl
+            }
+          });
         }
-        var user = this.state.authRelatedData.googleAuth.currentUser.get();
-        var accesstoken = this.state.authRelatedData.googleAuth.currentUser.get().getAuthResponse().access_token;
-        let username = user.getBasicProfile().getName();
-        let email = user.getBasicProfile().getEmail();
-        let imgurl = user.getBasicProfile().getImageUrl();
-        
-        
-        this.setState({
-          ...this.state,
-          authRelatedData : {
-            ...this.state.authRelatedData,
-            name: username,
-            accesstoken : accesstoken,
-            email : email,
-            imgurl
-          }
-        });
     }
 
     
     handleCreateSpreadSheet = async () => {
         let spreadsheetdata;
-        if(this.state.authRelatedData.accesstoken.length === 0){
+        if(this.state.authRelatedData.accesstoken.length === 0 && this.state.authRelatedData.sheeturl_of_council_members.length > 0){
             await this.signInFunction();
-        }   
+            return;
+        }
+        
+        if(this.state.authRelatedData.accesstoken.length === 0 && this.state.authRelatedData.sheeturl_of_council_members.length === 0){
+            await this.signInFunction();
+        }
         let data = {
             useremail : this.state.authRelatedData.email,
             accesstoken : this.state.authRelatedData.accesstoken
         }
         await this.props.createSpreadSheet(this.props.society.data.name , this.props.society.data._id , data);
-        this.setState({
-          ...this.state,
-          authRelatedData : {
-            ...this.state.authRelatedData,
-            sheeturl : spreadsheetdata.spreadsheetUrl
-          }
-        });
+        // this.setState({
+        //   ...this.state,
+        //   authRelatedData : {
+        //     ...this.state.authRelatedData,
+        //     sheeturl : society.spreadsheets.sheetid
+        //   }
+        // });
         
     }
 
@@ -430,6 +520,139 @@ class SocietySettingsManageMembers extends Component {
 
     } 
 
+    handleEditMember = async (dataobj) => {
+        if(dataobj.personType === "society_member"){
+            this.setState({
+               ...this.state,
+               societyMembers : this.state.societyMembers.map(member => {
+                   if(member._id.toString() === dataobj.id.toString()){
+                      return { ...member , editing : { ...member.editing , isEditing : !member.editing.isEditing } }
+                   }
+                   return member;
+               }) 
+            })
+        }
+
+        if(dataobj.personType === "council_member"){
+          this.setState({
+             ...this.state,
+             councilMembers : this.state.councilMembers.map(member => {
+                 if(member._id.toString() === dataobj.id.toString()){
+                    return { ...member , editing : { ...member.editing , isEditing : !member.editing.isEditing } }
+                 }
+                 return member;
+             }) 
+          })
+        }
+
+        if(dataobj.personType === "faculty"){
+            this.setState({
+              ...this.state,
+              faculty : {
+                ...this.state.faculty,
+                editing : { ...this.state.faculty.editing , isEditing : !this.state.faculty.editing.isEditing }
+              }
+            })
+        }
+
+        if(dataobj.personType === "chairperson"){
+          this.setState({
+            ...this.state,
+            chairperson : {
+              ...this.state.chairperson,
+              editing : { ...this.state.chairperson.editing , isEditing : !this.state.chairperson.editing.isEditing }
+            }
+          });
+        }
+    }
+
+    handleEditChange = (e , dataobj) => {
+      let fieldarr = e.target.name.split("_");
+      if(fieldarr[0] === "societymember"){
+          this.setState({
+            ...this.state,
+            societyMembers : this.state.societyMembers.map(member => {
+                if(member._id.toString() === dataobj.id.toString()){
+                   return {
+                      ...member,
+                      editing : {
+                        ...member.editing,
+                        [fieldarr[1]] : e.target.value
+                      }
+                   }
+                }
+
+                return member;
+            })
+          });
+      }
+
+      if(fieldarr[0] === "councilmember"){
+        this.setState({
+          ...this.state,
+          councilMembers : this.state.councilMembers.map(member => {
+              if(member._id.toString() === dataobj.id.toString()){
+                 return {
+                    ...member,
+                    editing : {
+                      ...member.editing,
+                      [fieldarr[1]] : e.target.value
+                    }
+                 }
+              }
+
+              return member;
+          })
+        });
+    }
+
+    if(fieldarr[0] === "facultyAndChairpersonData"){
+          this.setState({
+              ...this.state,
+              facultyAndChairpersonData : {
+                ...this.state.facultyAndChairpersonData,
+                [fieldarr[1]] : e.target.value
+              }
+          });
+      }
+       
+    }
+
+    handleEditMemberSubmit = async (e , data) => {
+       e.preventDefault();
+       let dataobj = {};
+       if(data.personType === "society_member"){
+          dataobj.id = data.id;
+          dataobj.name = data.name;
+          dataobj.email = data.email;
+          if(this.state.authRelatedData.sheeturl_of_society_members.length > 0){
+              dataobj.accesstoken = this.state.authRelatedData.accesstoken;
+          }
+          await this.props.handleEditSocietyMemeber(this.props.society.data.name , this.props.society.data._id , dataobj);
+       }
+
+       if(data.personType === "council_member"){
+          dataobj.id = data.id;
+          dataobj.name = data.name;
+          dataobj.email = data.email;
+          dataobj.role = data.role;
+          dataobj.specificrole = data.specificrole;
+          if(this.state.authRelatedData.sheeturl_of_council_members.length > 0){
+              dataobj.accesstoken = this.state.authRelatedData.accesstoken;
+          }
+          await this.props.handleEditCouncilMemeber(this.props.society.data.name , this.props.society.data._id , dataobj);
+       }
+
+      //  if(data.personType === "facultyAndChairperson"){
+      //     dataobj.id = data.id;
+      //     dataobj.role = data.personType;
+      //     if(this.state.authRelatedData.sheeturl_of_faculty_and_chairperson.length > 0){
+      //         dataobj.accesstoken = this.state.authRelatedData.accesstoken;
+      //     }
+      //     await this.props.handleEditFacultyAndChairperson(this.props.society.data.name , this.props.society.data._id , dataobj);
+      //  }
+    }
+
     
     render(){
 
@@ -461,7 +684,12 @@ class SocietySettingsManageMembers extends Component {
                 <div className="connect-to-spreadsheet-using-signin container d-flex justify-content-center align-items-center my-4">
                     <p>To Connect with SpreadSheet for better data import and export. Please sign in with account other than our college account.</p>
                     <button className="btn btn-sm btn-primary blue-button-sm-whites ml-5" onClick={this.handleCreateSpreadSheet}>
-                          <i class="fas fa-file-excel"></i> Create SpreadSheet
+                          <i class="fas fa-file-excel"></i> 
+                          {
+                            this.state.authRelatedData.accesstoken.length > 0  ?  (
+                               this.state.authRelatedData.sheeturl_of_society_members.length > 0 ? "Create New SpreadSheet" : "Create New SpreadSheet"  
+                            ) : "Connect To SpreadSheet"
+                          } 
                     </button> 
                     {/* <button className="btn btn-md btn-primary blue-button" id="sign" onClick={this.signInFunction}><i class="fab fa-google"></i> SignIn With Google </button> */}
                 </div>
@@ -559,35 +787,85 @@ class SocietySettingsManageMembers extends Component {
                                       <div className="row">
                                         {
                                            this.state.societyMembers.map(eachmember => (
-                                              <div className="col-12">
-                                                  <div className="each-member-div d-flex justify-content-between align-items-center">
-                                                      <div className="name-and-img-section d-flex justify-content-start">
-                                                         <div className="user-image">
-                                                            <img src="/images/user-img1.jpg" />
-                                                         </div>
-                                                         <div className="d-flex align-items-center">
-                                                            <div className="user-name-and-email-section">
-                                                                <h3>{ eachmember.name }</h3>
-                                                                <p>{ eachmember.email }</p>
+                                             !eachmember.editing.isEditing ? ( 
+                                                  <div className="col-12">
+                                                      <div className="each-member-div d-flex justify-content-between align-items-center">
+                                                          <div className="name-and-img-section d-flex justify-content-start">
+                                                            <div className="user-image">
+                                                                <img src="/images/user-img1.jpg" />
                                                             </div>
-                                                         </div>
-                                                      </div>
-                                                      <div className="role-section">
-                                                         <p>Society Member</p>
-                                                      </div>
-                                                      <div className="edit-and-delete-section">
-                                                         <button className="btn btn-sm btn-warning edit-button" onClick={this.handleSocietyMemberEdit}><i class="fas fa-pen"></i></button>
-                                                         <button className="btn btn-sm btn-danger" onClick={() => {
-                                                             this.handleRemoveMember({
-                                                                name : eachmember.name,
-                                                                email : eachmember.email,
-                                                                role : "society_member",
-                                                                personType : "society_member"
-                                                             })
-                                                          }}><i class="fas fa-times"></i></button>
+                                                            <div className="d-flex align-items-center">
+                                                                <div className="user-name-and-email-section">
+                                                                    <h3>{ eachmember.name }</h3>
+                                                                    <p>{ eachmember.email }</p>
+                                                                </div>
+                                                            </div>
+                                                          </div>
+                                                          <div className="role-section">
+                                                            <p>Society Member</p>
+                                                          </div>
+                                                          <div className="edit-and-delete-section">
+                                                            <button className="btn btn-sm btn-warning edit-button" onClick={() => {
+                                                                this.handleEditMember({
+                                                                  personType : "society_member",
+                                                                  id : eachmember._id
+                                                                })
+                                                            }}><i class="fas fa-pen"></i></button>
+                                                            <button className="btn btn-sm btn-danger" onClick={() => {
+                                                                this.handleRemoveMember({
+                                                                    name : eachmember.name,
+                                                                    email : eachmember.email,
+                                                                    role : "society_member",
+                                                                    personType : "society_member"
+                                                                })
+                                                              }}><i class="fas fa-times"></i></button>
+                                                          </div>
                                                       </div>
                                                   </div>
+                                             ) : (
+                                              <div className="new-member-add-div">
+                                                  <form onSubmit={(e) => {
+                                                    this.handleEditMemberSubmit(e , {
+                                                        personType : "society_member",
+                                                        id : eachmember._id,
+                                                        name : eachmember.editing.name,
+                                                        email : eachmember.editing.email 
+                                                    })
+                                                  }}>
+                                                    <div className="row">
+                                                        <div className="form-group col-3">
+                                                          <input type="text" name="societymember_name" className="form-control insert-member-input-feild" 
+                                                            id="membername" aria-describedby="emailHelp" placeholder="Member's Name" onChange={(e) => {
+                                                                this.handleEditChange(e , {
+                                                                  id : eachmember._id
+                                                                })
+                                                            }} value={eachmember.editing.name}/>
+                                                        </div>
+                                                        <div className="form-group col-3">
+                                                          <input type="email" name="societymember_email" className="form-control insert-member-input-feild" 
+                                                            id="memberemail" placeholder="Member's Email" onChange={(e) => {
+                                                              this.handleEditChange(e , {
+                                                                id : eachmember._id
+                                                              })
+                                                          }} value={eachmember.editing.email} />
+                                                        </div>
+                                                        <div className="form-group col-3">
+                                                              <input type="text" className="form-control insert-member-input-feild" 
+                                                                  id="memberrole" aria-describedby="emailHelp" placeholder="Member's Role" value="Society Member" disabled/>
+                                                          </div>
+                                                        <div className="form-group col-3 d-flex align-items-center justify-content-start">
+                                                            <button type="submit" className="btn btn-sm btn-primary blue-button-sm-whites mr-1"> Update </button>
+                                                            <button className="btn btn-sm btn-danger" onClick={() => {
+                                                                this.handleEditMember({
+                                                                  personType : "society_member",
+                                                                  id : eachmember._id
+                                                                })
+                                                            }}><i class="fas fa-times"></i></button>
+                                                        </div>
+                                                    </div>
+                                                  </form>
                                               </div>
+                                             )
                                            ))
                                         }  
                                       </div>
@@ -675,40 +953,100 @@ class SocietySettingsManageMembers extends Component {
                                       <div className="row">
                                         {
                                           this.state.councilMembers.map(eachmember => (
-                                              <div className="col-12">
-                                                  <div className="each-member-div d-flex justify-content-between align-items-center">
-                                                      <div className="name-and-img-section d-flex justify-content-start">
-                                                        <div className="user-image">
-                                                            <img src="/images/user-img1.jpg" />
+                                            !eachmember.editing.isEditing ? (
+                                                <div className="col-12">
+                                                    <div className="each-member-div d-flex justify-content-between align-items-center">
+                                                        <div className="name-and-img-section d-flex justify-content-start">
+                                                          <div className="user-image">
+                                                              <img src="/images/user-img1.jpg" />
+                                                          </div>
+                                                          <div className="d-flex align-items-center">
+                                                              <div className="user-name-and-email-section">
+                                                                  <h3>{ eachmember.name }</h3>
+                                                                  <p>{ eachmember.email }</p>
+                                                              </div>
+                                                          </div>
                                                         </div>
-                                                        <div className="d-flex align-items-center">
-                                                            <div className="user-name-and-email-section">
-                                                                <h3>{ eachmember.name }</h3>
-                                                                <p>{ eachmember.email }</p>
-                                                            </div>
+                                                        <div className="role-section">
+                                                            <p>{eachmember.role}</p>
                                                         </div>
+                                                        <div className="role-section">
+                                                            <p>{eachmember.specificrole}</p>
+                                                        </div>
+                                                        <div className="edit-and-delete-section">
+                                                          <button className="btn btn-sm btn-warning edit-button" onClick={() => {
+                                                                this.handleEditMember({
+                                                                  personType : "council_member",
+                                                                  id : eachmember._id
+                                                                })
+                                                            }} ><i class="fas fa-pen"></i></button>
+                                                          <button className="btn btn-sm btn-danger" onClick={() => {
+                                                              this.handleRemoveMember({
+                                                                name : eachmember.name,
+                                                                email : eachmember.email,
+                                                                role : eachmember.role,
+                                                                specificrole  : eachmember.specificrole,
+                                                                personType : "council_member"
+                                                            })
+                                                          }}><i class="fas fa-times"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                              <div className="new-member-add-div">
+                                              <form onSubmit={(e) => {
+                                                  this.handleEditMemberSubmit(e , {
+                                                      personType : "council_member",
+                                                      id : eachmember._id,
+                                                      name : eachmember.editing.name,
+                                                      email : eachmember.editing.email,
+                                                      role : eachmember.editing.role,
+                                                      specificrole : eachmember.editing.specificrole 
+                                                  }) 
+                                              }}>
+                                                <div className="d-flex flex-row">
+                                                      <div className="form-group mr-3">
+                                                          <input type="text" name="councilmember_name" className="form-control insert-member-input-feild" 
+                                                            id="membername" aria-describedby="emailHelp" placeholder="Member's Name" onChange={(e) => {
+                                                              this.handleEditChange(e , {
+                                                                id : eachmember._id
+                                                              })
+                                                          }} value={eachmember.editing.name}/>
                                                       </div>
-                                                      <div className="role-section">
-                                                          <p>{eachmember.role}</p>
+                                                      <div className="form-group mr-3">
+                                                          <input type="email" name="councilmember_email" className="form-control insert-member-input-feild" 
+                                                          id="memberemail" placeholder="Member's Email" onChange={(e) => {
+                                                            this.handleEditChange(e , {
+                                                              id : eachmember._id
+                                                            })
+                                                        }} value={eachmember.editing.email} />
                                                       </div>
-                                                      <div className="role-section">
-                                                          <p>{eachmember.specificrole}</p>
+                                                      <div className="form-group mr-3">
+                                                          <input type="text" className="form-control insert-member-input-feild" 
+                                                              id="memberrole" aria-describedby="emailHelp" placeholder="Member's Role" value="Council Member" disabled/>
                                                       </div>
-                                                      
-                                                      <div className="edit-and-delete-section">
-                                                        <button className="btn btn-sm btn-warning edit-button" onClick={this.handleSocietyMemberEdit}><i class="fas fa-pen"></i></button>
+                                                      <div className="form-group mr-3">
+                                                          <input type="text" name="councilmember_specificrole" className="form-control insert-member-input-feild" 
+                                                            id="memberspecificrole" placeholder="Specific Role" onChange={(e) => {
+                                                              this.handleEditChange(e , {
+                                                                id : eachmember._id
+                                                              })
+                                                          }} value={eachmember.editing.specificrole} />
+                                                      </div>
+                                                    <div className="form-group d-flex align-items-center justify-content-start">
+                                                        <button type="submit" className="btn btn-sm btn-primary blue-button-sm-whites mr-1"> Update </button>
                                                         <button className="btn btn-sm btn-danger" onClick={() => {
-                                                            this.handleRemoveMember({
-                                                              name : eachmember.name,
-                                                              email : eachmember.email,
-                                                              role : eachmember.role,
-                                                              specificrole  : eachmember.specificrole,
-                                                              personType : "council_member"
-                                                          })
-                                                        }}><i class="fas fa-times"></i></button>
-                                                      </div>
-                                                  </div>
-                                              </div>
+                                                                this.handleEditMember({
+                                                                  personType : "council_member",
+                                                                  id : eachmember._id
+                                                                })
+                                                            }} ><i class="fas fa-times"></i></button>
+                                                    </div>
+                                                </div>
+                                              </form>
+                                          </div>
+                                            ) 
+                                              
                                           ))
                                         }  
                                       </div>
@@ -740,9 +1078,7 @@ class SocietySettingsManageMembers extends Component {
                                                   </button>
                                               </div>
                                         }
-                                        
-                                          
-                                        
+
                                         <div className="sheet-link-and-syn-section">
                                           {
                                            ( this.state.authRelatedData.email && this.state.authRelatedData.sheeturl_of_society_members ) && (
@@ -800,39 +1136,85 @@ class SocietySettingsManageMembers extends Component {
                                       <div className="row">
                                         {
                                           this.state.faculty.email.length > 0 && 
-                                              <div className="col-12">
-                                                  <div className="each-member-div d-flex justify-content-between align-items-center">
-                                                      <div className="name-and-img-section d-flex justify-content-start">
-                                                        <div className="user-image">
-                                                            <img src="/images/user-img1.jpg" />
-                                                        </div>
-                                                        <div className="d-flex align-items-center">
-                                                            <div className="user-name-and-email-section">
-                                                                <h3>{ this.state.faculty.name }</h3>
-                                                                <p>{ this.state.faculty.email }</p>
-                                                            </div>
-                                                        </div>
+                                            !this.state.faculty.editing.isEditing ? (
+                                             <div className="col-12">
+                                                <div className="each-member-div d-flex justify-content-between align-items-center">
+                                                    <div className="name-and-img-section d-flex justify-content-start">
+                                                      <div className="user-image">
+                                                          <img src="/images/user-img1.jpg" />
                                                       </div>
-                                                      <div className="role-section">
-                                                          <p>Faculty</p>
+                                                      <div className="d-flex align-items-center">
+                                                          <div className="user-name-and-email-section">
+                                                              <h3>{ this.state.faculty.name }</h3>
+                                                              <p>{ this.state.faculty.email }</p>
+                                                          </div>
                                                       </div>
-                                                      <div className="edit-and-delete-section">
-                                                        <button className="btn btn-sm btn-warning edit-button" onClick={this.handleSocietyMemberEdit}><i class="fas fa-pen"></i></button>
-                                                        <button className="btn btn-sm btn-danger" onClick={()  => { 
-                                                          this.handleRemoveMember({
-                                                              name :  this.state.faculty.name,
-                                                              email :  this.state.faculty.email,
-                                                              role : "faculty",
-                                                              personType : "faculty_and_chairperson"
-                                                          })
-                                                        }}><i class="fas fa-times"></i></button>
+                                                    </div>
+                                                    <div className="role-section">
+                                                        <p>Faculty</p>
+                                                    </div>
+                                                    <div className="edit-and-delete-section">
+                                                      <button className="btn btn-sm btn-warning edit-button" onClick={() => {
+                                                                this.handleEditMember({
+                                                                  personType : "faculty",
+                                                                  id : this.state.faculty._id
+                                                                })
+                                                            }} ><i class="fas fa-pen"></i></button>
+                                                      <button className="btn btn-sm btn-danger" onClick={()  => { 
+                                                        this.handleRemoveMember({
+                                                            name :  this.state.faculty.name,
+                                                            email :  this.state.faculty.email,
+                                                            role : "faculty",
+                                                            personType : "faculty_and_chairperson"
+                                                        })
+                                                      }}><i class="fas fa-times"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                          ) : (
+                                            
+                                            <div className="new-member-add-div">
+                                                <form onSubmit={(e) => {
+                                                    this.handleEditMemberSubmit(e , {
+                                                        personType : "faculty",
+                                                        id : this.state.faculty._id 
+                                                    })
+                                                }}>
+                                                  <div className="row">
+                                                      <div className="form-group col-3">
+                                                        <input type="text" name="facultyAndChairpersonData_name" className="form-control insert-member-input-feild" 
+                                                          id="membername" aria-describedby="emailHelp" placeholder="Member's Name" onChange={this.handleChange} value={this.state.facultyAndChairpersonData.name} />
+                                                      </div>
+                                                      <div className="form-group col-3">
+                                                        <input type="email" name="facultyAndChairpersonData_email" className="form-control insert-member-input-feild" 
+                                                          id="memberemail" placeholder="Member's Email" onChange={this.handleChange} value={this.state.facultyAndChairpersonData.email} />
+                                                      </div>
+                                                      <div className="form-group col-3">
+                                                          <select className="form-control insert-member-input-feild" id="exampleFormControlSelect1" name="facultyAndChairpersonData_personType" 
+                                                              onChange={this.handleChange} value={this.state.facultyAndChairpersonData.personType}>
+                                                              <option value="faculty">Faculty</option>
+                                                              <option value="chairperson">Chairperson</option>
+                                                          </select>
+                                                      </div>
+                                                      <div className="form-group d-flex align-items-center justify-content-start">
+                                                          <button type="submit" className="btn btn-sm btn-primary blue-button-sm-whites mr-1"> Update </button>
+                                                          <button className="btn btn-sm btn-danger" onClick={() => {
+                                                                this.handleEditMember({
+                                                                  personType : "faculty",
+                                                                  id : this.state.faculty._id
+                                                                })
+                                                            }}><i class="fas fa-times"></i></button>
                                                       </div>
                                                   </div>
-                                              </div>
-                                          
-                                        }  
+                                                </form>
+                                          </div>
+                                          )
+                                        }
+
+
                                         {
-                                          this.state.chairperson.email.length > 0 &&  
+                                          this.state.chairperson.email.length > 0 && 
+                                            !this.state.chairperson.editing.isEditing ? (
                                               <div className="col-12">
                                                   <div className="each-member-div d-flex justify-content-between align-items-center">
                                                       <div className="name-and-img-section d-flex justify-content-start">
@@ -850,7 +1232,12 @@ class SocietySettingsManageMembers extends Component {
                                                           <p>Chairperson</p>
                                                       </div>
                                                       <div className="edit-and-delete-section">
-                                                        <button className="btn btn-sm btn-warning edit-button" onClick={this.handleSocietyMemberEdit}><i class="fas fa-pen"></i></button>
+                                                        <button className="btn btn-sm btn-warning edit-button" onClick={() => {
+                                                              this.handleEditMember({
+                                                                personType : "chairperson",
+                                                                id : this.state.chairperson._id
+                                                              })
+                                                          }}><i class="fas fa-pen"></i></button>
                                                         <button className="btn btn-sm btn-danger" onClick={()  => { 
                                                           this.handleRemoveMember({
                                                               name :  this.state.chairperson.name,
@@ -862,6 +1249,43 @@ class SocietySettingsManageMembers extends Component {
                                                       </div>
                                                   </div>
                                               </div>
+                                            ) : (
+                                                <div className="new-member-add-div">
+                                                    <form onSubmit={(e) => {
+                                                      this.handleEditMemberSubmit(e , {
+                                                          personType : "chairperson",
+                                                          id : this.state.chairperson._id 
+                                                      })
+                                                    }}>
+                                                      <div className="row">
+                                                          <div className="form-group col-3">
+                                                            <input type="text" name="facultyAndChairpersonData_name" className="form-control insert-member-input-feild" 
+                                                              id="membername" aria-describedby="emailHelp" placeholder="Member's Name" onChange={this.handleChange} value={this.state.facultyAndChairpersonData.name} />
+                                                          </div>
+                                                          <div className="form-group col-3">
+                                                            <input type="email" name="facultyAndChairpersonData_email" className="form-control insert-member-input-feild" 
+                                                              id="memberemail" placeholder="Member's Email" onChange={this.handleChange} value={this.state.facultyAndChairpersonData.email} />
+                                                          </div>
+                                                          <div className="form-group col-3">
+                                                              <select className="form-control insert-member-input-feild" id="exampleFormControlSelect1" name="facultyAndChairpersonData_personType" 
+                                                                  onChange={this.handleChange} value={this.state.facultyAndChairpersonData.personType}>
+                                                                  <option value="faculty">Faculty</option>
+                                                                  <option value="chairperson">Chairperson</option>
+                                                              </select>
+                                                          </div>
+                                                          <div className="form-group d-flex align-items-center justify-content-start">
+                                                              <button type="submit" className="btn btn-sm btn-primary blue-button-sm-whites mr-1"> Update </button>
+                                                              <button className="btn btn-sm btn-danger" onClick={() => {
+                                                                    this.handleEditMember({
+                                                                      personType : "chairperson",
+                                                                      id : this.state.chairperson._id
+                                                                    })
+                                                                }}><i class="fas fa-times"></i></button>
+                                                          </div>
+                                                      </div>
+                                                    </form>
+                                              </div>
+                                            )   
                                         }  
                                       </div>
                                   </div>
@@ -918,5 +1342,8 @@ export default connect(mapStateToProps , {
   handleAddFacultyAndChairperson, 
   handleRemoveSocietyMember, 
   handleRemoveCouncilMember, 
-  handleRemoveFacultyOrChairperson 
+  handleRemoveFacultyOrChairperson,
+  handleEditSocietyMemeber,
+  handleEditCouncilMemeber,
+  handleAddFacultyAndChairperson 
 })(SocietySettingsManageMembers);
