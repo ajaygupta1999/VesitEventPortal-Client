@@ -56,5 +56,5 @@ export const loginOrSignUp = (userData) => async dispatch => {
           dispatch({ type : FETCH_CURRENT_USER_ERROR });
           dispatch(addError(err.message));
       }
-  }
+}
 

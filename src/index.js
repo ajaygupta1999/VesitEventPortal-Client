@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './containers/App';
 import reportWebVitals from './reportWebVitals';
 import { Provider} from "react-redux";
@@ -12,6 +11,7 @@ import { setAuthorizationToken, setCurrentUser } from "./stores/actions/auth";
 
 // Central Store ============
 const store = configureStore();
+
 
 // For setting up jwt-token header and 
 if (localStorage.jwtToken) {
