@@ -602,4 +602,4 @@ const mapStateToProps = (state) => ({
 });
 
 
-export default connect(mapStateToProps , { getspecificevent , registerSpecificEvent , unregisterSpecificEvent  })(EventPage);
+export default connect(mapStateToProps , { getspecificevent , registerSpecificEvent , unregisterSpecificEvent })(EventPage);

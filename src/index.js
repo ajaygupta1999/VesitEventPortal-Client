@@ -6,7 +6,7 @@ import { Provider} from "react-redux";
 import  { configureStore } from "./stores";
 import { BrowserRouter as Router } from "react-router-dom";
 import jwtDecode from "jwt-decode";
-import { setAuthorizationToken, setCurrentUser } from "./stores/actions/auth";
+import { setAuthorizationToken, setCurrentUser , getUserData } from "./stores/actions/auth";
 
 
 // Central Store ============
@@ -14,17 +14,23 @@ const store = configureStore();
 
 
 // For setting up jwt-token header and 
-if (localStorage.jwtToken) {
-  setAuthorizationToken(localStorage.jwtToken);
-  // prevent someone from manually tampering with the key of jwtToken in localStorage
-  try {
-    console.log("got refreshed ===> " , jwtDecode(localStorage.jwtToken));
-    store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)));
-  } catch (e) {
-    store.dispatch(setCurrentUser({}));
-  }
-}
 
+const localStorageSetup = async () => {
+    if (localStorage.jwtToken) {
+      setAuthorizationToken(localStorage.jwtToken);
+      // prevent someone from manually tampering with the key of jwtToken in localStorage
+      try {
+          let userobj = jwtDecode(localStorage.jwtToken);
+          let user = await getUserData(userobj.id);
+          store.dispatch(setCurrentUser(user.userdata , user.registeredevents));
+      }catch(e){
+         console.log(e);
+         store.dispatch(setCurrentUser({}));
+      }
+    }
+} 
+
+localStorageSetup();
 
 
 ReactDOM.render(

@@ -5,7 +5,7 @@ import UserPageHeader from "./UserPageHeader";
 import { connect } from "react-redux";
 import "../../asserts/css/Society.scss";
 import {  withRouter } from "react-router-dom";
-import  { fetchSpecificUser } from "../../stores/actions/userRegisterDetails";
+import  { fetchSpecificUser } from "../../stores/actions/user";
 
 
 class UserPage extends Component{

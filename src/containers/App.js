@@ -16,7 +16,6 @@ import SocietySettingsManageAdmins from "./SocietyPage/SocietySettingsManageAdmi
 import SocietySettingsManageMembers from "./SocietyPage/SocietySettingsManageMembers";
 
 
-
 class App extends Component {
      render(){
        
@@ -41,8 +40,6 @@ class App extends Component {
        );
      }
 }
-
-
 
 
 export default App;

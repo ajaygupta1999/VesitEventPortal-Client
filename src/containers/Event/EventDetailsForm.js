@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "../../asserts/css/Forms.scss";
 import { Link } from "react-router-dom";
-import { setEventDetails } from "../../stores/actions/userRegisterDetails";
+import { setEventDetails } from "../../stores/actions/user";
 import { connect } from 'react-redux';
 import Navbar from "../navbar";
 import { Editor } from '@tinymce/tinymce-react';

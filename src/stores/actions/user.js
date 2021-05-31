@@ -3,18 +3,12 @@ import { setAuthorizationToken } from "./auth";
 import { config } from "../../Constants";
 
 import {
-    FETCH_USER_PERSONAL_DETAILS,
-    LOAD_USER_PERSONAL_DETAILS,
-    FETCH_USER_PERSONAL_DETAILS_ERROR,
     FETCH_CLASS_AND_SCOEITY_DETAILS,
     LOAD_CLASS_AND_SCOEITY_DETAILS,
     FETCH_CLASS_AND_SCOEITY_DETAILS_ERROR,
     FETCH_CREATED_EVENT,
     LOAD_CREATED_EVENT,
     FETCH_CREATED_EVENT_ERROR,
-    FETCH_GUESTANDSPONSOR_DATA,
-    LOAD_GUESTANDSPONSOR_DATA,
-    FETCH_GUESTANDSPONSOR_DATA_ERROR,
     FETCH_ALLUSERS_ERROR
 } from "../actionTypes";
 
@@ -37,6 +31,7 @@ import { addError , removeError } from "./error";
 // }
 
 
+
 export const setClassAndSocietyDetails = (data , userid) => async (dispatch) => {
         try{
             dispatch({ type : FETCH_CLASS_AND_SCOEITY_DETAILS });
@@ -56,7 +51,7 @@ export const setClassAndSocietyDetails = (data , userid) => async (dispatch) => 
 export const setEventDetails = (data , userid) => async (dispatch) => {
       try{
             dispatch({ type : FETCH_CREATED_EVENT  });
-            let { eventdetails } = await apiUploadCall("post", `${config.Api.API_URL}/api/user/${userid}/add/eventdetails`, data);
+            let { eventdetails } = await apiUploadCall("post", `${config.Api.API_URL}/api/createevent/user/${userid}/add/eventdetails`, data);
             dispatch({ type : LOAD_CREATED_EVENT , event : eventdetails });
             dispatch(removeError()); 
             

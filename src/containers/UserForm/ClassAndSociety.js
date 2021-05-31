@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Navbar from '../navbar';
 import "../../asserts/css/Forms.scss";
-import {setClassAndSocietyDetails , fetchusersocietydetails } from "../../stores/actions/userRegisterDetails";
+import {setClassAndSocietyDetails , fetchusersocietydetails } from "../../stores/actions/user";
 import { connect } from "react-redux"; 
 
 

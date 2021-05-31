@@ -53,7 +53,7 @@ export const fetchAllEvents = () => async (dispatch) => {
        dispatch({ type : FETCH_ALL_EVENTS_ERROR });
        dispatch(addError(err.message));
      }
-  }
+}
 
 
 export const registerEvent = (userid , eventid) => async (dispatch) => {
@@ -73,6 +73,8 @@ export const registerEvent = (userid , eventid) => async (dispatch) => {
   }
 }
 
+
+
 export const unregisterEvent = (userid , eventid) => async (dispatch) => {
   try{
    
@@ -88,23 +90,22 @@ export const unregisterEvent = (userid , eventid) => async (dispatch) => {
   }
 }
 
+
+
 export const unregisterEventFromProfile = (userid , eventid) => async (dispatch) => {
   try{
    
       let { event } = await apiCall("post" , `${config.Api.API_URL}/api/event/${eventid}/unregister/user/${userid}`);
-      let userdetailsdata = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/getspecificuser`);
+      let { userdata , registeredevents } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/getspecificuser`);
       dispatch({
           type : "LOAD_SPECIFIC_USER_DATA",
-          user : userdetailsdata.userdata,
-          registeredevents : userdetailsdata.registeredevents
+          user : userdata,
+          registeredevents : registeredevents
       });
-      let { token , userdetails , registeredevents } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/get/updateddataandtoken`);
-      console.log("Updating root data , " ,token , userdetails);
-      localStorage.setItem("jwtToken", token);
-      setAuthorizationToken(token);     
-      dispatch(setCurrentUser(userdetails , registeredevents));  
+        
+      dispatch(setCurrentUser(userdata , registeredevents));  
       dispatch(removeError());          
-      return userdetails; 
+      return userdata; 
 
   }catch(err){
       console.log("Got error while unregistering event ====>" , err.message);
@@ -113,18 +114,18 @@ export const unregisterEventFromProfile = (userid , eventid) => async (dispatch)
   }
 }
 
+
+
 export const registerSpecificEvent = (userid , eventid) => async (dispatch) => {
    try{
       let { event } = await apiCall("post" , `${config.Api.API_URL}/api/event/${eventid}/register/user/${userid}` );
       console.log("got event data from server ==> " , event);
       dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA" , event});
-      let { token , userdetails , registeredevents } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/get/updateddataandtoken`);
-      console.log("Updating root data , " ,token , userdetails);
-      localStorage.setItem("jwtToken", token);
-      setAuthorizationToken(token);     
-      dispatch(setCurrentUser(userdetails , registeredevents));  
+      let { userdata , registeredevents } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/getspecificuser`);
+          
+      dispatch(setCurrentUser(userdata , registeredevents));  
       dispatch(removeError());          
-      return userdetails; 
+      return userdata; 
 
    }catch(err){
        console.log("Error while registering specific event , " , err);
@@ -134,16 +135,15 @@ export const registerSpecificEvent = (userid , eventid) => async (dispatch) => {
 
 export const unregisterSpecificEvent = (userid , eventid) => async (dispatch) => {
   try{
-     let { event } = await apiCall("post" , `${config.Api.API_URL}/api/event/${eventid}/unregister/user/${userid}` );
-     console.log("got event data from server ==> " , event);
-     dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA" , event});
-     let { token , userdetails , registeredevents } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/get/updateddataandtoken`);
-      console.log("Updating root data , " ,token , userdetails);
-      localStorage.setItem("jwtToken", token);
-      setAuthorizationToken(token);     
-      dispatch(setCurrentUser(userdetails , registeredevents));  
+
+      let { event } = await apiCall("post" , `${config.Api.API_URL}/api/event/${eventid}/unregister/user/${userid}` );
+      console.log("got event data from server ==> " , event);
+      dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA" , event});
+      let { userdata , registeredevents } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/getspecificuser`);
+      dispatch(setCurrentUser(userdata , registeredevents));  
       dispatch(removeError());          
-      return userdetails; 
+      return userdata; 
+
   }catch(err){
       console.log("Error while registering specific event , " , err);
   }
@@ -167,7 +167,7 @@ export const fetchregisteredEvents = (userid) => async (dispatch) => {
 
 export const fetchCreatedEvent = (userid , eventid ) => async (dispatch) => {
     try{
-        let { event } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/event/${eventid}/createdeventsdetails`);
+        let { event } = await apiCall("get" , `${config.Api.API_URL}/api/event/user/${userid}/event/${eventid}/createdeventsdetails`);
         dispatch({ type : "LOAD_CREATED_EVENT" , event : event });
     }catch(err){
        console.log(err);
@@ -177,7 +177,7 @@ export const fetchCreatedEvent = (userid , eventid ) => async (dispatch) => {
 
 export const fetchguestandsponsorspagedata = (userid , eventid) => async (dispatch) => {
     try{
-       let { selectedguests , selectedeventtakers , addedguests , addedeventtakers  , addedsponsors } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/addevent/${eventid}/getallguestsandsponsorsandeventtakers`);
+       let { selectedguests , selectedeventtakers , addedguests , addedeventtakers  , addedsponsors } = await apiCall("get" , `${config.Api.API_URL}/api/createevent/user/${userid}/addevent/${eventid}/getallguestsandsponsorsandeventtakers`);
        let selectedguestsarr = selectedguests.map(eachperson => {
           if(eachperson.roletype === "user"){
               return eachperson.data;
@@ -249,7 +249,7 @@ export const fetchguestandsponsorspagedata = (userid , eventid) => async (dispat
   // Guest and Sponsors and Eventakers details add 
  export const handleAddSelectedPerson = (data , userid , eventid) => async (dispatch) => {
        try{
-          let { target , selectedpersons } = await apiCall("post" , `${config.Api.API_URL}/api/user/${userid}/addevent/${eventid}/addselected/guestoreventaker` , data);
+          let { target , selectedpersons } = await apiCall("post" , `${config.Api.API_URL}/api/createevent/user/${userid}/addevent/${eventid}/addselected/guestoreventaker` , data);
           if(target === "guest"){
               let newdata = selectedpersons.map(eachperson => {
                    if(eachperson.roletype === "user"){
@@ -285,9 +285,10 @@ export const fetchguestandsponsorspagedata = (userid , eventid) => async (dispat
        }
  }
 
+
  export const handleRemoveSelectedPerson = (data , userid , eventid) => async (dispatch) => {
       try{
-        let { target , selectedpersons } = await apiCall("delete" , `${config.Api.API_URL}/api/user/${userid}/addevent/${eventid}/remove/selected/${data.target}/${data.roletype}/${data.role}/${data.key}`);
+        let { target , selectedpersons } = await apiCall("delete" , `${config.Api.API_URL}/api/createevent/user/${userid}/addevent/${eventid}/remove/selected/${data.target}/${data.roletype}/${data.role}/${data.key}`);
           if(target === "guest"){
               let newdata = selectedpersons.map(eachperson => {
                    if(eachperson.roletype === "user"){
@@ -323,9 +324,10 @@ export const fetchguestandsponsorspagedata = (userid , eventid) => async (dispat
       }
  }
 
+ 
  export const handleAddPerson = (data , userid , eventid) => async (dispatch) => {
     try{
-        let { target , addedpersons } = await apiCall("post" , `${config.Api.API_URL}/api/user/${userid}/addevent/${eventid}/addperson/guestoreventakerorsponsor` , data);
+        let { target , addedpersons } = await apiCall("post" , `${config.Api.API_URL}/api/createevent/user/${userid}/addevent/${eventid}/addperson/guestoreventakerorsponsor` , data);
        
         if(target === "guest"){
             let newdata = addedpersons.map(eachperson => {
@@ -356,10 +358,12 @@ export const fetchguestandsponsorspagedata = (userid , eventid) => async (dispat
     }
 }
 
+
+
 export const handleRemovePerson = (data , userid , eventid) => async (dispatch) => {
   try{
 
-    let { target , removedpersons } = await apiCall("delete" , `${config.Api.API_URL}/api/user/${userid}/addevent/${eventid}/remove/added/${data.target}/${data.roletype}/${data.role}/${data.key}` , data);
+    let { target , removedpersons } = await apiCall("delete" , `${config.Api.API_URL}/api/createevent/user/${userid}/addevent/${eventid}/remove/added/${data.target}/${data.roletype}/${data.role}/${data.key}` , data);
     
     let newdata = removedpersons.map(person => {
         let newobj = person; 
@@ -387,7 +391,7 @@ export const handleRemovePerson = (data , userid , eventid) => async (dispatch) 
 
 export const handleAddSponsor = (data , userid , eventid) => async (dispatch) => {
     try{
-       let { target , sponsors } = await apiUploadCall("post" , `${config.Api.API_URL}/api/user/${userid}/addevent/${eventid}/addsponsor/sponsor` , data);
+       let { target , sponsors } = await apiUploadCall("post" , `${config.Api.API_URL}/api/createevent/user/${userid}/addevent/${eventid}/addsponsor/sponsor` , data);
        let newdata = sponsors.map(sponsor => {
             let newobj = sponsor;
             newobj.roletype = target;
@@ -405,9 +409,11 @@ export const handleAddSponsor = (data , userid , eventid) => async (dispatch) =>
     }
 }
 
+
+
 export const handleRemoveSponsor = (data , userid , eventid) => async (dispatch) => {
     try{
-      let { target , sponsors } = await apiCall("delete" , `${config.Api.API_URL}/api/user/${userid}/addevent/${eventid}/remove/sponsor/${data.target}/${data.key}`)
+      let { target , sponsors } = await apiCall("delete" , `${config.Api.API_URL}/api/createevent/user/${userid}/addevent/${eventid}/remove/sponsor/${data.target}/${data.key}`)
       let newdata = sponsors.map(sponsor => {
           let newobj = sponsor;
           newobj.roletype = target;
@@ -428,7 +434,7 @@ export const handleRemoveSponsor = (data , userid , eventid) => async (dispatch)
 
 export const addFormLink = (data , userid , eventid) => async (dispatch) => {
     try{
-        let { eventdetails }  = await apiCall("post" , `${config.Api.API_URL}/api/user/${userid}/addevent/${eventid}/add/registrationlink` , data);
+        let { eventdetails }  = await apiCall("post" , `${config.Api.API_URL}/api/createevent/user/${userid}/addevent/${eventid}/add/registrationlink` , data);
         console.log("Got Form data from server =>>> " , eventdetails);        
         dispatch({
             type : "LOAD_CREATED_EVENT",
@@ -440,6 +446,8 @@ export const addFormLink = (data , userid , eventid) => async (dispatch) => {
     }
 }
 
+
+
 export const showeventcreatedmodal = () =>  async (dispatch) => {
     try{
        dispatch({
@@ -450,6 +458,8 @@ export const showeventcreatedmodal = () =>  async (dispatch) => {
     }
 }
 
+
+
 export const hideeventcreatedmodal = () =>  async (dispatch) => {
   try{
      dispatch({
@@ -459,6 +469,8 @@ export const hideeventcreatedmodal = () =>  async (dispatch) => {
       console.log("Got error while ");
   }
 }
+
+
 
 export const fetchEventDetails = (userid , eventid) => async (dispatch) => {
   try{
@@ -474,6 +486,7 @@ export const fetchEventDetails = (userid , eventid) => async (dispatch) => {
 }
 
 
+
 export const getspecificevent = (eventid) => async (dispatch) => {
      try { 
          let { event } = await apiCall("get" , `${config.Api.API_URL}/api/event/${eventid}/getspecificevent`);
@@ -482,6 +495,8 @@ export const getspecificevent = (eventid) => async (dispatch) => {
          console.log(err);
      }
 } 
+
+
 
 export const getFileData = (dataobj ) => async (dispatch) => {
      try{

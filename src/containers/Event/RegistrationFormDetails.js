@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import "../../asserts/css/Forms.scss";
-import { Link , withRouter } from "react-router-dom";
-import { setEventDetails } from "../../stores/actions/userRegisterDetails";
+import { setEventDetails } from "../../stores/actions/user";
 import { connect } from 'react-redux';
 import Navbar from "../navbar";
 import { addFormLink , showeventcreatedmodal , fetchCreatedEvent } from "../../stores/actions/events";

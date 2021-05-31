@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import Navbar from "../navbar";
 import { connect } from "react-redux";
-import  { updateUserProfileData , updateUserSocietyDetails , updateUserClassDetails } from "../../stores/actions/userRegisterDetails";
+import  { updateUserProfileData, 
+    updateUserSocietyDetails, 
+    updateUserClassDetails 
+} from "../../stores/actions/user";
 import { Redirect , withRouter } from 'react-router-dom';
 import "../../asserts/css/EditPages.scss";
 

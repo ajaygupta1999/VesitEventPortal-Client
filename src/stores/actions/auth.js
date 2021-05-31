@@ -41,6 +41,32 @@ export const logout = () => dispatch => {
 // }
 
 
+// After relaod fetching user data
+export const logUserAfterRefresh = (userid) => async dispatch => {
+    try{
+        console.log("Api has been called");
+        let user = await apiCall("GET" , `${config.Api.API_URL}/api/user/${userid}/getspecificuser`);
+        console.log(user);
+
+    }catch(err){
+        console.log(err);
+        dispatch(addError(err.message));
+    }
+}
+
+
+
+export const getUserData = async (userid) => {
+    try{
+        console.log("Function has been called");
+        let userdata = await apiCall("GET" , `${config.Api.API_URL}/api/user/${userid}/getspecificuser`);
+        return userdata;
+    }catch(err){
+        console.log(err);
+    }
+}
+
+
 
 export const loginOrSignUp = (userData) => async dispatch => {
       try{

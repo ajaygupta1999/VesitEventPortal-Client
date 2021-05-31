@@ -15,7 +15,7 @@ import { showAddGuestModal ,
     handleRemoveSponsor,
     fetchguestandsponsorspagedata,
     fetchCreatedEvent } from "../../stores/actions/events";
-import { fetchAllUsers } from "../../stores/actions/userRegisterDetails";
+import { fetchAllUsers } from "../../stores/actions/user";
 
 
 class GuestAndSponsorsForm extends Component {

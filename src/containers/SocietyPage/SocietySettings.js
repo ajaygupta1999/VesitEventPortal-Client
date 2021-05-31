@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import  { connect } from "react-redux"; 
 import Navbar from "../navbar";
-import { loadSocietyData , fetchSocietyMembersFullDetails  , updateSocietyDetails , updateAboutSocietyDetails , updateSocietyAddChairpersonOrFaculty } from "../../stores/actions/society";
-import { fetchAllUsers } from "../../stores/actions/userRegisterDetails";
+import { loadSocietyData , 
+    fetchSocietyMembersFullDetails, 
+    updateSocietyDetails, 
+    updateAboutSocietyDetails, 
+    updateSocietyAddChairpersonOrFaculty 
+} from "../../stores/actions/society";
+import { fetchAllUsers } from "../../stores/actions/user";
 import { Editor } from '@tinymce/tinymce-react';
 import { Link } from "react-router-dom";
 

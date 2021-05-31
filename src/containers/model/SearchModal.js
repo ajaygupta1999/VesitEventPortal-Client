@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Modal from "./Modal";
 import "../../asserts/css/SearchModal.scss";
 import { Link } from "react-router-dom";
-import { serchedData , getSocietyMembers } from "../../functions";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { hideSearchModal } from "../../stores/actions/society";

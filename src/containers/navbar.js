@@ -125,7 +125,7 @@ class Navbar extends Component {
                                     <ul className="navbar-nav ml-auto">
                                         <li className="nav-item dropdown navbar-profile-session" id="navbar-allsocities-dropdown">
                                             <a className="nav-link dropdown-toggle navlink-header-text profile-session-link d-flex justify-content-center align-items-center" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <img src={ Object.keys(currentUser.user.imgurl).length > 0 ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="google-logo" /> 
+                                                <img src={ currentUser.user.imgurl ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="google-logo" /> 
                                                 <p>{ currentUser.user.username }</p>
                                             </a>
                                             <div className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -133,7 +133,7 @@ class Navbar extends Component {
                                                     <div className="dropdown-item">
                                                         <Link to={ `/user/${currentUser.user._id}/profile` }>
                                                             <div className="profile-name-and-email">
-                                                                <img src={ Object.keys(currentUser.user.imgurl).length > 0 ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="profile-image" />
+                                                                <img src={ currentUser.user.imgurl ? currentUser.user.imgurl.dataurl : "/images/profile_image.png" } alt="profile-image" />
                                                                 <p className="nav-profile-user-name">{ currentUser.user.username }</p>
                                                                 <p className="nav-profile-user-email">{ currentUser.user.email }</p>
                                                             </div>
