@@ -14,8 +14,8 @@ import {
   handleRemoveCouncilMember, 
   handleRemoveFacultyOrChairperson,
   handleEditSocietyMemeber,
-  handleEditCouncilMemeber,
-  handleEditFacultyAndChairperson } from "../../stores/actions/society";
+  handleEditCouncilMemeber
+ } from "../../stores/actions/society";
 
 import "../../asserts/css/SocietyMembers.scss"; 
 import { Link } from 'react-router-dom';
@@ -220,7 +220,7 @@ class SocietySettingsManageMembers extends Component {
         });
 
         var script = document.createElement('script');
-        script.onload=this.handleClientLoad;
+        script.onload = this.handleClientLoad;
         script.src="https://apis.google.com/js/api.js";
         document.body.appendChild(script);
 
@@ -236,11 +236,12 @@ class SocietySettingsManageMembers extends Component {
     initClient = () => {
         try{
             window.gapi.client.init({
-              'apiKey': "AIzaSyCP6sQLJxUYuZhFwMctY1bug0-CkgRBcTo",
-              'clientId': "755925335295-qmcfaigpmp9ch2hno1g5qpb3n5ifm6jh.apps.googleusercontent.com",
-              'scope': SCOPE,
+              'apiKey': "AIzaSyCGBe67F63wHgvUdJHe37-HUKYa1jcOe8Y",
+              // 'clientId': "178137140437-0repk8r5su4fdlcvjhh6s3fb1uplo2ug.apps.googleusercontent.com",
+              // 'scope': SCOPE,
               'discoveryDocs': [discoveryUrl]
             }).then(() => {
+              
               this.setState({
                 ...this.state,
                 authRelatedData : {
@@ -270,7 +271,10 @@ class SocietySettingsManageMembers extends Component {
                       }
                   });
               }
+          } , function(err){
+               console.log(err);
           });
+
         }catch(e){
           console.log(e);
         }
@@ -667,7 +671,8 @@ class SocietySettingsManageMembers extends Component {
                      you can edit details of someone. and also able to add new person if he/she is joined recently
                 </p>
                 {
-                  ( this.state.authRelatedData.email && this.state.authRelatedData.imgurl && this.state.authRelatedData.accesstoken && this.state.authRelatedData.name ) &&
+                  ( this.state.authRelatedData.email && this.state.authRelatedData.imgurl && 
+                    this.state.authRelatedData.accesstoken && this.state.authRelatedData.name ) &&
                     <div className="user-details-after-login">
                         <div className="Username-and-image-section d-flex justify-content-center align-items-center">
                             <div className="Userimage-section mr-2">

@@ -16,9 +16,9 @@ import SocietySettingsManageAdmins from "./SocietyPage/SocietySettingsManageAdmi
 import SocietySettingsManageMembers from "./SocietyPage/SocietySettingsManageMembers";
 
 
+
 class App extends Component {
      render(){
-       
        return(
           <Switch>
              <Route exact path="/" component={Home} />

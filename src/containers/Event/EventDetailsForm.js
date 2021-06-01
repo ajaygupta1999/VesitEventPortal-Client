@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import "../../asserts/css/Forms.scss";
-import { Link } from "react-router-dom";
 import { setEventDetails } from "../../stores/actions/user";
 import { connect } from 'react-redux';
 import Navbar from "../navbar";
 import { Editor } from '@tinymce/tinymce-react';
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 
 class EventDetailsForm extends Component {
@@ -59,7 +62,6 @@ class EventDetailsForm extends Component {
     }
 
     handleEditorChange = (content, editor) => {
-        
         this.setState({
             ...this.state,
             fulldesc : content
@@ -67,8 +69,12 @@ class EventDetailsForm extends Component {
       }
 
     render(){
+
+        const { isFetching } = this.props.createdEvent;
+
         return(
             <div>
+               
                 <Navbar />
                 <div className="our-login-page-content">
                  <div className="event-page-navigation">
@@ -195,7 +201,19 @@ class EventDetailsForm extends Component {
                                         <a id="our-back-button" className="btn btn-md btn-light back-buttons" href="/">Back</a>
                                     </div>
                                     <div>
-                                        <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Next</button>
+                                        {
+                                            isFetching ? (
+                                               <button type="submit" className="btn btn-primary btn-md btn-block next-buttons disable-button" disabled>
+                                                    <div className="text-center white-spinner-div">
+                                                        <Spinner className="white-small-button-spinner" animation="border"/>
+                                                    </div>
+                                                   <span className="spinner-text">Creating</span>
+                                                </button>
+                                            ) : (
+                                                <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Next</button>
+                                            )
+                                             
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -208,11 +226,9 @@ class EventDetailsForm extends Component {
     }
 }
 
-function mapStateToProps(state){
-    return {
-        currentUser : state.currentUser,
-        createdEvent : state.createdEvent
-    }
-} 
+const mapStateToProps = (state) => ({
+    currentUser : state.currentUser,
+    createdEvent : state.createdEvent
+});
 
 export default connect(mapStateToProps , {  setEventDetails })(EventDetailsForm);

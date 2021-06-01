@@ -82,10 +82,9 @@ const createdEvent = ( state = DEFAULT_STATE , action ) => {
         case LOAD_ADDED_EVENTTAKERS:
             return { ...state , addedeventtakers : action.data }
         
-        
         case LOAD_ADDED_SPONSORS:
-            return { ...state , addedsponsors : action.data }
-         
+            return { ...state , addedsponsors : action.data }   
+        
         case FETCH_ALLUSERS_ERROR:
             return { ...state , error : true }
         

@@ -4,6 +4,10 @@ import "../../asserts/css/SearchModal.scss";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { hideAddEventtakerModal } from "../../stores/actions/events";
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 class AddEventtakerModal extends Component{
 
@@ -36,6 +40,19 @@ class AddEventtakerModal extends Component{
                selectedeventtakers : this.props.selectedeventtakers
                
            });
+        }
+
+        if((JSON.stringify(prevProps.users) !== JSON.stringify(this.props.users)) 
+            || (JSON.stringify(prevProps.guests) !== JSON.stringify(this.props.guests)) 
+            || (JSON.stringify(prevProps.eventtakers) !== JSON.stringify(this.props.eventtakers))
+        ){
+            this.setState({
+                ...this.state,
+                users : this.props.users,
+                guests  : this.props.guests,
+                eventtakers : this.props.eventtakers,
+                selectedguests : this.props.selectedguests
+            });
         }
     }
     
@@ -98,7 +115,8 @@ class AddEventtakerModal extends Component{
    
 
     render(){
-
+         
+         let isFetching = this.props.isFetching;
          let rowdata = [];
          rowdata = rowdata.concat(this.state.users);
          rowdata = rowdata.concat(this.state.guests);
@@ -214,6 +232,13 @@ class AddEventtakerModal extends Component{
                             }
                         </div>
                     </div>
+                    {
+                        isFetching &&
+                            <div className="spinner-div text-center">
+                                <Spinner className="custom-modal-spinner" animation="border"/>
+                            </div>
+
+                    }
                 
                     {
                         this.state.selectedeventtakers.length > 0 && 

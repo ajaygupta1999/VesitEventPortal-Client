@@ -4,28 +4,67 @@ import "../../asserts/css/EventPage.scss";
 import { Link } from "react-router-dom";
 import { getspecificevent , registerSpecificEvent , unregisterSpecificEvent  } from "../../stores/actions/events";
 import { connect } from "react-redux";
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+
+
 
 
 class EventPage extends Component{
 
-    componentWillMount = async () => {
+    constructor(props){
+        super(props);
+        this.state = {
+            isFetchingEventData : false,
+            regregisteringEvent : false,
+            unregisteringEvent : false,
+        }
+    }
+
+    componentDidMount = async () => {
         try {
+            this.setState({
+                ...this.state,
+                isFetchingEventData : true
+            });
             let { eventid } = this.props.match.params;
             await this.props.getspecificevent(eventid);
+            this.setState({
+                ...this.state,
+                isFetchingEventData : false
+            });
         }catch(err){
             console.log(err);
         }
     }
 
-    handleRegister = () => {
+    handleRegister = async () => {
         if(this.props.currentUser.isAuthenticated){
-            this.props.registerSpecificEvent(this.props.currentUser.user._id , this.props.specificEvent.data._id);
+            this.setState({
+                ...this.state,
+                regregisteringEvent : true
+            });
+
+            await this.props.registerSpecificEvent(this.props.currentUser.user._id , this.props.specificEvent.data._id);
+
+            this.setState({
+                ...this.state,
+                regregisteringEvent : false
+            });
         }
     }
 
-    handleUnregister = () => {
+    handleUnregister = async () => {
         if(this.props.currentUser.isAuthenticated){
-            this.props.unregisterSpecificEvent( this.props.currentUser.user._id , this.props.specificEvent.data._id);
+            this.setState({
+                ...this.state,
+                unregisteringEvent : true
+            });
+            await this.props.unregisterSpecificEvent( this.props.currentUser.user._id , this.props.specificEvent.data._id);
+            this.setState({
+                ...this.state,
+                unregisteringEvent : false
+            });
         }
     }
 
@@ -204,6 +243,7 @@ class EventPage extends Component{
                     }
                 }
             }
+
             if(event.registrations){
                let matchedarr = event.registrations.filter(user => user._id === this.props.currentUser.user._id );
                if(matchedarr.length === 1){
@@ -221,376 +261,415 @@ class EventPage extends Component{
         return(
             <div>
                 <Navbar />
-                <div className="each-event-main-div">
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="row each-event-main-div-session">
-                                <div className="col-12 col-md-6">
-                                    <div className="each-event-content d-flex flex-column">
-                                        <p className="event-name">{ eventname }</p>
-                                        <p className="event-short-desc">{ eventshortdesc }</p>
-                                        {
-                                            guestnames.length > 0 &&
-                                            <p className="event-guest">
-                                               <span>Guests:</span>
-                                               { guestname }
-                                            </p>
-                                        }
-                                        {
-                                            eventtakernames.length > 0 &&
-                                            <p className="event-guest">
-                                               <span>Speakers:</span>
-                                               { eventtakername }
-                                            </p>
-                                        }
-                                        <p className="event-date-time"><span><i className="far fa-calendar-alt"></i> { date } </span> <span><i className="far fa-clock"></i>{ time }</span></p>
-                                        <Link className="profile-to-society-link" to="/society/ieee">
-                                            <div className="society-collections d-flex align-items-center">
-                                                <div>
-                                                    <img src={ imgurl } alt="society-img"/>
+                {
+                    this.state.isFetchingEventData ? (
+                        <div className="spinner-div text-center">
+                            <Spinner className="custom-modal-spinner" animation="border"/>
+                        </div>
+                    ) : (
+                        <div className="each-event-main-div">
+                            <div className="row">
+                                <div className="col-12">
+                                    <div className="row each-event-main-div-session">
+                                        <div className="col-12 col-md-6">
+                                            <div className="each-event-content d-flex flex-column">
+                                                <p className="event-name">{ eventname }</p>
+                                                <p className="event-short-desc">{ eventshortdesc }</p>
+                                                {
+                                                    guestnames.length > 0 &&
+                                                    <p className="event-guest">
+                                                    <span>Guests:</span>
+                                                    { guestname }
+                                                    </p>
+                                                }
+                                                {
+                                                    eventtakernames.length > 0 &&
+                                                    <p className="event-guest">
+                                                    <span>Speakers:</span>
+                                                    { eventtakername }
+                                                    </p>
+                                                }
+                                                <p className="event-date-time"><span><i className="far fa-calendar-alt"></i> { date } </span> <span><i className="far fa-clock"></i>{ time }</span></p>
+                                                <Link className="profile-to-society-link" to="/society/ieee">
+                                                    <div className="society-collections d-flex align-items-center">
+                                                        <div>
+                                                            <img src={ imgurl } alt="society-img"/>
+                                                        </div>
+                                                        <p className="profile-incharge-name"> { event ? ( event.society ?  event.society.name.toUpperCase() : null ) : null } VESIT </p>
+                                                    </div>
+                                                </Link>
+                                                <div className="all-registrations-class-wise">
+                                                    <span>D12C-15</span>
+                                                    <span>D12C-15</span>
+                                                    <span>D12C-15</span>
+                                                    <span>D12C-15</span>
+                                                    <span>D12C-15</span>
+                                                    <span>D12C-15</span>
                                                 </div>
-                                                <p className="profile-incharge-name"> { event ? ( event.society ?  event.society.name.toUpperCase() : null ) : null } VESIT </p>
+                                                {
+                                                    event &&
+                                                    event.registrations && 
+                                                        event.registrations.length > 0  && 
+                                                        <p className="total-registrations-on-specific-event"> <i class="fas fa-user-friends"></i> <span>{ event.registrations.length } Registrations</span></p>
+                                                }
+                                                <div className="call-starts-in-time">
+                                                    <p>Event Starts in : <span>05:04:30</span></p>
+                                                </div>
+                                                <div className="register-button-div">
+                                                    {
+                                                        this.state.regregisteringEvent && (
+                                                            <button type="submit" className="btn btn-primary btn-md register-button-div disable-button" disabled>
+                                                                <div className="text-center white-spinner-div">
+                                                                    <Spinner className="white-small-button-spinner" animation="border"/>
+                                                                </div>
+                                                                <span className="spinner-text">Registering</span>
+                                                            </button>
+                                                        )   
+                                                    }
+                                                    {
+                                                         this.state.unregisteringEvent && (
+                                                            <button type="submit" className="btn btn-success btn-md register-button-div disable-button" disabled>
+                                                                <div className="text-center white-spinner-div">
+                                                                    <Spinner className="white-small-button-spinner" animation="border"/>
+                                                                </div>
+                                                                <span className="spinner-text">Unregistering</span>
+                                                            </button>
+                                                         )
+                                                    }
+                                                    {
+                                                        ( !this.state.unregisteringEvent && !this.state.regregisteringEvent ) &&
+                                                            <div className="d-inline-block">
+                                                                {
+                                                                        isRegistered ? (
+                                                                            <button style={registedEventStyle} id="each-event-unregister-button" 
+                                                                                    className="btn btn-md btn-success register-button-div" onClick={this.handleUnregister}>Un-Register</button>
+                                                                        ) : (
+                                                                            <button id="each-event-register-button" className="btn btn-md btn-primary register-button-div" 
+                                                                                onClick={this.handleRegister}>Register</button>
+                                                                        )
+                                                                    } 
+                                                            </div>
+                                                        
+                                                    }
+                                                    
+                                                    <button className="btn btn-md btn-primary register-button-div set-remainder-button">Set Remainder</button>
+                                                </div>
                                             </div>
-                                        </Link>
-                                        <div className="all-registrations-class-wise">
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
+
                                         </div>
+                                        <div className="col-12 col-md-6 d-flex align-items-center event-page-main-image-session">
+                                            <div className="img-div">
+                                                <img style={{ width : "90%", height : "60%", objectFit: "cover" }} src="/images/download.jpg" alt="" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </div>
+                                <center><h2 className="main-title-full-detail">Full Detail of the Event</h2></center>
+                                <div className="full-detail-session">
+                                <div dangerouslySetInnerHTML={this.getFullDescInHTML()}></div>
+                                </div>
+                            
+                                <center><h2 className="main-title-event-guest mb-3">Events Speakers</h2></center>
+                                
+                                <div className="row">
+                                {
+                                    event &&
+                                        event.eventtakers && 
+                                        event.eventtakers.registered_eventtakers  &&  
+                                            ( event.eventtakers.registered_eventtakers.typeuser &&  event.eventtakers.registered_eventtakers.typeuser.length > 0 ) &&
+                                            event.eventtakers.registered_eventtakers.typeuser.map(guesttypeuser => (
+                                                <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                                    <div className="card">
+                                                        <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
+                                                        <div className="card-body">
+                                                            <h5 className="card-title">{ guesttypeuser.username }</h5>
+                                                            {
+                                                                guesttypeuser.societydetails ? 
+                                                                <p className="card-text">{ guesttypeuser.societydetails.name.toUpperCase() } VESIT, { guesttypeuser.societydetails.role.toUpperCase() }</p>
+                                                                : null
+                                                            }
+                                                            {
+                                                                guesttypeuser.classdetails ?
+                                                                <p className="card-text"> { guesttypeuser.classdetails.department.toUpperCase()  }  , { guesttypeuser.classdetails.class.toUpperCase() }-{guesttypeuser.classdetails.rollno} </p>
+                                                                : null
+                                                            }
+                                                            <div className="each-guest-profile-link-div">
+                                                            <Link to={ `/user/${ guesttypeuser._id}/profile` } className="btn btn-sm btn-primary navigation-link-to-profile">
+                                                                <span> Profile </span> </Link>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
                                         {
                                             event &&
-                                             event.registrations && 
-                                                event.registrations.length > 0  && 
-                                                   <p className="total-registrations-on-specific-event"> <i class="fas fa-user-friends"></i> <span>{ event.registrations.length } Registrations</span></p>
+                                            event.eventtakers && 
+                                            event.eventtakers.registered_eventtakers && 
+                                            ( event.eventtakers.registered_eventtakers.typeguest && event.eventtakers.registered_eventtakers.typeguest.length > 0 ) &&
+                                                event.eventtakers.registered_eventtakers.typeguest.map(guesttypeguest => (
+                                                    <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                                        <div className="card">
+                                                            <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
+                                                            {
+                                                                guesttypeguest.role === "others" ? 
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">{ guesttypeguest.details.others.name }</h5>
+                                                                        <p className="card-text">{ guesttypeguest.details.others.branch.toUpperCase() }, { guesttypeguest.details.others.class.toUpperCase() }</p>
+                                                                    </div>
+                                                                : (
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">
+                                                                            { 
+                                                                            guesttypeguest.role === "outsideperson" ?  guesttypeguest.details.outsideperson.name : guesttypeguest.details.faculty.name
+                                                                            }
+                                                                        </h5>
+                                                                        <p className="card-text">
+                                                                            {
+                                                                                guesttypeguest.role === "outsideperson" ? guesttypeguest.details.outsideperson.profession :  guesttypeguest.details.faculty.profession
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                ))
                                         }
-                                        <div className="call-starts-in-time">
-                                            <p>Event Starts in : <span>05:04:30</span></p>
-                                        </div>
-                                        <div className="register-button-div">
-                                            {
-                                                isRegistered ? (
-                                                    <button style={registedEventStyle} id="each-event-unregister-button" className="btn btn-md btn-success register-button-div" onClick={this.handleUnregister}>Un-Register</button>
-                                                ) : (
-                                                    <button id="each-event-register-button" className="btn btn-md btn-primary register-button-div" onClick={this.handleRegister}>Register</button>
-                                                )
-                                            }
-                                            <button className="btn btn-md btn-primary register-button-div set-remainder-button">Set Remainder</button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div className="col-12 col-md-6 d-flex align-items-center event-page-main-image-session">
-                                    <div className="img-div">
-                                        <img style={{ width : "90%", height : "60%", objectFit: "cover" }} src="/images/download.jpg" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        <center><h2 className="main-title-full-detail">Full Detail of the Event</h2></center>
-                        <div className="full-detail-session">
-                           <div dangerouslySetInnerHTML={this.getFullDescInHTML()}></div>
-                        </div>
-                       
-                        <center><h2 className="main-title-event-guest mb-3">Events Speakers</h2></center>
-                        
-                        <div className="row">
-                           {
-                               event &&
-                                event.eventtakers && 
-                                   event.eventtakers.registered_eventtakers  &&  
-                                     ( event.eventtakers.registered_eventtakers.typeuser &&  event.eventtakers.registered_eventtakers.typeuser.length > 0 ) &&
-                                       event.eventtakers.registered_eventtakers.typeuser.map(guesttypeuser => (
-                                        <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
-                                            <div className="card">
-                                                <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
-                                                <div className="card-body">
-                                                    <h5 className="card-title">{ guesttypeuser.username }</h5>
-                                                    {
-                                                        guesttypeuser.societydetails ? 
-                                                        <p className="card-text">{ guesttypeuser.societydetails.name.toUpperCase() } VESIT, { guesttypeuser.societydetails.role.toUpperCase() }</p>
-                                                        : null
-                                                    }
-                                                    {
-                                                        guesttypeuser.classdetails ?
-                                                        <p className="card-text"> { guesttypeuser.classdetails.department.toUpperCase()  }  , { guesttypeuser.classdetails.class.toUpperCase() }-{guesttypeuser.classdetails.rollno} </p>
-                                                        : null
-                                                    }
-                                                    <div className="each-guest-profile-link-div">
-                                                    <Link to={ `/user/${ guesttypeuser._id}/profile` } className="btn btn-sm btn-primary navigation-link-to-profile">
-                                                        <span> Profile </span> </Link>
+                                        {
+                                            event &&
+                                            event.eventtakers && 
+                                            event.eventtakers.registered_eventtakers && 
+                                                ( event.eventtakers.registered_eventtakers.typeeventtaker && event.eventtakers.registered_eventtakers.typeeventtaker.length > 0 ) &&
+                                                event.eventtakers.registered_eventtakers.typeeventtaker.map(guesttypeeventtaker => (
+                                                    <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                                        <div className="card">
+                                                            <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
+                                                            {
+                                                                guesttypeeventtaker.role === "others" ? 
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">{ guesttypeeventtaker.details.others.name }</h5>
+                                                                        <p className="card-text">{ guesttypeeventtaker.details.others.branch.toUpperCase() }, { guesttypeeventtaker.details.others.class.toUpperCase() }</p>
+                                                                    </div>
+                                                                : (
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">
+                                                                            { 
+                                                                            guesttypeeventtaker.role === "outsideperson" ?  guesttypeeventtaker.details.outsideperson.name : guesttypeeventtaker.details.faculty.name
+                                                                            }
+                                                                        </h5>
+                                                                        <p className="card-text">
+                                                                            {
+                                                                                guesttypeeventtaker.role === "outsideperson" ? guesttypeeventtaker.details.outsideperson.profession :  guesttypeeventtaker.details.faculty.profession
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        </div>
                                                     </div>
-                                                    
+                                                ))
+                                        }
+                                        {
+                                            event &&
+                                            event.eventtakers && 
+                                            ( event.eventtakers.unregistered_eventtakers &&  event.eventtakers.unregistered_eventtakers.length > 0 ) &&
+                                            event.eventtakers.unregistered_eventtakers.map(guesttypeeventtaker => (
+                                                <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                                    <div className="card">
+                                                        <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
+                                                        {
+                                                            guesttypeeventtaker.role === "others" ? 
+                                                                <div className="card-body">
+                                                                    <h5 className="card-title">{ guesttypeeventtaker.details.others.name }</h5>
+                                                                    <p className="card-text">{ guesttypeeventtaker.details.others.branch.toUpperCase() }, { guesttypeeventtaker.details.others.class.toUpperCase() }</p>
+                                                                </div>
+                                                            : (
+                                                                <div className="card-body">
+                                                                    <h5 className="card-title">
+                                                                        { 
+                                                                        guesttypeeventtaker.role === "outsideperson" ?  guesttypeeventtaker.details.outsideperson.name : guesttypeeventtaker.details.faculty.name
+                                                                        }
+                                                                    </h5>
+                                                                    <p className="card-text">
+                                                                        {
+                                                                            guesttypeeventtaker.role === "outsideperson" ? guesttypeeventtaker.details.outsideperson.profession :  guesttypeeventtaker.details.faculty.profession
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    ))
-                                }
-                                {
-                                    event &&
-                                    event.eventtakers && 
-                                      event.eventtakers.registered_eventtakers && 
-                                       ( event.eventtakers.registered_eventtakers.typeguest && event.eventtakers.registered_eventtakers.typeguest.length > 0 ) &&
-                                          event.eventtakers.registered_eventtakers.typeguest.map(guesttypeguest => (
-                                            <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
-                                                <div className="card">
-                                                    <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
-                                                    {
-                                                        guesttypeguest.role === "others" ? 
-                                                            <div className="card-body">
-                                                                <h5 className="card-title">{ guesttypeguest.details.others.name }</h5>
-                                                                <p className="card-text">{ guesttypeguest.details.others.branch.toUpperCase() }, { guesttypeguest.details.others.class.toUpperCase() }</p>
-                                                            </div>
-                                                        : (
-                                                            <div className="card-body">
-                                                                <h5 className="card-title">
-                                                                    { 
-                                                                    guesttypeguest.role === "outsideperson" ?  guesttypeguest.details.outsideperson.name : guesttypeguest.details.faculty.name
-                                                                    }
-                                                                </h5>
-                                                                <p className="card-text">
-                                                                    {
-                                                                        guesttypeguest.role === "outsideperson" ? guesttypeguest.details.outsideperson.profession :  guesttypeguest.details.faculty.profession
-                                                                    }
-                                                                </p>
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            </div>
-                                        ))
-                                }
-                                {
-                                    event &&
-                                    event.eventtakers && 
-                                       event.eventtakers.registered_eventtakers && 
-                                        ( event.eventtakers.registered_eventtakers.typeeventtaker && event.eventtakers.registered_eventtakers.typeeventtaker.length > 0 ) &&
-                                           event.eventtakers.registered_eventtakers.typeeventtaker.map(guesttypeeventtaker => (
-                                            <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
-                                                <div className="card">
-                                                    <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
-                                                    {
-                                                        guesttypeeventtaker.role === "others" ? 
-                                                            <div className="card-body">
-                                                                <h5 className="card-title">{ guesttypeeventtaker.details.others.name }</h5>
-                                                                <p className="card-text">{ guesttypeeventtaker.details.others.branch.toUpperCase() }, { guesttypeeventtaker.details.others.class.toUpperCase() }</p>
-                                                            </div>
-                                                        : (
-                                                            <div className="card-body">
-                                                                <h5 className="card-title">
-                                                                    { 
-                                                                    guesttypeeventtaker.role === "outsideperson" ?  guesttypeeventtaker.details.outsideperson.name : guesttypeeventtaker.details.faculty.name
-                                                                    }
-                                                                </h5>
-                                                                <p className="card-text">
-                                                                    {
-                                                                        guesttypeeventtaker.role === "outsideperson" ? guesttypeeventtaker.details.outsideperson.profession :  guesttypeeventtaker.details.faculty.profession
-                                                                    }
-                                                                </p>
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            </div>
-                                        ))
-                                }
-                                {
-                                    event &&
-                                    event.eventtakers && 
-                                      ( event.eventtakers.unregistered_eventtakers &&  event.eventtakers.unregistered_eventtakers.length > 0 ) &&
-                                       event.eventtakers.unregistered_eventtakers.map(guesttypeeventtaker => (
-                                        <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
-                                            <div className="card">
-                                                <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
-                                                {
-                                                    guesttypeeventtaker.role === "others" ? 
-                                                        <div className="card-body">
-                                                            <h5 className="card-title">{ guesttypeeventtaker.details.others.name }</h5>
-                                                            <p className="card-text">{ guesttypeeventtaker.details.others.branch.toUpperCase() }, { guesttypeeventtaker.details.others.class.toUpperCase() }</p>
-                                                        </div>
-                                                    : (
-                                                        <div className="card-body">
-                                                            <h5 className="card-title">
-                                                                { 
-                                                                guesttypeeventtaker.role === "outsideperson" ?  guesttypeeventtaker.details.outsideperson.name : guesttypeeventtaker.details.faculty.name
-                                                                }
-                                                            </h5>
-                                                            <p className="card-text">
-                                                                {
-                                                                    guesttypeeventtaker.role === "outsideperson" ? guesttypeeventtaker.details.outsideperson.profession :  guesttypeeventtaker.details.faculty.profession
-                                                                }
-                                                            </p>
-                                                        </div>
-                                                    )
-                                                }
-                                            </div>
-                                        </div>
-                                    ))
-                                }
-                        </div>
+                                            ))
+                                        }
+                                </div>
+                                
                         
+                                <center><h2 className="main-title-event-guest mb-3">Events Guests</h2></center>
+                                
+                                <div className="row">
+                                    {
+                                    event &&
+                                        event.guests  &&
+                                        event.guests.registered_guests &&
+                                            (event.guests.registered_guests.typeuser && event.guests.registered_guests.typeuser.length > 0) &&
+                                            event.guests.registered_guests.typeuser.map(guesttypeuser => (
+                                                <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                                    <div className="card">
+                                                        <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
+                                                        <div className="card-body">
+                                                            <h5 className="card-title">{ guesttypeuser.username }</h5>
+                                                            {
+                                                                guesttypeuser.societydetails ? 
+                                                                <p className="card-text">{ guesttypeuser.societydetails.name.toUpperCase() } VESIT, { guesttypeuser.societydetails.role.toUpperCase() }</p>
+                                                                : null
+                                                            }
+                                                            {
+                                                                guesttypeuser.classdetails ?
+                                                                <p className="card-text"> { guesttypeuser.classdetails.department.toUpperCase()  }  , { guesttypeuser.classdetails.class.toUpperCase() }-{guesttypeuser.classdetails.rollno} </p>
+                                                                : null
+                                                            }
+                                                            <div className="each-guest-profile-link-div">
+                                                            <Link to={ `/user/${ guesttypeuser._id}/profile` } className="btn btn-sm btn-primary navigation-link-to-profile">
+                                                                <span> Profile </span> </Link>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
+                                        {
+                                            event &&
+                                            event.guests &&
+                                            event.guests.registered_guests && 
+                                            ( event.guests.registered_guests.typeguest && event.guests.registered_guests.typeguest.length > 0 ) &&
+                                                event.guests.registered_guests.typeguest.map(guesttypeguest => (
+                                                    <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                                        <div className="card">
+                                                            <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
+                                                            {
+                                                                guesttypeguest.role === "others" ? 
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">{ guesttypeguest.details.others.name }</h5>
+                                                                        <p className="card-text">{ guesttypeguest.details.others.branch.toUpperCase() }, { guesttypeguest.details.others.class.toUpperCase() }</p>
+                                                                    </div>
+                                                                : (
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">
+                                                                            { 
+                                                                            guesttypeguest.role === "outsideperson" ?  guesttypeguest.details.outsideperson.name : guesttypeguest.details.faculty.name
+                                                                            }
+                                                                        </h5>
+                                                                        <p className="card-text">
+                                                                            {
+                                                                                guesttypeguest.role === "outsideperson" ? guesttypeguest.details.outsideperson.profession :  guesttypeguest.details.faculty.profession
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                ))
+                                        }
+                                        {
+                                            event &&
+                                            event.guests && 
+                                            event.guests.registered_guests && 
+                                                ( event.guests.registered_guests.typeeventtaker &&  event.guests.registered_guests.typeeventtaker.length > 0 ) &&
+                                                event.guests.registered_guests.typeeventtaker.map(guesttypeeventtaker => (
+                                                    <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                                        <div className="card">
+                                                            <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
+                                                            {
+                                                                guesttypeeventtaker.role === "others" ? 
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">{ guesttypeeventtaker.details.others.name }</h5>
+                                                                        <p className="card-text">{ guesttypeeventtaker.details.others.branch.toUpperCase() }, { guesttypeeventtaker.details.others.class.toUpperCase() }</p>
+                                                                    </div>
+                                                                : (
+                                                                    <div className="card-body">
+                                                                        <h5 className="card-title">
+                                                                            { 
+                                                                            guesttypeeventtaker.role === "outsideperson" ?  guesttypeeventtaker.details.outsideperson.name : guesttypeeventtaker.details.faculty.name
+                                                                            }
+                                                                        </h5>
+                                                                        <p className="card-text">
+                                                                            {
+                                                                                guesttypeeventtaker.role === "outsideperson" ? guesttypeeventtaker.details.outsideperson.profession :  guesttypeeventtaker.details.faculty.profession
+                                                                            }
+                                                                        </p>
+                                                                    </div>
+                                                                )
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                ))
+                                        }
+                                        {
+                                            event &&
+                                            event.guests && 
+                                            ( event.guests.unregistered_guests && event.guests.unregistered_guests.length > 0 ) && 
+                                                event.guests.unregistered_guests.map(guesttypeguest => (
+                                                <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
+                                                    <div className="card">
+                                                        <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
+                                                        {
+                                                            guesttypeguest.role === "others" ? 
+                                                                <div className="card-body">
+                                                                    <h5 className="card-title">{ guesttypeguest.details.others.name }</h5>
+                                                                    <p className="card-text">{ guesttypeguest.details.others.branch.toUpperCase() }, { guesttypeguest.details.others.class.toUpperCase() }</p>
+                                                                </div>
+                                                            : (
+                                                                <div className="card-body">
+                                                                    <h5 className="card-title">
+                                                                        { 
+                                                                        guesttypeguest.role === "outsideperson" ?  guesttypeguest.details.outsideperson.name : guesttypeguest.details.faculty.name
+                                                                        }
+                                                                    </h5>
+                                                                    <p className="card-text">
+                                                                        {
+                                                                            guesttypeguest.role === "outsideperson" ? guesttypeguest.details.outsideperson.profession :  guesttypeguest.details.faculty.profession
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </div>
+                                                </div>
+                                            ))
+                                        }
+                                </div>
+                            {
+                                event &&
+                                event.sponsors &&
+                                event.sponsors.length > 0 && 
+                                    <div>
+                                        <center><h2 className="main-title-full-detail">Sponsored by</h2></center>
+                                        <div className="full-detail-session container">
+                                            <div className="row">
+                                                <div className="col-12 col-md-8 d-flex flex-column align-items-start">
+                                                    <p style={{ fontWeight : "600" , fontSize : "20px" , margin : "0px" }}>{ event.sponsors[0].name }</p>
+                                                    <p>{ event.sponsors[0].description }</p>
+                                                </div>
+                                                <div className="col-12 col-md-4">
+                                                    <div className="full-detail-img-session d-flex justify-content-center">
+                                                        <img id="github-img"  src={ event.sponsors[0].imgurl ? event.sponsors[0].imgurl.dataurl : "/images/github.png" } alt="sponsors-image" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            }
+                        </div>
+                    )
+                }
+            
                 
-                        <center><h2 className="main-title-event-guest mb-3">Events Guests</h2></center>
-                        
-                        <div className="row">
-                              {
-                            event &&
-                                event.guests  &&
-                                   event.guests.registered_guests &&
-                                    (event.guests.registered_guests.typeuser && event.guests.registered_guests.typeuser.length > 0) &&
-                                       event.guests.registered_guests.typeuser.map(guesttypeuser => (
-                                        <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
-                                            <div className="card">
-                                                <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
-                                                <div className="card-body">
-                                                    <h5 className="card-title">{ guesttypeuser.username }</h5>
-                                                    {
-                                                        guesttypeuser.societydetails ? 
-                                                        <p className="card-text">{ guesttypeuser.societydetails.name.toUpperCase() } VESIT, { guesttypeuser.societydetails.role.toUpperCase() }</p>
-                                                        : null
-                                                    }
-                                                    {
-                                                        guesttypeuser.classdetails ?
-                                                        <p className="card-text"> { guesttypeuser.classdetails.department.toUpperCase()  }  , { guesttypeuser.classdetails.class.toUpperCase() }-{guesttypeuser.classdetails.rollno} </p>
-                                                        : null
-                                                    }
-                                                    <div className="each-guest-profile-link-div">
-                                                    <Link to={ `/user/${ guesttypeuser._id}/profile` } className="btn btn-sm btn-primary navigation-link-to-profile">
-                                                        <span> Profile </span> </Link>
-                                                    </div>
-                                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    ))
-                                }
-                                {
-                                    event &&
-                                    event.guests &&
-                                      event.guests.registered_guests && 
-                                      ( event.guests.registered_guests.typeguest && event.guests.registered_guests.typeguest.length > 0 ) &&
-                                          event.guests.registered_guests.typeguest.map(guesttypeguest => (
-                                            <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
-                                                <div className="card">
-                                                    <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
-                                                    {
-                                                        guesttypeguest.role === "others" ? 
-                                                            <div className="card-body">
-                                                                <h5 className="card-title">{ guesttypeguest.details.others.name }</h5>
-                                                                <p className="card-text">{ guesttypeguest.details.others.branch.toUpperCase() }, { guesttypeguest.details.others.class.toUpperCase() }</p>
-                                                            </div>
-                                                        : (
-                                                            <div className="card-body">
-                                                                <h5 className="card-title">
-                                                                    { 
-                                                                    guesttypeguest.role === "outsideperson" ?  guesttypeguest.details.outsideperson.name : guesttypeguest.details.faculty.name
-                                                                    }
-                                                                </h5>
-                                                                <p className="card-text">
-                                                                    {
-                                                                        guesttypeguest.role === "outsideperson" ? guesttypeguest.details.outsideperson.profession :  guesttypeguest.details.faculty.profession
-                                                                    }
-                                                                </p>
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            </div>
-                                        ))
-                                }
-                                {
-                                    event &&
-                                    event.guests && 
-                                       event.guests.registered_guests && 
-                                        ( event.guests.registered_guests.typeeventtaker &&  event.guests.registered_guests.typeeventtaker.length > 0 ) &&
-                                           event.guests.registered_guests.typeeventtaker.map(guesttypeeventtaker => (
-                                            <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
-                                                <div className="card">
-                                                    <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
-                                                    {
-                                                        guesttypeeventtaker.role === "others" ? 
-                                                            <div className="card-body">
-                                                                <h5 className="card-title">{ guesttypeeventtaker.details.others.name }</h5>
-                                                                <p className="card-text">{ guesttypeeventtaker.details.others.branch.toUpperCase() }, { guesttypeeventtaker.details.others.class.toUpperCase() }</p>
-                                                            </div>
-                                                        : (
-                                                            <div className="card-body">
-                                                                <h5 className="card-title">
-                                                                    { 
-                                                                    guesttypeeventtaker.role === "outsideperson" ?  guesttypeeventtaker.details.outsideperson.name : guesttypeeventtaker.details.faculty.name
-                                                                    }
-                                                                </h5>
-                                                                <p className="card-text">
-                                                                    {
-                                                                        guesttypeeventtaker.role === "outsideperson" ? guesttypeeventtaker.details.outsideperson.profession :  guesttypeeventtaker.details.faculty.profession
-                                                                    }
-                                                                </p>
-                                                            </div>
-                                                        )
-                                                    }
-                                                </div>
-                                            </div>
-                                        ))
-                                }
-                                {
-                                    event &&
-                                    event.guests && 
-                                     ( event.guests.unregistered_guests && event.guests.unregistered_guests.length > 0 ) && 
-                                        event.guests.unregistered_guests.map(guesttypeguest => (
-                                        <div className="each-member-card col-12 col-md-6 col-lg-4 col-xl-3">
-                                            <div className="card">
-                                                <img id="card-profile-image" className="card-img-top" src="/images/user-img1.jpg" alt="Card image cap" />
-                                                {
-                                                    guesttypeguest.role === "others" ? 
-                                                        <div className="card-body">
-                                                            <h5 className="card-title">{ guesttypeguest.details.others.name }</h5>
-                                                            <p className="card-text">{ guesttypeguest.details.others.branch.toUpperCase() }, { guesttypeguest.details.others.class.toUpperCase() }</p>
-                                                        </div>
-                                                    : (
-                                                        <div className="card-body">
-                                                            <h5 className="card-title">
-                                                                { 
-                                                                guesttypeguest.role === "outsideperson" ?  guesttypeguest.details.outsideperson.name : guesttypeguest.details.faculty.name
-                                                                }
-                                                            </h5>
-                                                            <p className="card-text">
-                                                                {
-                                                                    guesttypeguest.role === "outsideperson" ? guesttypeguest.details.outsideperson.profession :  guesttypeguest.details.faculty.profession
-                                                                }
-                                                            </p>
-                                                        </div>
-                                                    )
-                                                }
-                                            </div>
-                                        </div>
-                                    ))
-                                }
-                        </div>
-                    {
-                        event &&
-                        event.sponsors &&
-                          event.sponsors.length > 0 && 
-                            <div>
-                                <center><h2 className="main-title-full-detail">Sponsored by</h2></center>
-                                <div className="full-detail-session container">
-                                    <div className="row">
-                                        <div className="col-12 col-md-8 d-flex flex-column align-items-start">
-                                            <p style={{ fontWeight : "600" , fontSize : "20px" , margin : "0px" }}>{ event.sponsors[0].name }</p>
-                                            <p>{ event.sponsors[0].description }</p>
-                                        </div>
-                                        <div className="col-12 col-md-4">
-                                            <div className="full-detail-img-session d-flex justify-content-center">
-                                                <img id="github-img"  src={ event.sponsors[0].imgurl ? event.sponsors[0].imgurl.dataurl : "/images/github.png" } alt="sponsors-image" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                    }
-                </div>
             </div>
         )
     }

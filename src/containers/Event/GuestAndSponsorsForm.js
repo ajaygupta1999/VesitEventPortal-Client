@@ -16,12 +16,20 @@ import { showAddGuestModal ,
     fetchguestandsponsorspagedata,
     fetchCreatedEvent } from "../../stores/actions/events";
 import { fetchAllUsers } from "../../stores/actions/user";
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 
 class GuestAndSponsorsForm extends Component {
      constructor(props){
          super(props);
          this.state = {
+            fetchingAllUsersData : true,
+            addingNewGuestthroughform : false,
+            addingNewEventtakerthroughform : false,
+            addingsponsorthroughform : false,
             guestdetails : {
                 selectedguests : [],
                 addedguests : [],
@@ -97,10 +105,9 @@ class GuestAndSponsorsForm extends Component {
         // await this.props.fetchEventDetails(userid , eventid);
         // Then load all the guests and eventakers and sponsors
         // Then set the data into store after manupilation. 
-
-
         this.setState({
             ...this.state,
+            fetchingAllUsersData : false,
             usersdata : {
                 guests,
                 users,
@@ -108,6 +115,7 @@ class GuestAndSponsorsForm extends Component {
             }
         });
      }
+
 
      componentDidUpdate = (prevProps, prevState) => {
           if(JSON.stringify(prevProps.createdEvent.selectedguests) !== JSON.stringify(this.props.createdEvent.selectedguests)){
@@ -117,8 +125,9 @@ class GuestAndSponsorsForm extends Component {
                        ...this.state.guestdetails,
                        selectedguests : this.props.createdEvent.selectedguests
                    }
-               });
+                });
           }
+
           if(JSON.stringify(prevProps.createdEvent.selectedeventtakers) !== JSON.stringify(this.props.createdEvent.selectedeventtakers)){
                 this.setState({
                     ...this.state,
@@ -128,6 +137,7 @@ class GuestAndSponsorsForm extends Component {
                     }
                 });
           }
+
           if(JSON.stringify(prevProps.createdEvent.addedguests) !== JSON.stringify(this.props.createdEvent.addedguests)){
             this.setState({
                 ...this.state,
@@ -137,6 +147,7 @@ class GuestAndSponsorsForm extends Component {
                 }
             });
           }
+
           if(JSON.stringify(prevProps.createdEvent.addedeventtakers) !== JSON.stringify(this.props.createdEvent.addedeventtakers)){
             this.setState({
                 ...this.state,
@@ -146,6 +157,7 @@ class GuestAndSponsorsForm extends Component {
                 }
             });
           }
+
           if(JSON.stringify(prevProps.createdEvent.addedsponsors) !== JSON.stringify(this.props.createdEvent.addedsponsors)){
             this.setState({
                 ...this.state,
@@ -158,8 +170,8 @@ class GuestAndSponsorsForm extends Component {
      }
 
      getAllUsers = async () => {
-        let { allusers }  = await this.props.fetchAllUsers(this.props.currentUser.user._id);
-        return allusers;
+         let { allusers }  = await this.props.fetchAllUsers(this.props.match.params.userid);
+         return allusers;
      }
 
     
@@ -203,6 +215,10 @@ class GuestAndSponsorsForm extends Component {
      // Handle add guest (Data which is coming from guests form)
      handleSubmitAddGuest = async (e) => {
          e.preventDefault();
+         this.setState({
+            ...this.state,
+            addingNewGuestthroughform : true
+        });
          console.log("form is submitted");
          let guesttype = this.state.guestdetails.guesttype;
          let dataobj = {};
@@ -235,7 +251,11 @@ class GuestAndSponsorsForm extends Component {
             resetobj.currentyear = ""; 
          }
          
-         await this.props.handleAddPerson(dataobj , this.props.currentUser.user._id , this.props.createdEvent.data._id);  
+         await this.props.handleAddPerson(dataobj , this.props.currentUser.user._id , this.props.createdEvent.data._id);
+         this.setState({
+            ...this.state,
+            addingNewGuestthroughform : false
+        });  
      }
 
      handleRemoveAddedGuests = async (obj) => {
@@ -248,6 +268,10 @@ class GuestAndSponsorsForm extends Component {
     // Handle add Eventtakers (Data which is coming from eventtakers form)
     handleSubmitAddEventtaker = async (e) => {
         e.preventDefault();
+        this.setState({
+            ...this.state,
+            addingNewEventtakerthroughform : true
+        });
         let eventtakertype = this.state.eventtakerdetails.eventtakertype;
         let dataobj = {};
         dataobj.target = "eventtaker";
@@ -280,6 +304,10 @@ class GuestAndSponsorsForm extends Component {
         }
 
         await this.props.handleAddPerson(dataobj , this.props.currentUser.user._id , this.props.createdEvent.data._id);
+        this.setState({
+            ...this.state,
+            addingNewEventtakerthroughform : false
+        });
         
     }
 
@@ -292,6 +320,10 @@ class GuestAndSponsorsForm extends Component {
     handleSubmitAddSponsor = async (e) => {
         e.preventDefault();
         console.log("sponsos form submitted");
+        this.setState({
+            ...this.state,
+            addingsponsorthroughform : true
+        });
         let dataobj = {
             target : "sponsor",
             roletype :  "sponsor",
@@ -302,6 +334,10 @@ class GuestAndSponsorsForm extends Component {
         };
         console.log("sponsor form =>> " , dataobj);
         await this.props.handleAddSponsor(dataobj , this.props.currentUser.user._id , this.props.createdEvent.data._id);
+        this.setState({
+            ...this.state,
+            addingsponsorthroughform : false
+        });
     }
 
     handleRemoveSponsor = async (obj) => {
@@ -521,7 +557,8 @@ class GuestAndSponsorsForm extends Component {
                 {
                      this.props.createdEvent.addGuestModalVisible && 
                      <AddGuestModal userid={this.props.currentUser.user._id} 
-                        handleSelectedPerson={this.handleSelectedPerson} 
+                        handleSelectedPerson={this.handleSelectedPerson}
+                        isFetching={this.state.fetchingAllUsersData} 
                         handleRemoveSelectedPerson = {this.handleRemoveSelectedPerson} 
                         guests={this.state.usersdata.guests} 
                         users={this.state.usersdata.users} 
@@ -534,11 +571,12 @@ class GuestAndSponsorsForm extends Component {
                      <AddEventTakerModal userid={this.props.currentUser.user._id} 
                         handleSelectedPerson={this.handleSelectedPerson} 
                         handleRemoveSelectedPerson = {this.handleRemoveSelectedPerson} 
+                        isFetching={this.state.fetchingAllUsersData} 
                         guests={this.state.usersdata.guests} 
                         users={this.state.usersdata.users} 
                         eventtakers={this.state.usersdata.eventtakers}
                         selectedeventtakers={this.state.eventtakerdetails.selectedeventtakers} 
-                    />
+                     />
                 }
                 <div className="our-login-page-content">
                     <div className="event-page-navigation">
@@ -588,7 +626,7 @@ class GuestAndSponsorsForm extends Component {
                                                                         roletype : "user",
                                                                         role : "user",
                                                                         key : member._id
-                                                                   })
+                                                                    })
                                                                 }}>
                                                             <i class="far fa-times-circle"></i>
                                                             </span>
@@ -781,7 +819,18 @@ class GuestAndSponsorsForm extends Component {
                                                             </div>
                                                         </div>
                                                 }
-                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Add</button>
+                                                {
+                                                    this.state.addingNewGuestthroughform ? (
+                                                        <button type="submit" className="btn btn-primary btn-md btn-block next-buttons disable-button" disabled>
+                                                            <div className="text-center white-spinner-div">
+                                                                <Spinner className="white-small-button-spinner" animation="border"/>
+                                                            </div>
+                                                            <span className="spinner-text">Adding</span>
+                                                        </button>
+                                                     ) : (
+                                                        <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Add</button>
+                                                     )  
+                                                }
                                                 </div>
                                             </div>
                                         </form>
@@ -1006,7 +1055,18 @@ class GuestAndSponsorsForm extends Component {
                                                             </div>
                                                         </div>
                                                 }
-                                                <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Add</button>
+                                                {
+                                                    this.state.addingNewEventtakerthroughform ? (
+                                                        <button type="submit" className="btn btn-primary btn-md btn-block next-buttons disable-button" disabled>
+                                                            <div className="text-center white-spinner-div">
+                                                                <Spinner className="white-small-button-spinner" animation="border"/>
+                                                            </div>
+                                                            <span className="spinner-text">Adding</span>
+                                                        </button>
+                                                     ) : (
+                                                        <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Add</button>
+                                                     )  
+                                                }
                                             </div>
                                         </div>
                                     </form>
@@ -1086,7 +1146,20 @@ class GuestAndSponsorsForm extends Component {
                                                         <label htmlFor="sponsors-description" className="label">Sponsors Details</label>
                                                         <textarea className="form-control" id="sponsors-description" rows="5" name="sponsor_details_details" value={this.state.sponsorsdetails.details.details}  onChange={this.handleChange} placeholder="Something about the sponsorship.."></textarea>
                                                     </div>
-                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Add</button>
+
+                                                    {
+                                                        this.state.addingsponsorthroughform ? (
+                                                            <button type="submit" className="btn btn-primary btn-md btn-block next-buttons disable-button" disabled>
+                                                                <div className="text-center white-spinner-div">
+                                                                    <Spinner className="white-small-button-spinner" animation="border"/>
+                                                                </div>
+                                                                <span className="spinner-text">Adding</span>
+                                                            </button>
+                                                        ) : (
+                                                            <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Add</button>
+                                                        )  
+                                                    }
+                                                    
                                                 </div>
                                             </div>
                                         </form>

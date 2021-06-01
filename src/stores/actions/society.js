@@ -37,6 +37,7 @@ export const loadSocietyData = (name) => async dispatch => {
 
 export const fetchSocietyMembersFullDetails = (societyid) => async ( dispatch ) => {
     try{
+        
         let { normal_members , council_members , council_heads , faculty , chairperson } = await apiCall("get" , `${config.Api.API_URL}/api/society/${societyid}/get/membersfulldetails`);
         dispatch({
             type : "LOAD_MEMBERS_DATA",
@@ -58,7 +59,7 @@ export const updateSocietyDetails = (societyname , userid ,  data) => async (dis
         dispatch({
             type : "LOAD_SOCIETY_DATA",
             data : society
-        })
+        });
     }catch(err){
         console.log(err);
     }

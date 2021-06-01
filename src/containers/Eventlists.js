@@ -4,6 +4,10 @@ import { fetchAllEvents  } from "../stores/actions/events";
 import { connect } from "react-redux";
 import "../asserts/css/EventCards.scss";
 import moment from "moment";
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
 
 class Eventlists extends Component{
 
@@ -27,15 +31,25 @@ class Eventlists extends Component{
 
 
     render(){
-        const { allEvents } = this.props;
+        const allEvents  = this.props.allEvents.data;
         let todaysevents = this.getTodaysEvents(allEvents);
         let upcomingevents = this.getUpcomingEvents(allEvents);
- 
+        let isFetchingAllEvents = this.props.allEvents.isFetching;
+
+
         return(
             <div>
+                
                 <div class="d-flex justify-content-center align-items-center">
                     <h4 class="my-ongoing-title-index-page">Today's Events</h4>
                 </div>
+                {
+                    isFetchingAllEvents && 
+                        <div className="spinner-div text-center">
+                            <Spinner className="custom-spinner" animation="border"/>
+                        </div>
+                }
+               
                 <div className="MY-on-going-evenets-session container">
                     <div className="row">
                         {
@@ -56,6 +70,12 @@ class Eventlists extends Component{
                 <div class="d-flex justify-content-center align-items-center">
                     <h4 class="my-upcoming-title-index-page">Upcoming's Events</h4>
                 </div>
+                {
+                    isFetchingAllEvents && 
+                        <div className="spinner-div text-center">
+                            <Spinner className="custom-spinner" animation="border"/>
+                        </div>
+                }
                 <div className="MY-on-going-evenets-session container">
                     <div className="row">
                        {
@@ -84,7 +104,7 @@ class Eventlists extends Component{
 
 const mapStateToProps = (state) => ({
     currentUser : state.currentUser,
-    allEvents : state.allEvents.data,
+    allEvents : state.allEvents,
 });
     
 export default connect( mapStateToProps , { fetchAllEvents } )(Eventlists);

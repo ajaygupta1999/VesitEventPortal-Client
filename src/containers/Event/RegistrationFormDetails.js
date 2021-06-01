@@ -4,12 +4,16 @@ import { setEventDetails } from "../../stores/actions/user";
 import { connect } from 'react-redux';
 import Navbar from "../navbar";
 import { addFormLink , showeventcreatedmodal , fetchCreatedEvent } from "../../stores/actions/events";
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 class RegistrationFormDetails extends Component {
      constructor(props){
          super(props);
          this.state = {
+             isAddingFormLink : false,
              haveregistrationform : "true",
              formlink : ""
          }
@@ -28,13 +32,22 @@ class RegistrationFormDetails extends Component {
 
     handleSubmit = async (e) => {
         e.preventDefault();
+        this.setState({
+            ...this.state,
+            isAddingFormLink : true
+        });
         let dataobj = {};
         dataobj.haveregistrationform = true;
         dataobj.formlink = this.state.formlink;
         console.log("Form is submitted =>> " , dataobj );
-        let eventdetails = await this.props.addFormLink(dataobj , this.props.currentUser.user._id , this.props.createdEvent.data._id);   
+        let eventdetails = await this.props.addFormLink(dataobj , this.props.currentUser.user._id , this.props.createdEvent.data._id);
+        
         if(eventdetails._id){
             // Event is successfully created
+            this.setState({
+                ...this.state,
+                isAddingFormLink : false
+            });   
             this.props.showeventcreatedmodal();
             this.props.history.push(`/home/createdevent/user/${this.props.currentUser.user._id}/event/${this.props.createdEvent.data._id}?showmodal=createdeventmodal`);
         }
@@ -104,7 +117,18 @@ class RegistrationFormDetails extends Component {
                                             <a id="our-back-button" className="btn btn-md btn-light back-buttons" href="addevent/aboutevent">Back</a>
                                         </div>
                                         <div>
-                                           <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Submit</button>
+                                            {
+                                                this.state.isAddingFormLink ? (
+                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons disable-button" disabled>
+                                                        <div className="text-center white-spinner-div">
+                                                            <Spinner className="white-small-button-spinner" animation="border"/>
+                                                        </div>
+                                                        <span className="spinner-text">Adding</span>
+                                                    </button>
+                                                ) : (
+                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Next</button>
+                                                )
+                                            }
                                         </div>
                                     </div>
                                 </div> 
@@ -114,7 +138,18 @@ class RegistrationFormDetails extends Component {
                                             <a id="our-back-button" className="btn btn-md btn-light back-buttons" href="addevent/aboutevent">Back</a>
                                         </div>
                                         <div>
-                                           <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Submit</button>
+                                            {
+                                                this.state.isAddingFormLink ? (
+                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons disable-button" disabled>
+                                                        <div className="text-center white-spinner-div">
+                                                            <Spinner className="white-small-button-spinner" animation="border"/>
+                                                        </div>
+                                                        <span className="spinner-text">Adding</span>
+                                                    </button>
+                                                ) : (
+                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Next</button>
+                                                )
+                                            }
                                         </div>
                                     </div>
                                 )

@@ -44,7 +44,8 @@ const society = (state = INITIAL_STATE , action) => {
                 council_heads : action.council_heads , 
                 normal_members : action.normal_members , 
                 faculty : action.faculty,
-                chairperson : action.chairperson
+                chairperson : action.chairperson,
+                isFetching : false
             }
 
         case SHOW_SEARCH_MODAL:

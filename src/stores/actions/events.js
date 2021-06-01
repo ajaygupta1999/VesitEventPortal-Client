@@ -47,7 +47,6 @@ export const fetchAllEvents = () => async (dispatch) => {
         let allEvents = await apiCall("get" , `${config.Api.API_URL}/api/event/allevents`);
         dispatch({ type : LOAD_ALL_EVENTS  , events : allEvents});
         dispatch(removeError());
-
      }catch(err){
        console.log("got error while loading all events ===> " , err.message);
        dispatch({ type : FETCH_ALL_EVENTS_ERROR });

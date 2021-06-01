@@ -5,7 +5,13 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { hideSearchModal } from "../../stores/actions/society";
- 
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+
+
+
+
+
 class SearchModal extends Component{
 
     constructor(props){
@@ -35,8 +41,8 @@ class SearchModal extends Component{
             });
 
             const faculty = {
-                societyrole : "faculty",
-                ...this.props.society.faculty
+                ...this.props.society.faculty,
+                societyrole : "faculty"
             }
 
             this.setState({
@@ -47,6 +53,36 @@ class SearchModal extends Component{
                 faculty
             });
         }
+    }
+
+
+    componentDidUpdate =  (prevProps , prevState) => {
+        if(JSON.stringify(this.props.society) !== JSON.stringify(prevProps.society)){
+            const normal_members = this.props.society.normal_members.map(member => {
+                return { societyrole : "normal-member" , ...member }
+            });
+            
+            const council_members = this.props.society.council_members.map(member => {
+                return {  societyrole : "council-member" , ...member }
+            });
+
+            const council_heads = this.props.society.council_heads.map(member => {
+                return { societyrole : "council-head" , ...member }
+            });
+
+            const faculty = {
+                ...this.props.society.faculty,
+                societyrole : "faculty"
+            }
+
+            this.setState({
+                ...this.state,
+                normal_members,
+                council_heads,
+                council_members,
+                faculty
+            });
+        } 
     }
 
    
@@ -86,7 +122,8 @@ class SearchModal extends Component{
     }
 
     render(){
-    
+
+        console.log("IsFetching ==> " , this.props.isFetching);
         let filtereData = [];
         if(this.state.filters.length > 0){
             for(let p = 0 ; p < this.state.filters.length ; p++){
@@ -113,23 +150,27 @@ class SearchModal extends Component{
             for(let t = 0 ; t < this.state.council_heads.length ; t++){
                 filtereData.push(this.state.council_heads[t]);
             }
+
             for(let q = 0 ; q < this.state.normal_members.length ; q++){
                 filtereData.push(this.state.normal_members[q]);
             }
+
             for(let r = 0 ; r < this.state.council_members.length ; r++){
                 filtereData.push(this.state.council_members[r]);
             }
-            filtereData.push(this.state.faculty);
-            
+
+            for(let d = 0; d < this.state.faculty.length; d++){
+                filtereData.push(this.state.faculty);
+            }
         }
 
-         if(this.state.searchtext !== ""){
+        if(this.state.searchtext !== ""){
             let matches = filtereData.filter(state => {
                 const regex = new RegExp(this.state.searchtext.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), 'gi');
                 return state.email.match(regex);
             });
             filtereData = matches;
-         }
+        }
 
         return(
             
@@ -171,10 +212,18 @@ class SearchModal extends Component{
                             }
                         </div>
                     </div>
+
+                    {
+                        this.props.isFetching &&
+                            <div className="spinner-div text-center">
+                                <Spinner className="custom-modal-spinner" animation="border"/>
+                            </div>
+                    }
+
                     <div className="col-12">
                         <div className="searched-content">
                             <div className="row">
-                                {
+                            {
                                 filtereData.map(member => (
                                     member.username ? (
                                            <div className="col-12">
@@ -198,7 +247,7 @@ class SearchModal extends Component{
                                                     </div>
                                                     <div className="view-profile-button col-12 col-md-4 d-flex justify-content-center align-items-center">
                                                         <button className="btn btn-md btn-primary">    
-                                                            <Link to={ `/user/${member._id}/profile` }>
+                                                            <Link to={ `/user/${ member._id }/profile` }>
                                                                 View Profile
                                                             </Link>
                                                         </button>
@@ -221,7 +270,7 @@ class SearchModal extends Component{
                                                     </div>
                                                 </div>
                                             </div>
-                                    ) 
+                                       ) 
                                 ))
                             }
                             </div>
@@ -234,12 +283,9 @@ class SearchModal extends Component{
 }
 
 
-const mapStateToProps = ( state ) => ({
-    society : state.society
-});
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
     hideSearchModal
 } , dispatch)
 
-export default connect(mapStateToProps , mapDispatchToProps)(SearchModal); 
+export default connect(null , mapDispatchToProps)(SearchModal); 

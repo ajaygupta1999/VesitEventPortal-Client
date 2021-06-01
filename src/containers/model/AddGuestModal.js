@@ -4,12 +4,18 @@ import "../../asserts/css/SearchModal.scss";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import { hideAddGuestModal } from "../../stores/actions/events";
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+
 
 class AddGuestModal extends Component{
 
     constructor(props){
         super(props);
         this.state = {
+            addingpersonofourprotal : false,
             searchtext : "",
             filters : [],
             users : [],
@@ -33,8 +39,22 @@ class AddGuestModal extends Component{
         if(JSON.stringify(prevProps.selectedguests) !== JSON.stringify(this.props.selectedguests)){
             this.setState({
                ...this.state,
+               addingpersonofourprotal : false,
                selectedguests : this.props.selectedguests  
-           });
+            });
+        }
+
+        if((JSON.stringify(prevProps.users) !== JSON.stringify(this.props.users)) 
+            || (JSON.stringify(prevProps.guests) !== JSON.stringify(this.props.guests)) 
+            || (JSON.stringify(prevProps.eventtakers) !== JSON.stringify(this.props.eventtakers))
+        ){
+            this.setState({
+                ...this.state,
+                users : this.props.users,
+                guests  : this.props.guests,
+                eventtakers : this.props.eventtakers,
+                selectedguests : this.props.selectedguests
+            });
         }
     }
     
@@ -74,7 +94,7 @@ class AddGuestModal extends Component{
     }
 
 
-    handleAddGuest = (obj) => {
+    handleAddGuest = async (obj) => {
         
         let dataArr = [];
         dataArr = dataArr.concat(this.state.users);
@@ -88,6 +108,10 @@ class AddGuestModal extends Component{
         });
         
         if(!isGuestAlreadyAdded){
+            this.setState({
+                ...this.state,
+                addingpersonofourprotal : true
+            });
             this.props.handleSelectedPerson(obj);
         }
     }
@@ -98,7 +122,7 @@ class AddGuestModal extends Component{
    
 
     render(){
-
+         let isFetching = this.props.isFetching;
          let rowdata = [];
          rowdata = rowdata.concat(this.state.users);
          rowdata = rowdata.concat(this.state.guests);
@@ -218,6 +242,12 @@ class AddGuestModal extends Component{
                             }
                         </div>
                     </div>
+                    {
+                        isFetching &&
+                            <div className="spinner-div text-center">
+                                <Spinner className="custom-modal-spinner" animation="border"/>
+                            </div>
+                    }
                 
                     {
                         this.state.selectedguests.length > 0 && 
@@ -315,16 +345,38 @@ class AddGuestModal extends Component{
                                                             </div>
                                                         </div>
                                                         <div className="view-profile-button col-12 col-md-4 d-flex justify-content-center align-items-center">
+                                                            {/* {
+                                                                this.state.addingpersonofourprotal ? (
+                                                                    <button type="submit" className="btn btn-primary btn-md disable-button" disabled>
+                                                                        <div className="text-center white-spinner-div">
+                                                                            <Spinner className="white-small-button-spinner" animation="border"/>
+                                                                        </div>
+                                                                        <span className="spinner-text">Adding</span>
+                                                                    </button>
+                                                                ) : (
+                                                                    <button className="btn btn-md btn-primary" onClick={() => {
+                                                                        this.handleAddGuest({
+                                                                            target : "guest",
+                                                                            roletype :  "user",
+                                                                            role : "user",
+                                                                            key : member._id
+                                                                        })
+                                                                       }} >    
+                                                                      Add
+                                                                   </button>
+                                                                )
+                                                            } */}
                                                             <button className="btn btn-md btn-primary" onClick={() => {
-                                                                 this.handleAddGuest({
-                                                                     target : "guest",
-                                                                     roletype :  "user",
-                                                                     role : "user",
-                                                                     key : member._id
-                                                                 })
-                                                                }} >    
-                                                               Add
-                                                            </button>
+                                                                        this.handleAddGuest({
+                                                                            target : "guest",
+                                                                            roletype :  "user",
+                                                                            role : "user",
+                                                                            key : member._id
+                                                                        })
+                                                                       }} >    
+                                                                      Add
+                                                                   </button>
+                                                            
                                                         </div>
                                                      </div>
                                                 }

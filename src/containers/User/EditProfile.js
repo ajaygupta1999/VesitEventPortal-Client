@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import Navbar from "../navbar";
 import { connect } from "react-redux";
-import  { updateUserProfileData, 
-    updateUserSocietyDetails, 
-    updateUserClassDetails 
+import  {
+   updateUserProfileData, 
+   updateUserSocietyDetails, 
+   updateUserClassDetails 
 } from "../../stores/actions/user";
 import { Redirect , withRouter } from 'react-router-dom';
 import "../../asserts/css/EditPages.scss";
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+
+
 
 class EditProfile extends Component {
     
     constructor(props){
         super(props);
         this.state = {
+            isUpdatingPersonalDetails : false,
+            isUpdatingSocietyDetails : false,
+            isUpdatingClassDetails : false,
             role : "",
             firstname : "",
             lastname : "",
@@ -87,31 +96,55 @@ class EditProfile extends Component {
         });
     }
 
-    handlePersonalDetailsUpdate = (e) => {
+    handlePersonalDetailsUpdate = async (e) => {
         e.preventDefault();
+        this.setState({
+            ...this.state,
+            isUpdatingPersonalDetails : true
+        });
+
         let dataobj = {
             firstname : this.state.firstname,
             lastname : this.state.lastname,
             image : this.state.image
         }
-        this.props.updateUserProfileData(this.props.currentUser.user._id , dataobj);
+
+        await this.props.updateUserProfileData(this.props.currentUser.user._id , dataobj);
+        this.setState({
+            ...this.state,
+            isUpdatingPersonalDetails : false
+        });
     }
     
-    handleSocietyDetailsUpdate = (e) => {
+    handleSocietyDetailsUpdate = async (e) => {
         e.preventDefault();
+        this.setState({
+            ...this.state,
+            isUpdatingSocietyDetails : true
+        });
+
         if(this.state.role === "student"){
             if(this.state.societyrole !== "faculty"){
                 let dataobj = {
                     role : this.state.role,
                     specificrole : this.state.specificrole
                 }
-                this.props.updateUserSocietyDetails(this.props.currentUser.user._id , dataobj);
+                await this.props.updateUserSocietyDetails(this.props.currentUser.user._id , dataobj);
+                this.setState({
+                    ...this.state,
+                    isUpdatingSocietyDetails : false
+                });
             }
         }
     }
 
-    handleUpdateClassDetails = (e) => {
+    handleUpdateClassDetails = async (e) => {
         e.preventDefault();
+        this.setState({
+            ...this.state,
+            isUpdatingClassDetails : true
+        });
+        
         if(this.state.role === "student"){
             let dataobj = {
                 class: this.state.class,
@@ -121,7 +154,11 @@ class EditProfile extends Component {
                 currentyear : this.state.currentyear,
             }
 
-            this.props.updateUserClassDetails(this.props.currentUser.user._id , dataobj);
+            await this.props.updateUserClassDetails(this.props.currentUser.user._id , dataobj);
+            this.setState({
+                ...this.state,
+                isUpdatingClassDetails : false
+            });
         }
     }
     
@@ -173,7 +210,18 @@ class EditProfile extends Component {
                                                 name="image" onChange={this.handleFileChange}/>
                                         </div>
                                     </div>
-                                    <button type="submit" className="btn btn-md btn-primary next-buttons">Update</button> 
+                                    {
+                                        this.state.isUpdatingPersonalDetails ? (
+                                            <button type="submit" className="btn btn-primary btn-md btn-block next-buttons disable-button" disabled>
+                                                <div className="text-center white-spinner-div">
+                                                    <Spinner className="white-small-button-spinner" animation="border"/>
+                                                </div>
+                                                <span className="spinner-text">Updating</span>
+                                            </button>
+                                            ) : (
+                                            <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Update</button>
+                                            )  
+                                    }
                                 </form>
                             </div>
                         </div>
@@ -211,11 +259,21 @@ class EditProfile extends Component {
                                                         name="specificrole" value={this.state.specificrole} onChange={this.handleChange} />
                                                 </div>
                                             </div>
-                                            <button type="submit" className="btn btn-md btn-primary next-buttons">Update</button> 
+                                            {
+                                                this.state.isUpdatingSocietyDetails ? (
+                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons disable-button" disabled>
+                                                        <div className="text-center white-spinner-div">
+                                                            <Spinner className="white-small-button-spinner" animation="border"/>
+                                                        </div>
+                                                        <span className="spinner-text">Updating</span>
+                                                    </button>
+                                                    ) : (
+                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Update</button>
+                                                    )  
+                                            }
                                         </div>   
                                     }
-                        
-                                
+                                    
                                 </form>
                             </div>
                         </div>
@@ -271,7 +329,18 @@ class EditProfile extends Component {
                                                             name="rollno" value={this.state.rollno} onChange={this.handleChange} />
                                                 </div>
                                             </div>
-                                            <button type="submit" className="btn btn-md btn-primary next-buttons">Update</button> 
+                                            {
+                                                this.state.isUpdatingClassDetails ? (
+                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons disable-button" disabled>
+                                                        <div className="text-center white-spinner-div">
+                                                            <Spinner className="white-small-button-spinner" animation="border"/>
+                                                        </div>
+                                                        <span className="spinner-text">Updating</span>
+                                                    </button>
+                                                    ) : (
+                                                    <button type="submit" className="btn btn-primary btn-md btn-block next-buttons">Update</button>
+                                                    )  
+                                            }
                                         </div>
                                     </form>
                                     </div>

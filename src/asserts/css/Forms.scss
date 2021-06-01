@@ -52,9 +52,9 @@
 
 .back-buttons {
     font-size: 14px;
-    width: 100px;
-    height: 34px;
+    padding : 8px 26px;
     font-weight: 700;
+    width: fit-content;
     color: black !important;
     background: #dadada;
     border-radius: 33px;
@@ -64,9 +64,9 @@
 
 .next-buttons{
     font-size: 14px;
-    width: 100px;
-    height: 34px;
+    padding : 8px 26px;
     font-weight: 700;
+    width: fit-content;
     color: white !important;
     border-radius: 33px;
     border: none;

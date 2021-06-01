@@ -6,20 +6,47 @@ import { connect } from "react-redux";
 import "../../asserts/css/Society.scss";
 import {  withRouter } from "react-router-dom";
 import  { fetchSpecificUser } from "../../stores/actions/user";
+import Spinner from "react-bootstrap/Spinner";
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+
+
 
 
 class UserPage extends Component{
 
-    componentWillMount = async () => {
+    constructor(props){
+        super(props);
+        this.state = {
+            isFetching : false,
+        }
+    }
+
+    componentDidMount = async () => {
+        this.setState({
+            ...this.state,
+            isFetching : true
+        });
         let { userid } = this.props.match.params;
         await this.props.fetchSpecificUser(userid);
+        this.setState({
+            ...this.state,
+            isFetching : false
+        });
     }
 
     componentDidUpdate = async (prevProps , prevState) => {
         let prevuserid = prevProps.match.params.userid;
         let newuserid = this.props.match.params.userid;
         if(prevuserid.toString() !==  newuserid.toString()){
+            this.setState({
+                ...this.state,
+                isFetching : true
+            });
             await this.props.fetchSpecificUser(newuserid);
+            this.setState({
+                ...this.state,
+                isFetching : false
+            });
         }
     }
 
@@ -34,8 +61,20 @@ class UserPage extends Component{
         return(
             <div>
                 <Navbar />
-                <UserPageHeader user={ this.props.specificUser.user } currentUser={this.props.currentUser} totalreg={totalReg}/>
-                <UserPageContent />
+                {
+                    this.state.isFetching &&
+                        <div className="spinner-div text-center">
+                            <Spinner className="custom-modal-spinner" animation="border"/>
+                        </div>
+                }
+                {
+                     !this.state.isFetching &&
+                        <div>
+                            <UserPageHeader user={ this.props.specificUser.user } currentUser={this.props.currentUser} totalreg={totalReg}/>
+                            <UserPageContent />
+                        </div>    
+                }
+                
             </div>
         )
     }
