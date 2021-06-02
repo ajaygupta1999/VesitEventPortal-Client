@@ -7,7 +7,7 @@ const dev = {
 
 const prod = {
     Api : {
-        API_URL : "https://vesit-events-portal.herokuapp.com"
+        API_URL : "https://vesitevents-backend-cugppvci4q-el.a.run.app"
     }
 }
 
