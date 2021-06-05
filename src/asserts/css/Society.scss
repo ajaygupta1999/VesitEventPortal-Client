@@ -272,7 +272,7 @@
         width : 100%;
         height : 180px;
         object-fit: cover;
-        object-position: center;
+        object-position: top;
     }
 
     #card-profile-image{
@@ -287,10 +287,22 @@
         font-weight : 500;
         font-size : 19px;
     }
+
+    .second-card-text{
+        font-weight : 500;
+    }
     
     .card-text{
         margin : 0px;
         font-size : 14px;
+        
+
+        i{
+            position  :relative;
+            top : 2px;
+            color : red;
+            margin-right : 2px;
+        }
     }
     
     button{

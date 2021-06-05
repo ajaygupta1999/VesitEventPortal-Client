@@ -35,7 +35,7 @@ class Eventlists extends Component{
         let todaysevents = this.getTodaysEvents(allEvents);
         let upcomingevents = this.getUpcomingEvents(allEvents);
         let isFetchingAllEvents = this.props.allEvents.isFetching;
-
+        
 
         return(
             <div>
@@ -73,7 +73,7 @@ class Eventlists extends Component{
                 {
                     isFetchingAllEvents && 
                         <div className="spinner-div text-center">
-                            <Spinner className="custom-spinner" animation="border"/>
+                            <Spinner className="custom-spinner" animation="border" />
                         </div>
                 }
                 <div className="MY-on-going-evenets-session container">
@@ -81,8 +81,7 @@ class Eventlists extends Component{
                        {
                             upcomingevents.map(event => {
                                 if(this.props.currentUser.isAuthenticated){
-                                    let data = this.props.currentUser.user.registered_events.filter(registered => registered._id.toString() === event._id.toString());
-                            
+                                    let data = this.props.currentUser.user.registered_events.filter(registered => registered.toString() === event._id.toString());
                                     if(data.length > 0){
                                         return <Event key={event._id} {...event} userdata={this.props.currentUser} isRegistered={true}/>
                                     }else{
@@ -90,7 +89,6 @@ class Eventlists extends Component{
                                     }
                                 }
                                 return <Event key={event._id} {...event} userdata={this.props.currentUser} isRegistered={false}/>
-                                
                             }) 
                         }
                     </div>

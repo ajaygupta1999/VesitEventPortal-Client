@@ -24,6 +24,22 @@ class Event extends Component{
         const registedEventStyle = {
             backgroundColor : "blue !important"
         }
+        let societyimgurl = "";
+        console.log("event ==> " , this.props.society.name)
+        if(Object.keys(this.props.society.name).length > 0){
+            if(this.props.society.name === "ieee"){
+                societyimgurl = "ieee_logo.jpg";
+            }
+            if(this.props.society.name === "iste"){
+                societyimgurl = "iste_logo.jpg";
+            }
+            if(this.props.society.name === "isa"){
+                societyimgurl = "isa_logo.gif";
+            }
+            if(this.props.society.name === "csi"){
+                societyimgurl = "csi_logo.jpg";
+            }
+        }
 
         return(
                 <div className="col-12 col-md-6 col-lg-4">
@@ -35,8 +51,17 @@ class Event extends Component{
                             <div className="content-session">
                                 <div className="upper-content d-flex flex-column">
                                     <p className="main-title">{ name }</p>
-                                    <p className="short-desc">{ shortdesc }</p>
-                                    
+                                    {
+                                        shortdesc.length > 170 ? (
+                                            <p className="short-desc">{ shortdesc.substring(0 , 170)  } <a href={ `/event/${this.props._id}` } style={{ color : "red" , fontWeight: "600" }}>...Read more</a></p>
+                                        ) : (
+                                            <p className="short-desc">{ shortdesc }</p>
+                                        )
+                                    }
+                                    <div className="society-name-section-each-card d-flex justify-content-start align-items-center">
+                                        <img src={ `/images/${societyimgurl}` } />
+                                        <p>{ this.props.society.name.toUpperCase()  } VESIT</p>
+                                    </div>
                                     <div className="date-time-div d-flex justify-content-start align-items-center">
                                         <p className="date-session"><span><i className="far fa-calendar-alt"></i></span>{ date }</p>
                                         <p><span><i className="far fa-clock"></i></span> { time } </p>
@@ -44,7 +69,7 @@ class Event extends Component{
                                     {
                                         isRegistered ? (
                                             <div className="register-button-div">
-                                                <button style={registedEventStyle} id="each-event-unregister-button" className="btn btn-md btn-success" onClick={this.handleUnregister}>Un-Register</button>        
+                                                <button style={ registedEventStyle } id="each-event-unregister-button" className="btn btn-md btn-success" onClick={this.handleUnregister}>Un-Register</button>        
                                             </div> 
                                         ) : (
                                             <div className="register-button-div">

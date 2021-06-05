@@ -70,14 +70,20 @@ class Events extends Component{
                                                     <div className="content-session">
                                                         <div className="upper-content d-flex flex-column">
                                                             <p className="main-title">{ event.name }</p>
-                                                            <p className="short-desc">{ event.shortdesc }</p>
+                                                            {
+                                                                event.shortdesc.length > 170 ? (
+                                                                    <p className="short-desc">{ event.shortdesc.substring(0 , 170)  } <Link to={ `/event/${event._id}` } style={{ color : "red" , fontWeight: "600" }}>...Read more</Link></p>
+                                                                ) : (
+                                                                    <p className="short-desc">{ event.shortdesc }</p>
+                                                                )
+                                                            }
                                                             <p className="guest-text"><span>Guest: </span> Ajay, Neel </p>
                                                             <div className="date-time-div d-flex justify-content-start align-items-center">
                                                                 <p className="date-session"><span><i className="far fa-calendar-alt"></i></span>{ event.date }</p>
                                                                 <p><span><i className="far fa-clock"></i></span> { event.time } </p>
                                                             </div>
                                                             <div className="register-button-div">
-                                                                <a id="each-event-register-button" className="btn btn-md btn-success" href="/event/">Register</a>        
+                                                                <Link id="each-event-register-button" className="btn btn-md btn-success" to={ `/event/${event._id}` }>Register</Link>        
                                                             </div>
                                                         </div>
                                                     </div>
@@ -98,14 +104,21 @@ class Events extends Component{
                                                     <div className="content-session">
                                                         <div className="upper-content d-flex flex-column">
                                                             <p className="main-title">{ event.name }</p>
-                                                            <p className="short-desc">{ event.shortdesc }</p>
+                                                            {
+                                                                event.shortdesc.length > 170 ? (
+                                                                    <p className="short-desc">{ event.shortdesc.substring(0 , 170)  } <Link to={ `/event/${event._id}` } style={{ color : "red" , fontWeight: "600" }}>...Read more</Link></p>
+                                                                ) : (
+                                                                    <p className="short-desc">{ event.shortdesc }</p>
+                                                                )
+                                                            }
+                                                            
                                                             <p className="guest-text"><span>Guest: </span> Ajay, Neel </p>
                                                             <div className="date-time-div d-flex justify-content-start align-items-center">
                                                                 <p className="date-session"><span><i className="far fa-calendar-alt"></i></span>{ event.date }</p>
                                                                 <p><span><i className="far fa-clock"></i></span> { event.time } </p>
                                                             </div>
                                                             <div className="register-button-div">
-                                                                <a id="each-event-register-button" className="btn btn-md btn-success" href="/event/">Register</a>        
+                                                                <Link id="each-event-register-button" className="btn btn-md btn-success" to={ `/event/${event._id}` }>Register</Link>        
                                                             </div>
                                                         </div>
                                                     </div>
@@ -125,14 +138,20 @@ class Events extends Component{
                                                     <div className="content-session">
                                                         <div className="upper-content d-flex flex-column">
                                                             <p className="main-title">{ event.name }</p>
-                                                            <p className="short-desc">{ event.shortdesc }</p>
+                                                            {
+                                                                event.shortdesc.length > 170 ? (
+                                                                    <p className="short-desc">{ event.shortdesc.substring(0 , 170)  } <Link to={ `/event/${event._id}` } style={{ color : "red" , fontWeight: "600" }}>...Read more</Link></p>
+                                                                ) : (
+                                                                    <p className="short-desc">{ event.shortdesc }</p>
+                                                                )
+                                                            }
                                                             <p className="guest-text"><span>Guest: </span> Ajay, Neel </p>
                                                             <div className="date-time-div d-flex justify-content-start align-items-center">
                                                                 <p className="date-session"><span><i className="far fa-calendar-alt"></i></span>{ event.date }</p>
                                                                 <p><span><i className="far fa-clock"></i></span> { event.time } </p>
                                                             </div>
                                                             <div className="register-button-div">
-                                                                <a id="each-event-register-button" className="btn btn-md btn-success" href="/event/">Register</a>        
+                                                                <Link id="each-event-register-button" className="btn btn-md btn-success" to={ `/event/${event._id}` }>Register</Link>    
                                                             </div>
                                                         </div>
                                                     </div>

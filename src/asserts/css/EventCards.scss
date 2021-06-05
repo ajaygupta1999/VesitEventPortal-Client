@@ -56,6 +56,28 @@
 				overflow-wrap: anywhere;
 			}
 
+			.society-name-section-each-card{
+				margin: 2px 0px;
+				padding: 3px 9px;
+				background: #dedede80;
+				border-radius: 5px;
+				color: black;
+				font-size: 12px;
+				max-width: 133px;
+
+				img{
+					width : 28px;
+					border-radius : 14px;
+					margin-right : 5px;
+				}
+
+				p{
+					margin : 0px;
+					font-size: 14px;
+    				font-weight: 600;
+				}
+			}
+
 			.guest-text{
 				font-weight : 600;
 				font-size: 14px;

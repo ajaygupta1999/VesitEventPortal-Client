@@ -59,11 +59,23 @@ const ReviewCard = (props) => {
                                                     props.data.role === "outsideperson" ?  props.data.details.outsideperson.name : props.data.details.faculty.name
                                                     }
                                                 </h5>
-                                                <p className="card-text">
-                                                    {
-                                                        props.data.role === "outsideperson" ? props.data.details.outsideperson.profession :  props.data.details.faculty.profession
-                                                    }
-                                                </p>
+                                                {
+                                                    props.data.role === "outsideperson" ? (
+                                                        <p className="card-text">
+                                                            {
+                                                                props.data.details.outsideperson.profession.length > 80 ?  `${props.data.details.outsideperson.profession.substring(0 , 80)} ...` : props.data.details.outsideperson.profession
+                                                                
+                                                            }
+                                                        </p>
+                                                    ) : (
+                                                        <p className="card-text">
+                                                            {
+                                                                props.data.details.faculty.profession.length > 80 ? `${props.data.details.faculty.profession.substring(0 , 80)} ...` : props.data.details.faculty.profession
+                                                                  
+                                                            }
+                                                        </p>
+                                                    )
+                                                }
                                             </div>
                                         )
                                     }
@@ -94,11 +106,24 @@ const ReviewCard = (props) => {
                                                     props.data.role === "outsideperson" ?  props.data.details.outsideperson.name : props.data.details.faculty.name
                                                     }
                                                 </h5>
-                                                <p className="card-text">
-                                                    {
-                                                        props.data.role === "outsideperson" ? props.data.details.outsideperson.profession :  props.data.details.faculty.profession
-                                                    }
-                                                </p>
+                                                {
+                                                    props.data.role === "outsideperson" ? (
+                                                        <p className="card-text">
+                                                            {
+                                                                props.data.details.outsideperson.profession.length > 80 ?  `${props.data.details.outsideperson.profession.substring(0 , 80)} ...` : props.data.details.outsideperson.profession
+                                                                
+                                                            }
+                                                        </p>
+                                                    ) : (
+                                                        <p className="card-text">
+                                                            {
+                                                                props.data.details.faculty.profession.length > 80 ? `${props.data.details.faculty.profession.substring(0 , 80)} ...` : props.data.details.faculty.profession
+                                                                  
+                                                            }
+                                                        </p>
+                                                    )
+                                                }
+                                                
                                             </div>
                                         )
                                     }
@@ -132,16 +157,16 @@ const ReviewCard = (props) => {
                                                             props.data.role === "outsideperson" ? (
                                                                 <p className="card-text">
                                                                     {
-                                                                        props.data.details.outsideperson.profession.length > 100 ? 
-                                                                            `${props.data.details.outsideperson.profession.substring(0 , 100)} ...`
+                                                                        props.data.details.outsideperson.profession.length > 80 ? 
+                                                                            `${props.data.details.outsideperson.profession.substring(0 , 80)} ...`
                                                                         : props.data.details.outsideperson.profession
                                                                     }
                                                                 </p>
                                                             ) : (
                                                                 <p className="card-text">
                                                                     {
-                                                                        props.data.details.faculty.profession.length > 100 ? 
-                                                                            `${props.data.details.faculty.profession.substring(0 , 100)} ...`
+                                                                        props.data.details.faculty.profession.length > 80 ? 
+                                                                            `${props.data.details.faculty.profession.substring(0 , 80)} ...`
                                                                         : props.data.details.faculty.profession
                                                                     }
                                                                 </p>
@@ -206,11 +231,23 @@ const ReviewCard = (props) => {
                                                     props.data.role === "outsideperson" ?  props.data.details.outsideperson.name : props.data.details.faculty.name
                                                     }
                                                 </h5>
-                                                <p className="card-text">
-                                                    {
-                                                        props.data.role === "outsideperson" ? props.data.details.outsideperson.profession :  props.data.details.faculty.profession
-                                                    }
-                                                </p>
+                                                {
+                                                    props.data.role === "outsideperson" ? (
+                                                        <p className="card-text">
+                                                            {
+                                                                props.data.details.outsideperson.profession.length > 80 ?  `${props.data.details.outsideperson.profession.substring(0 , 80)} ...` : props.data.details.outsideperson.profession
+                                                                
+                                                            }
+                                                        </p>
+                                                    ) : (
+                                                        <p className="card-text">
+                                                            {
+                                                                props.data.details.faculty.profession.length > 80 ? `${props.data.details.faculty.profession.substring(0 , 80)} ...` : props.data.details.faculty.profession
+                                                                  
+                                                            }
+                                                        </p>
+                                                    )
+                                                }
                                             </div>
                                         )
                                     }
@@ -241,11 +278,23 @@ const ReviewCard = (props) => {
                                                     props.data.role === "outsideperson" ?  props.data.details.outsideperson.name : props.data.details.faculty.name
                                                     }
                                                 </h5>
-                                                <p className="card-text">
-                                                    {
-                                                        props.data.role === "outsideperson" ? props.data.details.outsideperson.profession :  props.data.details.faculty.profession
-                                                    }
-                                                </p>
+                                                {
+                                                    props.data.role === "outsideperson" ? (
+                                                        <p className="card-text">
+                                                            {
+                                                                props.data.details.outsideperson.profession.length > 80 ?  `${props.data.details.outsideperson.profession.substring(0 , 80)} ...` : props.data.details.outsideperson.profession
+                                                                
+                                                            }
+                                                        </p>
+                                                    ) : (
+                                                        <p className="card-text">
+                                                            {
+                                                                props.data.details.faculty.profession.length > 80 ? `${props.data.details.faculty.profession.substring(0 , 80)} ...` : props.data.details.faculty.profession
+                                                                  
+                                                            }
+                                                        </p>
+                                                    )
+                                                }
                                             </div>
                                         )
                                     }

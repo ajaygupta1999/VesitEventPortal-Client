@@ -32,21 +32,21 @@ class SocietyContents extends Component{
                 </ul>
                 {
                    ( queryObj.show === "about-society" || Object.keys(queryObj).length === 0 ) && 
-                    <AboutSociety />
+                       <AboutSociety />
 
                 }
                 {
                     queryObj.show === "about-members" &&
-                    <AboutMembers />
+                       <AboutMembers />
 
                 }
                 {
                     queryObj.show === "events" && 
-                    <Events />
+                       <Events />
                 }
                 {
                     queryObj.show === "eventevent-statistics" &&
-                    <EventStatistics />
+                       <EventStatistics />
                 }
             </div>
         );

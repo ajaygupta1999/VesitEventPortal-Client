@@ -42,7 +42,14 @@ class EventStatistics extends Component{
                                 <div className="card event-statistics-card">
                                     <div className="card-body">
                                         <h5 className="card-title">{ event.name }</h5>
-                                        <p className="card-text"> { event.shortdesc }</p>
+                                        {
+                                            event.shortdesc.length > 120 ? (
+                                                <p className="short-desc">{ event.shortdesc.substring(0 , 120)  } <a href={ `/event/${event._id}` } style={{ color : "red" , fontWeight: "600" }}>...Read more</a></p>
+                                            ) : (
+                                                <p className="short-desc">{ event.shortdesc }</p>
+                                            )
+                                        }
+                                        
                                         <p className="date-and-time-session">
                                             <span><i className="far fa-calendar-alt"></i> { event.date }</span>
                                             <span><i className="far fa-clock"></i> { event.time } </span>

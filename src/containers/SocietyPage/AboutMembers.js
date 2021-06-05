@@ -88,8 +88,10 @@ class AboutMembers extends Component {
                                             <div className="card">
                                                 <img className="card-img-top" src={ member.imgurl ? member.imgurl.dataurl : "/images/profile_image.png" } alt="Card image cap" />
                                                 <div className="card-body">
-                                                    <h5 className="card-title">{ member.email }</h5>
-                                                    <p className="card-text">{ queryObj.memberType  }</p>
+                                                    <h4 className="text-center"> {member.name} </h4>
+                                                    <p className="card-text second-card-text text-center">{ queryObj.memberType ? queryObj.memberType.toUpperCase() : null }</p>
+                                                    <p className="card-text second-card-text text-center"><i class="far fa-envelope"></i> { member.email }</p>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
