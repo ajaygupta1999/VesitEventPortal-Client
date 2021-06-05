@@ -17,12 +17,17 @@ import {
   handleEditCouncilMemeber
  } from "../../stores/actions/society";
 
+
+import "../../asserts/css/Notification.scss";
 import "../../asserts/css/SocietyMembers.scss"; 
 import { Link } from 'react-router-dom';
 import { parse } from "query-string";
 import Spinner from "react-bootstrap/Spinner";
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import ReactNotification from 'react-notifications-component';
+import 'react-notifications-component/dist/theme.css'
+import { store } from 'react-notifications-component';
+import 'animate.css/animate.min.css';
 
 
 var SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
@@ -39,6 +44,7 @@ class SocietySettingsManageMembers extends Component {
             isSyncingCouncilMembersData  : false,
             isSyncingChairpersonAndFacultyData : false,
             isLoadingData : false,
+            isCreatingSheet : false,
             initialisingSheetApi : false,
             isNewAddSocietyMember : false,
             isNewAddCouncilMember : false,
@@ -168,6 +174,13 @@ class SocietySettingsManageMembers extends Component {
         }
     }
 
+    componentWillUnmount  = () => {
+        console.log("Component has been unmounted");
+        if(this.state.authRelatedData.email.length > 0){
+            this.signOutFunction();
+        }
+    }
+
 
     componentDidMount = async () => {
       try{
@@ -192,7 +205,7 @@ class SocietySettingsManageMembers extends Component {
               isEditing : false,
               name : member.name,
               email : member.email
-           }
+            }
         }));
 
         let councilMemberArr = this.props.society.data.council_members.map(member => ({
@@ -247,6 +260,7 @@ class SocietySettingsManageMembers extends Component {
       }
     }
 
+
     handleClientLoad = () => {
         window.gapi.load('client:auth2', this.initClient);
     }
@@ -269,26 +283,8 @@ class SocietySettingsManageMembers extends Component {
                 }
               });
 
-              this.state.authRelatedData.googleAuth.isSignedIn.listen(this.updateSigninStatus);
               if(!this.state.authRelatedData.googleAuth.isSignedIn.get()) {
                   console.log("Please login first");
-                  // document.getElementById('sign').addEventListener('click', this.signInFunction);
-              }else{
-                  var user = this.state.authRelatedData.googleAuth.currentUser.get();
-                  var accesstoken = this.state.authRelatedData.googleAuth.currentUser.get().getAuthResponse().access_token;
-                  let username = user.getBasicProfile().getName();
-                  let email = user.getBasicProfile().getEmail();
-                  let imgurl = user.getBasicProfile().getImageUrl();
-                  this.setState({
-                      ...this.state,
-                      authRelatedData : {
-                        ...this.state.authRelatedData,
-                        name: username,
-                        accesstoken : accesstoken,
-                        email : email,
-                        imgurl
-                      }
-                  });
               }
           } , function(err){
                console.log(err);
@@ -302,17 +298,17 @@ class SocietySettingsManageMembers extends Component {
 
     signInFunction = async () => {
         await this.state.authRelatedData.googleAuth.signIn();
-        await this.updateSigninStatus();
+        this.updateSigninStatus();
     }
 
     signOutFunction = async () => {
         await this.state.authRelatedData.googleAuth.signOut();
-        await this.updateSigninStatus();
+        this.updateSigninStatus();
     }
 
     updateSigninStatus = async () => {
         if(!this.state.authRelatedData.googleAuth.isSignedIn.get()) {
-            console.log("Please login first");
+            console.log("Please login first ======>");
             this.setState({
               ...this.state,
               authRelatedData : {
@@ -323,27 +319,69 @@ class SocietySettingsManageMembers extends Component {
               }
             });
         }else{
-          var user = this.state.authRelatedData.googleAuth.currentUser.get();
-          var accesstoken = this.state.authRelatedData.googleAuth.currentUser.get().getAuthResponse().access_token;
-          let username = user.getBasicProfile().getName();
-          let email = user.getBasicProfile().getEmail();
-          let imgurl = user.getBasicProfile().getImageUrl();
-          
-          this.setState({
-            ...this.state,
-            authRelatedData : {
-              ...this.state.authRelatedData,
-              name: username,
-              accesstoken : accesstoken,
-              email : email,
-              imgurl
-            }
-          });
+            var user = this.state.authRelatedData.googleAuth.currentUser.get();
+            var accesstoken = this.state.authRelatedData.googleAuth.currentUser.get().getAuthResponse().access_token;
+            let username = user.getBasicProfile().getName();
+            let email = user.getBasicProfile().getEmail();
+            let imgurl = user.getBasicProfile().getImageUrl();
+            // Sheet exist == login
+            // sheet not exist sign in
+           if(this.props.society.data.spreadsheets){
+               if(this.props.society.data.spreadsheets.sheetid && this.props.society.data.spreadsheets.useremail && 
+                ( this.props.society.data.spreadsheets.useremail === email )){
+                    this.setState({
+                      ...this.state,
+                      authRelatedData : {
+                        ...this.state.authRelatedData,
+                        name: username,
+                        accesstoken : accesstoken,
+                        email : email,
+                        imgurl
+                      }
+                    });
+                }
+           }else{
+              this.setState({
+                ...this.state,
+                authRelatedData : {
+                  ...this.state.authRelatedData,
+                  name: username,
+                  accesstoken : accesstoken,
+                  email : email,
+                  imgurl
+                }
+              });
+           }
+            
+            // if(this.props.society.data.spreadsheets && this.props.society.data.spreadsheets.sheetid && this.props.society.data.spreadsheets.useremail && 
+            //   ( this.props.society.data.spreadsheets.useremail === email )){
+            //     this.setState({
+            //       ...this.state,
+            //       authRelatedData : {
+            //         ...this.state.authRelatedData,
+            //         name: username,
+            //         accesstoken : accesstoken,
+            //         email : email,
+            //         imgurl
+            //       }
+            //     });
+            // }
+            if(this.props.society.data.spreadsheets && this.props.society.data.spreadsheets.sheetid && this.props.society.data.spreadsheets.useremail && 
+              ( this.props.society.data.spreadsheets.useremail !== email)){
+                  this.addErrorNotification(this.props.society.data.spreadsheets.useremail);
+                  console.log("Please login with correct gmail account ==> " , this.props.society.data.spreadsheets.useremail);
+              }
+                
+            
         }
     }
 
     
     handleCreateSpreadSheet = async () => {
+      this.setState({
+        ...this.state,
+        isCreatingSheet : true
+      });
         let spreadsheetdata;
         if(this.state.authRelatedData.accesstoken.length === 0 && this.state.authRelatedData.sheeturl_of_council_members.length > 0){
             await this.signInFunction();
@@ -358,6 +396,10 @@ class SocietySettingsManageMembers extends Component {
             accesstoken : this.state.authRelatedData.accesstoken
         }
         await this.props.createSpreadSheet(this.props.society.data.name , this.props.society.data._id , data);
+        this.setState({
+          ...this.state,
+          isCreatingSheet : false
+        });
         // this.setState({
         //   ...this.state,
         //   authRelatedData : {
@@ -762,6 +804,26 @@ class SocietySettingsManageMembers extends Component {
       //  }
     }
 
+    addErrorNotification = (email) => {
+        console.log("Called one's");
+        store.addNotification({
+          title : "Email Does Not Match",
+          message: <p>Please login with correct gamil account. Email address of SpreadSheet API for this society is <strong>{email}</strong></p>,
+          type: "danger",
+          insert: "bottom",
+          container: "bottom-left",
+          animationIn: ["animate__animated", "animate__zoomIn"],
+          animationOut: ["animate__animated", "animate__zoomOut"],
+          dismiss: {
+            duration: 5000,
+            onScreen: true,
+            pauseOnHover : true
+          },
+          click : false,
+          showIcon : true
+        });
+    }
+
     
     render(){
 
@@ -778,6 +840,7 @@ class SocietySettingsManageMembers extends Component {
                       </div>
                    ) : ( 
                       <div>
+                        <ReactNotification /> 
                         <h1 className="manage-members-heading">Manage Members</h1>
                           <p className="description-of-page">Here you can mange details of your council members and society members. 
                               you can edit details of someone and also able to add new person if he/she is joined recently.
@@ -808,10 +871,23 @@ class SocietySettingsManageMembers extends Component {
                                             <i class="fas fa-check-circle mr-1"></i> Connected to spreadsheet
                                         </button> 
                                       ) : (
-                                          <button className="btn btn-sm btn-primary blue-button-sm-whites ml-5" onClick={this.handleCreateSpreadSheet}>
-                                                <img src="/images/Google_Sheets_logo.svg" style={{ width : "18px" , marginTop : "-4px", marginRight : "10px"  }} alt="spreadsheet logo" />
-                                                Create new SpreadSheet 
-                                          </button>
+                                        <div>
+                                          {
+                                           this.state.isCreatingSheet ? (
+                                              <button type="submit" className="btn btn-primary btn-md blue-button-sm-whites disable-button mr-2" disabled>
+                                                      <div className="text-center white-spinner-div">
+                                                          <Spinner className="white-small-button-spinner" animation="border"/>
+                                                      </div>
+                                                  <span className="spinner-text">Creating New SpreadSheet</span>
+                                              </button>
+                                           ) : (
+                                            <button className="btn btn-sm btn-primary blue-button-sm-whites ml-5" onClick={this.handleCreateSpreadSheet}>
+                                                  <img src="/images/Google_Sheets_logo.svg" style={{ width : "18px" , marginTop : "-4px", marginRight : "10px"  }} alt="spreadsheet logo" />
+                                                  Create New SpreadSheet 
+                                            </button>
+                                           )   
+                                        }
+                                        </div>
                                       )
                                   ) : (
                                     this.state.initialisingSheetApi ? (

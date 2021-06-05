@@ -1,0 +1,87 @@
+.reviews , .sponsors-cards{
+    padding-bottom : 30px;
+    text-align: center;
+    background-color: white;
+
+    .alice-carousel__prev-btn{
+        position : absolute;
+        width : fit-content;
+        top : 36%;
+        left : -20px;
+        background: #dedede63;
+        border-radius: 35px;
+        font-weight: 600;
+    }
+
+    .alice-carousel__next-btn{
+        position : absolute;
+        width : fit-content;
+        top : 36%;
+        right : -20px;
+        background: #dedede63;
+        border-radius: 35px;
+        font-weight: 600;
+    }
+
+    .alice-carousel__dots{
+        margin-top : 0px;
+    }
+    
+
+    .reviews-heading{
+        text-align: center;
+        font-weight : 500;
+    }
+
+    
+
+    .each-review{
+        margin: 20px 24px;
+        padding: 40px 26px 40px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #ffffff;
+        background-clip: border-box;
+        border: 1px solid #eaeaeac9;
+        border-radius: 0.5rem;
+        transition: 0.3s all ease;
+        cursor: pointer;
+        box-shadow: 0 1px 1rem rgba(148, 148, 148, 0.18);
+
+        
+        .review-img-div{
+            margin-bottom : 15px;
+            img{
+                width: 80px;
+                border-radius: 42px;
+            }
+        }
+
+        p{
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 21px;
+            margin-bottom : 2px;
+        }
+    }
+}
+
+
+.reviews {
+    .alice-carousel{
+        .alice-carousel__stage-item {
+            max-width: 420px !important;
+        }
+    }
+}
+
+.sponsors-cards {
+    .alice-carousel{
+        .alice-carousel__stage-item {
+            max-width: 800px !important;
+        }
+    }
+}
