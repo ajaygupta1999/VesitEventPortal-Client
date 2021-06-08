@@ -1,0 +1,113 @@
+
+.Event-registration-visualization{
+    margin : 20px auto;
+
+    .heading{
+        color : #6734FF;
+        font-weight : 500;
+        font-size : 36px;
+        margin-bottom : 10px;
+    }
+
+    .event-visualization-desc{
+        text-align: center;
+        font-size: 18px;
+        font-weight: 400;
+        width: 70%;
+        margin: 0 auto 20px;
+        color: #656565;
+    }
+
+    .all-data-section{
+        padding: 32px 51px;
+        border: 1px solid #d8d8d8;
+        background: #f9f9f959;
+    }
+
+    .All-buttons-of-events{
+        max-height : 500px;
+        overflow-y: overlay;
+        padding : 10px 20px;
+
+        .each-event-buttons {
+            display: block;
+            width: 100%;
+            padding: 6px;
+            border: none;
+            border-radius: 4px;
+            color:  black;
+            font-weight: 500;
+            background: #dfdfdf;
+            transition: all 0.3s ease;
+        }
+
+        .seleted-event-button{
+            background : #302ac9d4;
+            color : white;
+            transition: all 0.3s ease;
+        }
+    }
+
+    .pi-charts-data-visualization{
+        padding : 0px 20px;
+    }
+}
+
+
+.alleventsvisualization-section-main-div{
+    .custom-tooltip{
+        max-width : 250px;
+        background : #f9f9f9f0;
+        padding : 15px;
+        border-radius : 8px;
+        box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+        
+        .tooltip-eventName, .tooltip-intro {
+            font-size : 14px;
+            margin-bottom:2px;
+            font-weight : 500;
+            color : #333333;
+    
+            span{
+                font-weight : 600;
+            }
+        }
+    
+        .Each-registration-records{
+            font-weight : 500;
+            font-size : 14px;
+            margin-bottom : 5px;
+
+            fieldset {  
+                border: 2px solid #504aff;
+                border-radius: 3px;
+                padding: 0px 5px 2px;
+                margin-bottom: 0px;
+            }
+
+            legend {
+                font-size : 14px;
+                font-weight : 600; 
+                margin: 0px !important;
+                width: 80px;
+                line-height: 15px;
+                padding: 2px 2px 0px;
+            }
+        }
+    }
+}
+
+
+
+@media (max-width: 1199.98px) { 
+    .Event-registration-visualization{
+        .all-data-section{
+            padding: 32px 5px !important;
+
+            .inside-first-visualization{
+                margin-left : 50px;
+            }
+        }
+    }
+ }
+

@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import moment from "moment";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import EventVisualization from "./EventVisualization";
+import EventStatisticsCard from "./EventStatisticsCard";
+
+
 
 
 class EventStatistics extends Component{
@@ -24,56 +27,37 @@ class EventStatistics extends Component{
     render(){
 
         let allEvents = [];
+        let todaysEvents = [];
+        let upcomingEvents = [];
         if(Object.keys(this.props.society.data).length > 0){
-            let todaysEvents = this.getTodaysEvents(this.props.society.data.events);
-            let upcomingEvents = this.getUpcomingEvents(this.props.society.data.events);
+            todaysEvents = this.getTodaysEvents(this.props.society.data.events);
+            upcomingEvents = this.getUpcomingEvents(this.props.society.data.events);
             allEvents = todaysEvents.concat(upcomingEvents);
+        }
+
+
+        let allEventsData = [];
+        if(this.props.society && (Object.keys(this.props.society.data).length > 0)){
+            if(this.props.society.data.events.length > 0){
+                allEventsData = this.props.society.data.events;
+            }
+            
         }
 
         return(
             <div className="event-statistics-session">
                 <h5>All Events Statistics</h5>
                 <div className="row">
-
                     {
                         allEvents.map(event => (
-
-                            <div className="col-12 col-md-6 col-lg-3">
-                                <div className="card event-statistics-card">
-                                    <div className="card-body">
-                                        <h5 className="card-title">{ event.name }</h5>
-                                        {
-                                            event.shortdesc.length > 120 ? (
-                                                <p className="short-desc">{ event.shortdesc.substring(0 , 120)  } <a href={ `/event/${event._id}` } style={{ color : "red" , fontWeight: "600" }}>...Read more</a></p>
-                                            ) : (
-                                                <p className="short-desc">{ event.shortdesc }</p>
-                                            )
-                                        }
-                                        
-                                        <p className="date-and-time-session">
-                                            <span><i className="far fa-calendar-alt"></i> { event.date }</span>
-                                            <span><i className="far fa-clock"></i> { event.time } </span>
-                                        </p>
-                                        
-                                        <div className="all-registrations-class-wise">
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
-                                            <span>D12C-15</span>
-                                        </div>
-                                        <p className="total-registrations-text"><i class="fas fa-user-friends"></i> 25 Registrations</p>
-                                        <div className="event-statistics-button-session">
-                                            <Link to="/event/:id">View Event</Link>
-                                            <button className="btn btn-sm btn-light see-registrations-button">See All registrations</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <EventStatisticsCard key={event._id} event={event} />
                         ))
                     }
                 </div>
+                {
+                   allEventsData.length > 0 &&
+                      <EventVisualization todaysEvents={allEventsData} />
+                }
             </div>
 
         );
