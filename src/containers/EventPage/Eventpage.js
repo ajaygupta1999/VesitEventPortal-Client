@@ -11,7 +11,7 @@ import AliceCarousel from 'react-alice-carousel';
 import 'react-alice-carousel/lib/alice-carousel.css';
 import ReviewCard from "./ReviewCard";
 import SponsorCard from "./SponsorCard";
-
+import {  addClassWiseReg , addBranchWiseReg } from "../../utils";
 
 
 class EventPage extends Component{
@@ -47,9 +47,10 @@ class EventPage extends Component{
             });
             let { eventid } = this.props.match.params;
             await this.props.getspecificevent(eventid);
+
             this.setState({
                 ...this.state,
-                isFetchingEventData : false
+                isFetchingEventData : false,
             });
         }catch(err){
             console.log(err);
@@ -427,14 +428,17 @@ class EventPage extends Component{
                                                         <p className="profile-incharge-name"> { event ? ( event.society ?  event.society.name.toUpperCase() : null ) : null } VESIT </p>
                                                     </div>
                                                 </Link>
-                                                <div className="all-registrations-class-wise">
-                                                    <span>D12C-15</span>
-                                                    <span>D12C-15</span>
-                                                    <span>D12C-15</span>
-                                                    <span>D12C-15</span>
-                                                    <span>D12C-15</span>
-                                                    <span>D12C-15</span>
-                                                </div>
+                                                {
+                                                    event && event.registrations && event.registrations.length > 0  &&
+                                                        <div className="all-registrations-class-wise">
+                                                            {
+                                                                event.classWiseReg.map(reg => (
+                                                                    <span>{ reg.class.toUpperCase() }-{ reg.reg }</span>
+                                                                ))
+                                                            } 
+                                                        </div>
+                                                }
+                                                
                                                 {
                                                     event &&
                                                     event.registrations && 

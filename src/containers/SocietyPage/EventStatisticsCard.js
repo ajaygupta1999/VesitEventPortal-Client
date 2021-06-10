@@ -21,16 +21,17 @@ const EventStatisticsCard = (props) => {
                             <span><i className="far fa-calendar-alt"></i> { event.date }</span>
                             <span><i className="far fa-clock"></i> { event.time } </span>
                         </p>
-                        
-                        <div className="all-registrations-class-wise">
-                            <span>D12C-15</span>
-                            <span>D12C-15</span>
-                            <span>D12C-15</span>
-                            <span>D12C-15</span>
-                            <span>D12C-15</span>
-                            <span>D12C-15</span>
-                        </div>
-                        <p className="total-registrations-text"><i class="fas fa-user-friends"></i> 25 Registrations</p>
+                        {
+                            event.classWiseReg.length > 0 && 
+                                <div className="all-registrations-class-wise">
+                                    {
+                                        event.classWiseReg.map(reg => (
+                                            <span>{ reg.class.toUpperCase() }-{ reg.reg }</span>
+                                        ))
+                                    }
+                                </div>
+                        }
+                        <p className="total-registrations-text"><i class="fas fa-user-friends"></i> { event.registrations.length } Registrations</p>
                         <div className="event-statistics-button-session">
                             <Link to={ `/event/${event._id}` }>View Event</Link>
                             <button className="btn btn-sm btn-light see-registrations-button">See All registrations</button>

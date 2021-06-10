@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import EventVisualizer from "./EventVisualization/EventVisualizer";
 import AllEventVisualizer from "./EventVisualization/AllEventVisualizer";
 import "../../asserts/css/DataVisualization.scss";
+import { addClassWiseReg , addBranchWiseReg } from "../../utils";
+
 
 
 class EventVisualization extends Component {
@@ -14,62 +16,18 @@ class EventVisualization extends Component {
         }
     }
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         let { todaysEvents } = this.props;
         let todaysEventsData = [];
-
-        // All branch processing ===
+        
+        // Creating new data formate for data visualization ==
         for(var i = 0 ; i < todaysEvents.length; i++){
             let eventobj = {};
             eventobj.id = todaysEvents[i]._id;
             eventobj.name = todaysEvents[i].name;
             eventobj.totalregistrations = todaysEvents[i].registrations.length;
-            let classArray = [];
-            let branchArray = [];
-
-            // For checking of classObj array checking and Branch array checking ==
-            for(var j = 0; j < todaysEvents[i].registrations.length; j++){
-                var count = 0;
-                var count1 = 0;
-                for(var k = 0 ; k < classArray.length ; k++){
-                    if(classArray[k].class === todaysEvents[i].registrations[j].classdetails.class){
-                        classArray[k].reg = classArray[k].reg + 1;
-                        break;
-                    }else{
-                        count++;
-                    }
-                }
-
-                for(var p = 0; p < branchArray.length ; p++){
-                    if(branchArray[p].branch === todaysEvents[i].registrations[j].classdetails.department){
-                        branchArray[p].reg = branchArray[p].reg + 1;
-                        break;
-                    }else{
-                        count1++;
-                    }
-                }
-
-
-                if(count === classArray.length){
-                    let newClass = {
-                        class : todaysEvents[i].registrations[j].classdetails.class,
-                        reg : 1
-                    }
-                    classArray.push(newClass);
-                }
-
-                if(count1 === branchArray.length){
-                    let newBranch = {
-                        branch : todaysEvents[i].registrations[j].classdetails.department,
-                        reg : 1
-                    }
-                    branchArray.push(newBranch);
-                }
-
-            }
-
-            eventobj.classWiseReg = classArray;
-            eventobj.branchWiseReg = branchArray;
+            eventobj.classWiseReg = todaysEvents[i].classWiseReg;
+            eventobj.branchWiseReg = todaysEvents[i].branchWiseReg;
             todaysEventsData.push(eventobj);
         }
 
@@ -117,7 +75,7 @@ class EventVisualization extends Component {
                                     <div className="col-lg-3 All-buttons-of-events">
                                         <div>
                                             <button className={ this.state.selectedVisualization === "all" ?  "each-event-buttons seleted-event-button mb-2" : "each-event-buttons mb-2" } onClick={() => { 
-                                                            this.handleEventClick("all")
+                                                this.handleEventClick("all")
                                             }}>All Events</button>
                                         </div>
                                         {

@@ -1,6 +1,6 @@
 import { apiCall, apiUploadCall } from "../../services/api";
 import { config } from "../../Constants";
-
+import { addClassWiseReg , addBranchWiseReg } from "../../utils";
 import { 
   FETCH_ALL_EVENTS, 
   LOAD_ALL_EVENTS,
@@ -118,8 +118,12 @@ export const unregisterEventFromProfile = (userid , eventid) => async (dispatch)
 export const registerSpecificEvent = (userid , eventid) => async (dispatch) => {
    try{
       let { event } = await apiCall("post" , `${config.Api.API_URL}/api/event/${eventid}/register/user/${userid}` );
-      console.log("got event data from server ==> " , event);
-      dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA" , event});
+      let eventdataobj = [];
+      eventdataobj.push(event);
+      eventdataobj = await addClassWiseReg(eventdataobj);
+      eventdataobj = await addBranchWiseReg(eventdataobj);
+      console.log("got event data from server ==> " , eventdataobj[0]);
+      dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA" , event : eventdataobj[0]});
       let { userdata , registeredevents } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/getspecificuser`);
           
       dispatch(setCurrentUser(userdata , registeredevents));  
@@ -136,8 +140,12 @@ export const unregisterSpecificEvent = (userid , eventid) => async (dispatch) =>
   try{
 
       let { event } = await apiCall("post" , `${config.Api.API_URL}/api/event/${eventid}/unregister/user/${userid}` );
-      console.log("got event data from server ==> " , event);
-      dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA" , event});
+      let eventdataobj = [];
+      eventdataobj.push(event);
+      eventdataobj = await addClassWiseReg(eventdataobj);
+      eventdataobj = await addBranchWiseReg(eventdataobj);
+      console.log("got event data from server ==> " , eventdataobj[0]);
+      dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA" , event : eventdataobj[0]});
       let { userdata , registeredevents } = await apiCall("get" , `${config.Api.API_URL}/api/user/${userid}/getspecificuser`);
       dispatch(setCurrentUser(userdata , registeredevents));  
       dispatch(removeError());          
@@ -489,7 +497,11 @@ export const fetchEventDetails = (userid , eventid) => async (dispatch) => {
 export const getspecificevent = (eventid) => async (dispatch) => {
      try { 
          let { event } = await apiCall("get" , `${config.Api.API_URL}/api/event/${eventid}/getspecificevent`);
-         dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA", event });
+         let eventdataobj = [];
+         eventdataobj.push(event);
+         eventdataobj = await addClassWiseReg(eventdataobj);
+         eventdataobj = await addBranchWiseReg(eventdataobj);
+         dispatch({ type : "LOAD_SPECIFIC_EVENT_DATA", event : eventdataobj[0] });
      }catch(err){
          console.log(err);
      }

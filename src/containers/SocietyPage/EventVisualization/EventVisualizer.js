@@ -1,39 +1,13 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Tooltip, Legend, ResponsiveContainer, Cell } from "recharts";
-
-
-
-const getRandomColor = () => {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-
-const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      console.log(active , payload , label);
-      return (
-        <div className="custom-tooltip">
-          <p className="tooltip-eventName"><span>Name:</span> { payload[0].name }</p>
-          <p className="tooltip-intro"><span>Registration:</span> {  payload[0].value }</p>
-        </div>
-      );
-    }
-  
-    return null;
-};
-
+import CustomTooltipEachEvent from "./CustomTooltipEachEvent";
+import { getRandomColor } from "../../../utils";
 
 
 
 
 class EventVisualizer extends Component {
     render(){
-        
         let { data } = this.props;
         let { classWiseReg } = data;
         let { branchWiseReg } = data;
@@ -90,7 +64,7 @@ class EventVisualizer extends Component {
                                        <Cell key={`cell-${index}`} fill={getRandomColor()} />
                                     ))}
                                 </Pie>
-                                <Tooltip content={<CustomTooltip />} />
+                                <Tooltip content={<CustomTooltipEachEvent />} />
                                 <Legend verticalAlign="top" width="100%" height={36}/>
                         </PieChart>
                         </ResponsiveContainer>
