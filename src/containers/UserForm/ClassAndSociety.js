@@ -248,7 +248,7 @@ class ClassAndSociety extends Component{
 			</div>
         </div>
         </div>
-        );
+     );
     }
 }
 

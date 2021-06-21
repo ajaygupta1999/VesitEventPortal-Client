@@ -19,6 +19,11 @@ const DEFAULT_STATE = {
     error : false
 }
 
+// {
+//     type : "LOAD_DATA_FROM_BACKEND",
+//     data : data
+// }
+
 // Set user reducer
 const currentUser = (state = DEFAULT_STATE , action) => {
     switch(action.type){

@@ -573,10 +573,19 @@ class EventPage extends Component{
     }
 }
 
+
+
+
 const mapStateToProps = (state) => ({
     specificEvent : state.specificEvent,
     currentUser : state.currentUser
 });
 
 
-export default connect(mapStateToProps , { getspecificevent , registerSpecificEvent , unregisterSpecificEvent })(EventPage);
+
+
+
+
+
+
+export default connect(mapStateToProps , { getspecificevent  , registerSpecificEvent , unregisterSpecificEvent })(EventPage);

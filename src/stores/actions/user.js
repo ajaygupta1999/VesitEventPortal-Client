@@ -32,6 +32,9 @@ import { addError , removeError } from "./error";
 
 
 
+
+
+
 export const setClassAndSocietyDetails = (data , userid) => async (dispatch) => {
         try{
             dispatch({ type : FETCH_CLASS_AND_SCOEITY_DETAILS });
