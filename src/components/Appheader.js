@@ -2,7 +2,7 @@ import "../asserts/css/Appheader.scss";
 
 function Appheader() {
     return(
-            <div className="container home-main-header my-4 my-md-5">
+            <div className="container home-main-header">
                 <div className="row">
                     <div className="col-12 col-md-6">
                         <div className="home-content">

@@ -209,11 +209,12 @@ class EventPage extends Component{
     }
 
     render(){
-
+        
         let event = this.props.specificEvent.data;
         let isRegistered = false;
         let eventname = "";
         let eventshortdesc = "";
+        let eventimage = event.imgurl ? ( event.imgurl.dataurl ?  event.imgurl.dataurl : ""  ) : "";
         let imgurl = "";
         let guestname = "";
         let eventtakername = "";
@@ -492,7 +493,7 @@ class EventPage extends Component{
                                         </div>
                                         <div className="col-12 col-md-6 d-flex align-items-center event-page-main-image-session">
                                             <div className="img-div">
-                                                <img style={{ width : "90%", height : "60%", objectFit: "cover" }} src="/images/download.jpg" alt="" />
+                                                <img src={ eventimage } alt="event-image" />
                                             </div>
                                         </div>
                                     </div>
@@ -507,7 +508,7 @@ class EventPage extends Component{
                                 {
                                     aliceCarouseldataeventtaker.length > 0 && 
                                         <div>
-                                            <center><h2 className="main-title-event-guest mb-3">Events Speakers</h2></center>
+                                            <center><h2 className="main-title-event-guest">Events Speakers</h2></center>
                                             <div className="reviews">
                                                 <AliceCarousel 
                                                     mouseTracking 
@@ -526,7 +527,7 @@ class EventPage extends Component{
                                 {
                                     aliceCarouseldataguest.length > 0 && 
                                         <div>
-                                            <center><h2 className="main-title-event-guest mb-3">Events Guests</h2></center>
+                                            <center><h2 className="main-title-event-guest">Events Guests</h2></center>
                                             <div className="reviews">
                                                 <AliceCarousel 
                                                     mouseTracking 

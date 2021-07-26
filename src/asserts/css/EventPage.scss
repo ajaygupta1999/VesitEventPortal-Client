@@ -71,6 +71,7 @@
                 color: white !important;
                 border-radius: 33px;
                 border: none;
+                margin-bottom : 6px;
                 box-shadow: 0 4px 10px 8px rgba(0, 0, 0, 0.05), 0 6px 20px 2px rgba(0, 0, 0, 0.04);
             }
 
@@ -114,24 +115,31 @@
             }
         }
 
-        .event-page-main-image-session div{
-            width : 100%;
-            text-align: center;
+        .event-page-main-image-session{
+            padding-top: 30px;
+            padding-bottom: 18px;
 
-            img { 
-                width : 80% !important;
-                height : 60% !important;
-                object-fit: cover !important;
-                object-position: start !important;  
+
+            div{
+                width : 100%;
+                text-align: center;
+    
+                img { 
+                    width : 100% !important;
+                    height : 100% !important;
+                    object-fit: cover !important;
+                    object-position: start !important;  
+                }
             }
         }
+         
     }
 
     
     .main-title-full-detail{
         font-weight: 600;
-        margin-top : 50px;
-        margin-bottom : 20px;
+        margin-top: 40px;
+        margin-bottom: 15px;
     }
     
     .full-detail-session{
@@ -180,8 +188,7 @@
 
 .main-title-event-guest{
     font-weight: 600;
-    margin-top : 50px;
-    margin-bottom : 0px;
+    margin-top : 25px;
 }
 
 .guest-session .guest-card{

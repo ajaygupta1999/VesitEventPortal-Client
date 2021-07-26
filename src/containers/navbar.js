@@ -69,7 +69,7 @@ class Navbar extends Component {
         
            return(
                 <div className="my-content">
-                    <nav id="my-navbar" className="navbar navbar-expand-lg navbar-light">
+                    <nav id="my-navbar" className="navbar navbar-expand-lg navbar-light fixed-top">
                         <NavLink to="/home" className="navbar-navsession-links" id="navbar-logo-link">
                             <img src="/images/VES_logo.png" alt="profile"/>
                         VESIT EVENT

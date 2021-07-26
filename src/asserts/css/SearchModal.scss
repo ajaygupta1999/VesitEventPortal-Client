@@ -49,25 +49,26 @@
         }
 
         .search-modal-heading{
-            text-align: center!important;
+            text-align: center !important;
             font-size: 1.9em;
             font-weight: 500;
-            margin-top: 12px;
+            margin-top: 0px;
+            margin-bottom: 16px;
         }
 
         .search-members-form{
 
             input{
                 padding : 9px 15px;
-                padding-left : 8%;
+                padding-left : 7%;
                 font-weight : 500;
                 border-color: #1E6AD9;
             }
 
             i{
                 position: absolute;
-                top: 13px;
-                left: 6%;
+                top: 10px;
+                left: 5%;
                 color : #1E6AD9;
                 font-size : 1em;
             }
@@ -158,6 +159,12 @@
                 font-weight : 600;
             }
 
+            .searched-content-user-details a{
+                text-decoration: underline;
+                font-size :14px;
+                font-weight : 600;
+            }
+
             .view-profile-button button{
                 background: #1E6AD9 !important;
                 padding: 4px 16px;
@@ -182,6 +189,17 @@
 }
 
 
-@media (max-width: 575.98px){
+@media (max-width: 767.98px) {
 
+    .show-only-after-md{
+        display: none !important;
+    }
 }
+
+@media (min-width: 768px) { 
+    .show-only-before-md{
+      display: none !important;
+    }
+
+ }
+

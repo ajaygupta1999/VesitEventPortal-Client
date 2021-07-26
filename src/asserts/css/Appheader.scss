@@ -1,16 +1,21 @@
 
-.home-main-header .row .home-img-session {
-    height : 100%;
-    width : 100%;
+.home-main-header{
+    margin-bottom: 40px;
+    margin-top: 10px;
 
-    .home-ad-event-pic img , .home-ad-left-right-arrow img , .home-ad-ves_logo img{
-        width : 140px;
+    .row .home-img-session {
+        height : 100%;
+        width : 100%;
+    
+        .home-ad-event-pic img , .home-ad-left-right-arrow img , .home-ad-ves_logo img{
+            width : 140px;
+        }
+    
+        .home-ad-left-right-arrow img{
+            margin-left : 30px;
+        }
+    
     }
-
-    .home-ad-left-right-arrow img{
-        margin-left : 30px;
-    }
-
 }
 
 
@@ -26,7 +31,7 @@
 
 @media (max-width: 992px){
     .home-main-header .row .home-content {
-        padding : 20px 10px;
+        padding : 0px 5%;
     }
 
     .home-main-header .row .home-img-session{

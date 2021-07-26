@@ -37,7 +37,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
         <Router>
-            <App />
+          <div style={{ marginTop : "90px" }}>
+              <App />
+          </div>
         </Router>
     </Provider>
   </React.StrictMode>,

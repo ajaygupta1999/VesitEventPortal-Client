@@ -14,7 +14,7 @@
     }
 
     .my-society-content{
-        margin : 20px 25% 40px;
+        margin : 10px 25% 40px;
 
         .col-6{
             padding-top:  10px;
@@ -22,8 +22,8 @@
         } 
 
         img{
-            width: 120px;
-            height : 120px;
+            width: 100px;
+            height : 100px;
             object-fit: cover;
         }
 
@@ -43,26 +43,26 @@
 
 @media (max-width: 1199.98px){
     .my-all-society-div .my-society-content img{
-        width : 100px;
-        height : 100px;
+        width : 90px;
+        height : 90px;
         object-fit: cover;
     }
 }
 
 @media (max-width: 1199.98px){
     .my-all-society-div .my-society-content{
-        margin : 20px 18% 40px;
+        margin : 10px 18% 40px;
     }
 }
 
 @media (max-width: 767.98px){
     .my-all-society-div .my-society-content{
-        margin : 20px 14% 40px;
+        margin : 10px 14% 40px;
     }
 }
 
 @media (max-width: 575.98px){
     .my-all-society-div .my-society-content{
-        margin : 20px 5% 40px;
+        margin : 10px 5% 40px;
     }
 }

@@ -26,18 +26,18 @@ class SponsorCard extends Component {
                         <div className="col-12 col-md-8">
                             <p className="sponsors-name">{ sponsor.name }</p>
                             {
-                                (sponsor.description.length > 160 ) ? (
+                                (sponsor.description.length > 150 ) ? (
                                     <div>
                                         {
                                             this.state.viewAll ?  (
                                                 <p className="sponsors-description">
                                                     {sponsor.description} 
-                                                    <span style={{ color : "blue" }} onClick={this.handleViewAllClick}>... Show less</span> 
+                                                    <span style={{ color : "blue", textDecoration : "underline" }} onClick={this.handleViewAllClick}>... Show less</span> 
                                                 </p>
                                             ) : (
                                                 <p className="sponsors-description">
-                                                    {sponsor.description.substring(0 , 160)} 
-                                                    <span style={{ color : "blue" }} onClick={this.handleViewAllClick}>... Read more</span> 
+                                                    {sponsor.description.substring(0 , 150)} 
+                                                    <span style={{ color : "blue" ,  textDecoration : "underline" }} onClick={this.handleViewAllClick}>... Read more</span> 
                                                 </p>
                                             )       
                                         }

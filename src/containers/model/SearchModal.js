@@ -228,7 +228,7 @@ class SearchModal extends Component{
                                     member.username ? (
                                            <div className="col-12">
                                                 <div className="each-search-content row">
-                                                    <div className="serached-profile-content col-12 col-md-8 d-flex justify-content-center justify-content-md-start  align-items-center">
+                                                    <div className="serached-profile-content col-12 col-md-8 d-flex justify-content-start  align-items-center">
                                                         <div className="searched-content-img-session">
                                                             <img src={ member.imgurl ? member.imgurl.dataurl : "/images/profile_image.png" } alt="user-image" />
                                                         </div>
@@ -242,10 +242,12 @@ class SearchModal extends Component{
                                                                 member.classdetails && 
                                                                  <p><span>{ member.classdetails.department.toUpperCase() }</span> - <span>{member.classdetails.class.toUpperCase()},</span> { member.classdetails.rollno }</p>
                                                             }
-                                                            
+                                                            <Link to={ `/user/${ member._id }/profile` } className="show-only-before-md">
+                                                                View Profile
+                                                            </Link>
                                                         </div>
                                                     </div>
-                                                    <div className="view-profile-button col-12 col-md-4 d-flex justify-content-center align-items-center">
+                                                    <div className="view-profile-button show-only-after-md col-12 col-md-4 d-flex justify-content-center align-items-center">
                                                         <button className="btn btn-md btn-primary">    
                                                             <Link to={ `/user/${ member._id }/profile` }>
                                                                 View Profile
@@ -257,7 +259,7 @@ class SearchModal extends Component{
                                     ) : (
                                            <div className="col-12">
                                                 <div className="each-search-content row">
-                                                    <div className="serached-profile-content col-12 col-md-8 d-flex justify-content-center justify-content-md-start  align-items-center">
+                                                    <div className="serached-profile-content col-12 col-md-8 d-flex justify-content-start  align-items-center">
                                                         <div className="searched-content-img-session">
                                                             <img src="/images/profile_image.png" alt="user-image" />
                                                         </div>
