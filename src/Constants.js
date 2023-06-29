@@ -1,13 +1,13 @@
 
 const dev = {
     Api : {
-        API_URL : "http://localhost:8000"
+        API_URL : "http://localhost:8081"
     }
 }
 
 const prod = {
     Api : {
-        API_URL : "https://vesitevents-backend-cugppvci4q-el.a.run.app"
+        API_URL : "https://vesiteventportal-client-cugppvci4q-uc.a.run.app"
     }
 }
 
